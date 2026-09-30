@@ -1,0 +1,92 @@
+[
+  {
+    "id": "gatsby-long-island",
+    "title": "The Great Gatsby — Long Island",
+    "year": 1922,
+    "lat": 40.8270,
+    "lon": -73.6440,
+    "place": "Long Island, New York",
+    "excerpt": "Fitzgerald sets the novel's parties and shoreline gaze on the North Shore of Long Island in the early 1920s. West Egg and East Egg stand in for Great Neck and Manhasset Neck — money, bootleg liquor, and a green light across the bay."
+  },
+  {
+    "id": "dublin-liberties-1824",
+    "title": "Dublin Liberties — Equalization Era",
+    "year": 1824,
+    "lat": 53.3380,
+    "lon": -6.2770,
+    "place": "The Liberties, Dublin",
+    "excerpt": "In the decades around Catholic Emancipation, the Liberties remained a dense weave of trades, brewing, and tenements. Equalization of political rights did not equalize rents or working hours; the parish records still show crowded lanes and early death."
+  },
+  {
+    "id": "ulysses-dublin-1904",
+    "title": "Ulysses — Dublin, 16 June 1904",
+    "year": 1904,
+    "lat": 53.3438,
+    "lon": -6.2546,
+    "place": "Dublin, Ireland",
+    "excerpt": "Joyce compresses a single day — Bloomsday — into a city-scale cosmogram: streets, pubs, the Martello tower at Sandycove, and the night sky over Howth Head. The novel maps Dublin the way an orrery maps planets."
+  },
+  {
+    "id": "whitman-brooklyn-1855",
+    "title": "Leaves of Grass — Brooklyn Ferry",
+    "year": 1855,
+    "lat": 40.7020,
+    "lon": -73.9870,
+    "place": "Brooklyn, New York",
+    "excerpt": "Whitman's first edition looks across the East River at crowds, ferries, and the unfinished continent. Crossing Brooklyn Ferry later folds that shoreline into a single continuous present."
+  },
+  {
+    "id": "babel-odessa-1920",
+    "title": "Odessa Stories — Isaac Babel",
+    "year": 1920,
+    "lat": 46.4825,
+    "lon": 30.7233,
+    "place": "Odessa, Ukraine",
+    "excerpt": "Babel's Moldavanka neighborhoods, gang lore, and Civil War sketches fix Odessa as a port of languages and violence in the early Soviet years."
+  },
+  {
+    "id": "marquez-aracataca-1967",
+    "title": "One Hundred Years of Solitude — Aracataca",
+    "year": 1967,
+    "lat": 10.5910,
+    "lon": -74.1860,
+    "place": "Aracataca, Colombia",
+    "excerpt": "Macondo is drawn from the banana-zone town where García Márquez grew up. The novel's flood, plague, and repeating names sit on a Caribbean coastal plain that still floods."
+  },
+  {
+    "id": "dante-florence-1300",
+    "title": "Divine Comedy — Florence",
+    "year": 1300,
+    "lat": 43.7696,
+    "lon": 11.2558,
+    "place": "Florence, Italy",
+    "excerpt": "Dante dates the Comedy's journey to Easter week of 1300, with Florence as the political wound behind exile. The city of Guelphs and Ghibellines becomes the map of Hell's factions."
+  },
+  {
+    "id": "beowulf-east-anglia",
+    "title": "Beowulf — East Anglian Shore",
+    "year": 700,
+    "lat": 52.2000,
+    "lon": 1.6000,
+    "place": "East Anglia, England",
+    "excerpt": "The poem's Geats and Danes sit in a North Sea world; English manuscript culture later anchors it in early medieval East Anglia and Mercia. Mead-halls, sea-crossings, and barrows."
+  },
+  {
+    "id": "gilgamesh-uruk",
+    "title": "Gilgamesh — Uruk",
+    "year": -2100,
+    "lat": 31.3222,
+    "lon": 45.6360,
+    "place": "Uruk, Mesopotamia",
+    "excerpt": "The Standard Babylonian epic looks back to Uruk's walls and cedar forests. Flood tablets and dream omens sit near the same latitude as later eclipse watches."
+  },
+  {
+    "id": "melville-nantucket-1851",
+    "title": "Moby-Dick — Nantucket",
+    "year": 1851,
+    "lat": 41.2835,
+    "lon": -70.0995,
+    "place": "Nantucket, Massachusetts",
+    "excerpt": "Ishmael signs aboard in New Bedford but the book's whaling capital is Nantucket — try-works, charts, and a Pacific chase that starts from a small Atlantic island."
+  }
+]
