@@ -33,12 +33,12 @@ if (this._natalGroup) this._natalGroup.visible = false;
 this._placeObserverCamera();
 this._updateObserverSkyBodies();
 }
-}
+},
 _placeObserverCamera() {
 this.observerCam.position.set(-0.2, 0.35, 0);
 this.observerCam.up.set(0, 1, 0);
 this.observerCam.lookAt(2, 0.2, 0);
-}
+},
 _updateObserverSkyBodies() {
 const bodies = ['sun', 'mercury', 'venus', 'mars', 'jupiter', 'saturn'];
 for (const name of bodies) {
@@ -58,7 +58,7 @@ R * cosAlt * Math.sin(az)
 mesh.visible = true;
 }
 this.planetGroup.visible = true;
-}
+},
 setNatalFreeze(jd, lat, lon, horizonIn) {
 this._clearNatalMeshes();
 this.natal = { jd, lat, lon };
@@ -146,7 +146,7 @@ this._updatePlanetPositions();
 this.natal.horizon = horizon;
 this._natalGroup.visible = this.mode === 'planetary';
 return horizon;
-}
+},
 _clearNatalMeshes() {
 while (this._natalGroup.children.length) {
 const c = this._natalGroup.children[0];
@@ -157,14 +157,14 @@ if (Array.isArray(c.material)) c.material.forEach((m) => m.dispose());
 else c.material.dispose();
 }
 }
-}
+},
 clearNatal() {
 this._clearNatalMeshes();
 this.natal = null;
-}
+},
 updateTemporalHorizon(year) {
 this.nodes.updateTemporalHorizon(year);
-}
+},
 _onClick(event) {
 if (this.mode !== 'planetary') return;
 const rect = this.canvas.getBoundingClientRect();
@@ -175,7 +175,7 @@ const hits = this.raycaster.intersectObjects(this.nodes.getClickables(), false);
 if (hits.length && this.onNodeClick) {
 this.onNodeClick(hits[0].object.userData);
 }
-}
+},
 _onResize() {
 const w = window.innerWidth;
 const h = window.innerHeight;
@@ -184,7 +184,7 @@ this.planetaryCam.updateProjectionMatrix();
 this.observerCam.aspect = w / h;
 this.observerCam.updateProjectionMatrix();
 this.renderer.setSize(w, h);
-}
+},
 animate() {
 requestAnimationFrame(() => this.animate());
 if (this.mode === 'planetary') {
