@@ -25,6 +25,14 @@ const ELEMENTS = {
   saturn: {
     a: 9.55491, e: 0.055546, i: 2.489, L: 49.944, peri: 93.057, node: 113.665,
     period: 10759.22
+  },
+  uranus: {
+    a: 19.2184, e: 0.046295, i: 0.773, L: 313.232, peri: 170.964, node: 74.006,
+    period: 30688.5
+  },
+  neptune: {
+    a: 30.1104, e: 0.009457, i: 1.770, L: 304.880, peri: 44.971, node: 131.784,
+    period: 60182
   }
 };
 const PLANET_COLORS = {
@@ -34,7 +42,9 @@ const PLANET_COLORS = {
   earth: 0x4a90d9,
   mars: 0xc1440e,
   jupiter: 0xd4a574,
-  saturn: 0xe8d4a0
+  saturn: 0xe8d4a0,
+  uranus: 0xa8e4e8,
+  neptune: 0x4068d0
 };
 export function dateToJulianDay(year, month, day, hour = 12, minute = 0, second = 0) {
   let y = year;
@@ -127,7 +137,7 @@ export function getHelioCoordinates(body, jd) {
   return { x, y, z, r, name: body };
 }
 export function getAllBodies(jd) {
-  const names = ['sun', 'mercury', 'venus', 'earth', 'mars', 'jupiter', 'saturn'];
+  const names = ['sun', 'mercury', 'venus', 'earth', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune'];
   const out = {};
   for (const n of names) {
     out[n] = getHelioCoordinates(n, jd);
@@ -148,25 +158,33 @@ export function getGeoCoordinates(body, jd) {
     name: body
   };
 }
-export function altitudeAboveHorizon(body, jd, lat, lon) {
-  const geo = getGeoCoordinates(body === 'sun' ? 'sun' : body, jd);
+/**
+ * Approximate geometric horizontal coordinates. Azimuth is degrees clockwise
+ * from true north (east = 90); altitude is degrees above the local horizon.
+ * The orbital elements are a visualization approximation, especially far from J2000.
+ */
+export function horizontalCoordinates(body, jd, lat, lon) {
+  const geo = getGeoCoordinates(body, jd);
   const obl = 23.4393 * DEG;
   const xeq = geo.x;
   const yeq = geo.y * Math.cos(obl) - geo.z * Math.sin(obl);
   const zeq = geo.y * Math.sin(obl) + geo.z * Math.cos(obl);
   const ra = Math.atan2(yeq, xeq);
-  const dec = Math.atan2(zeq, Math.sqrt(xeq * xeq + yeq * yeq));
-  const cal = jdToCalendar(jd);
-  const ut = cal.hour + cal.minute / 60;
-  const d = jd - 2451545.0;
-  let gmst = 280.46061837 + 360.98564736629 * d;
-  gmst = wrap360(gmst);
-  const lst = wrap360(gmst + lon);
-  const ha = (lst * DEG - ra);
-  const sinAlt =
-    Math.sin(lat * DEG) * Math.sin(dec) +
-    Math.cos(lat * DEG) * Math.cos(dec) * Math.cos(ha);
-  return Math.asin(Math.max(-1, Math.min(1, sinAlt))) * RAD;
+  const dec = Math.atan2(zeq, Math.hypot(xeq, yeq));
+  const gmst = wrap360(280.46061837 + 360.98564736629 * (jd - 2451545.0));
+  const ha = (wrap360(gmst + lon) * DEG - ra);
+  const phi = lat * DEG;
+  const sinAlt = Math.sin(phi) * Math.sin(dec) +
+    Math.cos(phi) * Math.cos(dec) * Math.cos(ha);
+  const altitude = Math.asin(Math.max(-1, Math.min(1, sinAlt))) * RAD;
+  const east = -Math.sin(ha) * Math.cos(dec);
+  const north = Math.sin(dec) * Math.cos(phi) -
+    Math.cos(dec) * Math.sin(phi) * Math.cos(ha);
+  const azimuth = wrap360(Math.atan2(east, north) * RAD);
+  return { altitude, azimuth };
+}
+export function altitudeAboveHorizon(body, jd, lat, lon) {
+  return horizontalCoordinates(body, jd, lat, lon).altitude;
 }
 export { PLANET_COLORS, ELEMENTS };
 export class EphemerisEngine {
@@ -190,6 +208,9 @@ export class EphemerisEngine {
   }
   altitudeAboveHorizon(body, jd, lat, lon) {
     return altitudeAboveHorizon(body, jd, lat, lon);
+  }
+  horizontalCoordinates(body, jd, lat, lon) {
+    return horizontalCoordinates(body, jd, lat, lon);
   }
 }
 export default EphemerisEngine;
