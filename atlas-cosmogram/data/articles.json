@@ -1,1 +1,171 @@
-PLACEHOLDER
+[
+  {
+    "id": "gatsby-long-island",
+    "title": "The Great Gatsby — Long Island",
+    "year": 1922,
+    "lat": 40.827,
+    "lon": -73.644,
+    "place": "Long Island, New York",
+    "excerpt": "Fitzgerald sets the novel's parties and shoreline gaze on the North Shore of Long Island in the early 1920s. West Egg and East Egg stand in for Great Neck and Manhasset Neck — money, bootleg liquor, and a green light across the bay.",
+    "locales": {
+      "he": {
+        "title": "גטסבי הגדול — לונג איילנד",
+        "place": "לונג איילנד, ניו יורק",
+        "excerpt": "פיצג׳רלד ממקם את המסיבות ואת מבט החוף של הרומן בחוף הצפוני של לונג איילנד בראשית שנות העשרים. וסט אג ואיסט אג עומדים במקום גרייט נק ומנהסט נק — כסף, משקאות מוברחים, ואור ירוק מעבר למפרץ."
+      }
+    }
+  },
+  {
+    "id": "dublin-liberties-1824",
+    "title": "Dublin Liberties — Equalization, 1801–1824",
+    "year": 1824,
+    "lat": 53.338,
+    "lon": -6.277,
+    "place": "The Liberties, Dublin",
+    "excerpt": "Article VI of the Act of Union put a twenty-year duty clock on Irish manufactured goods; the end date was in the statute. Manchester already ran power looms by night. Liberties households — women at the frames, children on bobbins — worked hand poplin under a guild that could still petition Westminster, while Combination laws made shop-floor crew organizing a crime. Final equalization in 1824 lifted the last silk duties; by 1825 the Coombe hall was let to Methodists, George II’s shuttle still carved above a room that no longer wove.",
+    "locales": {
+      "ar": {
+        "title": "الليبرتيز، دبلن — التسوية، 1215–1239 هـ",
+        "excerpt": "وضعت المادّة السادسة من قانون الاتحاد ساعة رسوم لعشرين سنة على المصنّعات الأيرلندية، وتاريخ الانتهاء مكتوب في النص. كانت أنوال مانشستر الآلية تدور ليلًا أصلًا. بيوت الليبرتيز — نساء عند الأنوال وأطفال يلفّون البكرات — نسجت البوبلين يدويًّا تحت نقابة ما زالت تخاطب وستمنستر، بينما جعلت قوانين الاتّحاد تنظيم أهل الورشة جريمة. في سنة 1239 هـ سقطت آخر رسوم الحرير؛ وبحلول السنة التالية أُجّرت قاعة الكومب للميثوديين، والمكّوك لا يزال منحوتًا في يد جورج الثاني فوق غرفة لم تعد تنسج."
+      },
+      "he": {
+        "title": "הליברטיז, דבלין — השוואת מכסים, תקס״א–תקפ״ד",
+        "place": "הליברטיז, דבלין",
+        "excerpt": "סעיף שישי של חוק האיחוד הציב שעון מכס לעשרים שנה על סחורות תעשייתיות איריות; מועד הסיום כתוב בחוק עצמו. במנצ׳סטר כבר רצו נולים ממוכנים בלילה. בתי הליברטיז — נשים ליד הנולים, ילדים מפתלים סלילים — ארגו פופלין ביד תחת גילדה שעדיין יכלה לעתור לווסטמינסטר, בעוד חוקי ההתאגדות הפכו ארגון צוות על רצפת הסדנה לעבירה. בשנת תקפ״ד נפלו מכסי המשי האחרונים; עד תקפ״ה הושכר אולם הקום למתודים, והבוכיינה עדיין מגולפת ביד ג׳ורג׳ השני מעל חדר שכבר אינו אורג."
+      },
+      "zh": {
+        "title": "都柏林利伯蒂区 — 关税拉平，嘉庆六年—道光四年",
+        "place": "都柏林利伯蒂区",
+        "excerpt": "联合法令第六条给爱尔兰制成品设了二十年关税钟，截止年写在条款里。曼彻斯特的动力织机夜里已经转着。利伯蒂区各户——女人守在织机边，孩子绕纱管——手里织着府绸；上头还有能向西敏寺陈情的行会，而《结社法》把作坊一班人的组织算作罪。道光四年，最后的丝绸税免了；到次年，库姆会堂租给卫理公会，乔治二世手里的梭子还刻在那间不再织布的厅堂上头。"
+      }
+    }
+  },
+  {
+    "id": "ulysses-dublin-1904",
+    "title": "Ulysses — Dublin, 16 June 1904",
+    "year": 1904,
+    "lat": 53.3438,
+    "lon": -6.2546,
+    "place": "Dublin, Ireland",
+    "excerpt": "Joyce compresses a single day — Bloomsday — into a city-scale cosmogram: streets, pubs, the Martello tower at Sandycove, and the night sky over Howth Head. The novel maps Dublin the way an orrery maps planets.",
+    "locales": {
+      "he": {
+        "title": "יוליסס — דבלין, ט״ז ביוני תרס״ד",
+        "place": "דבלין, אירלנד",
+        "excerpt": "ג׳ויס דוחס יום אחד — בלומסדיי — לקוסמוגרמה בגודל עיר: רחובות, פאבים, מגדל מרטלו בסנדיקוב, ושמי הלילה מעל האיות הד. הרומן ממפה את דבלין כפי שאוררי ממפה כוכבי לכת."
+      }
+    }
+  },
+  {
+    "id": "whitman-brooklyn-1855",
+    "title": "Leaves of Grass — Brooklyn Ferry",
+    "year": 1855,
+    "lat": 40.702,
+    "lon": -73.987,
+    "place": "Brooklyn, New York",
+    "excerpt": "Whitman's first edition looks across the East River at crowds, ferries, and the unfinished continent. Crossing Brooklyn Ferry later folds that shoreline into a single continuous present.",
+    "locales": {
+      "he": {
+        "title": "עלי עשב — מעבורת ברוקלין",
+        "place": "ברוקלין, ניו יורק",
+        "excerpt": "מהדורתו הראשונה של ויטמן מביטה מעבר לאיסט ריבר אל קהל, מעבורות, והיבשת שעדיין לא נשלמה. «חוצים את מעבורת ברוקלין» מקפל אחר כך את אותו חוף להווה אחד רציף."
+      }
+    }
+  },
+  {
+    "id": "babel-odessa-1920",
+    "title": "Odessa Stories — Isaac Babel",
+    "year": 1920,
+    "lat": 46.4825,
+    "lon": 30.7233,
+    "place": "Odessa, Ukraine",
+    "excerpt": "Babel's Moldavanka neighborhoods, gang lore, and Civil War sketches fix Odessa as a port of languages and violence in the early Soviet years.",
+    "locales": {
+      "he": {
+        "title": "סיפורי אודסה — יצחק באבל",
+        "place": "אודסה, אוקראינה",
+        "excerpt": "שכונות מולדבנקה של באבל, סיפורי כנופיות, ורישומי מלחמת האזרחים מקבעים את אודסה כנמל של שפות ואלימות בראשית השנים הסובייטיות."
+      }
+    }
+  },
+  {
+    "id": "marquez-aracataca-1967",
+    "title": "One Hundred Years of Solitude — Aracataca",
+    "year": 1967,
+    "lat": 10.591,
+    "lon": -74.186,
+    "place": "Aracataca, Colombia",
+    "excerpt": "Macondo is drawn from the banana-zone town where García Márquez grew up. The novel's flood, plague, and repeating names sit on a Caribbean coastal plain that still floods.",
+    "locales": {
+      "he": {
+        "title": "מאה שנים של בדידות — אראקטקה",
+        "place": "אראקטקה, קולומביה",
+        "excerpt": "מקונדו נשאב מן העיירה באזור הבננות שבה גדל גארסיה מארקס. השיטפון, המגפה, והשמות החוזרים ברומן יושבים על מישור חוף קריבי שעדיין מוצף."
+      }
+    }
+  },
+  {
+    "id": "dante-florence-1300",
+    "title": "Divine Comedy — Florence",
+    "year": 1300,
+    "lat": 43.7696,
+    "lon": 11.2558,
+    "place": "Florence, Italy",
+    "excerpt": "Dante dates the Comedy's journey to Easter week of 1300, with Florence as the political wound behind exile. The city of Guelphs and Ghibellines becomes the map of Hell's factions.",
+    "locales": {
+      "he": {
+        "title": "הקומדיה האלוהית — פירנצה",
+        "place": "פירנצה, איטליה",
+        "excerpt": "דנטה מתארך את מסע הקומדיה לשבוע הפסחא של שנת 1300, ופירנצה היא הפצע הפוליטי מאחורי הגלות. עיר הגולפים והגיבלינים הופכת למפת סיעות הגיהנום."
+      }
+    }
+  },
+  {
+    "id": "beowulf-east-anglia",
+    "title": "Beowulf — East Anglian Shore",
+    "year": 700,
+    "lat": 52.2,
+    "lon": 1.6,
+    "place": "East Anglia, England",
+    "excerpt": "The poem's Geats and Danes sit in a North Sea world; English manuscript culture later anchors it in early medieval East Anglia and Mercia. Mead-halls, sea-crossings, and barrows.",
+    "locales": {
+      "he": {
+        "title": "באוולף — חוף מזרח אנגליה",
+        "place": "מזרח אנגליה, אנגליה",
+        "excerpt": "הגטים והדנים של השיר יושבים בעולם הים הצפוני; תרבות כתבי היד האנגלית מעגנת אותו אחר כך במזרח אנגליה ובמרסיה של ימי הביניים המוקדמים. אולמות משתה, מעברי ים, ותלי קברים."
+      }
+    }
+  },
+  {
+    "id": "gilgamesh-uruk",
+    "title": "Gilgamesh — Uruk",
+    "year": -2100,
+    "lat": 31.3222,
+    "lon": 45.636,
+    "place": "Uruk, Mesopotamia",
+    "excerpt": "The Standard Babylonian epic looks back to Uruk's walls and cedar forests. Flood tablets and dream omens sit near the same latitude as later eclipse watches.",
+    "locales": {
+      "he": {
+        "title": "עלילות גלגמש — אורוך",
+        "place": "אורוך, מסופוטמיה",
+        "excerpt": "האפוס הבבלי הסטנדרטי מביט לאחור אל חומות אורוך ויערות הארזים. לוחות המבול ואותות החלום יושבים ליד אותו קו רוחב שבו נערכו אחר כך תצפיות ליקוי."
+      }
+    }
+  },
+  {
+    "id": "melville-nantucket-1851",
+    "title": "Moby-Dick — Nantucket",
+    "year": 1851,
+    "lat": 41.2835,
+    "lon": -70.0995,
+    "place": "Nantucket, Massachusetts",
+    "excerpt": "Ishmael signs aboard in New Bedford but the book's whaling capital is Nantucket — try-works, charts, and a Pacific chase that starts from a small Atlantic island.",
+    "locales": {
+      "he": {
+        "title": "מובי דיק — נאנטקט",
+        "place": "נאנטקט, מסצ׳וסטס",
+        "excerpt": "ישמעאל נרשם בניו בדפורד, אך בירת ציד הלווייתנים של הספר היא נאנטקט — כבשנים, מפות, ומרדף באוקיינוס השקט שמתחיל מאי אטלנטי קטן."
+      }
+    }
+  }
+]
