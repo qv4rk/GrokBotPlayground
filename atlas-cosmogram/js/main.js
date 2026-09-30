@@ -126,7 +126,8 @@ async function boot() {
     if (obsLon) obsLon.value = String(lon);
     const horizon = scene.setNatalFreeze(jd, lat, lon);
     if (natalResult) {
-      natalResult.textContent = formatHorizon(horizon);
+      natalResult.textContent = formatHorizon(horizon) +
+        (horizon.ascendant ? `\nAscendant: ${horizon.ascendant.sign} ${horizon.ascendant.degree.toFixed(1)}°` : '');
       natalResult.hidden = false;
     }
     setCam('planetary');
