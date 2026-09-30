@@ -6,7 +6,14 @@
     "lat": 40.827,
     "lon": -73.644,
     "place": "Long Island, New York",
-    "excerpt": "Fitzgerald sets the novel's parties and shoreline gaze on the North Shore of Long Island in the early 1920s. West Egg and East Egg stand in for Great Neck and Manhasset Neck — money, bootleg liquor, and a green light across the bay."
+    "excerpt": "Fitzgerald sets the novel's parties and shoreline gaze on the North Shore of Long Island in the early 1920s. West Egg and East Egg stand in for Great Neck and Manhasset Neck — money, bootleg liquor, and a green light across the bay.",
+    "locales": {
+      "ar": {
+        "title": "غاتسبي العظيم — لونغ آيلاند",
+        "place": "لونغ آيلاند، نيويورك",
+        "excerpt": "يضع فيتزجيرالد حفلات الرواية ونظرها إلى الشاطئ على الساحل الشمالي للونغ آيلاند في أوائل عشرينيات القرن الماضي. ويست إغ وإيست إغ يقفان مقام غريت نك ومانهاست نك — مال، خمر مهرّب، وضوء أخضر عبر الخليج."
+      }
+    }
   },
   {
     "id": "dublin-liberties-1824",
@@ -19,7 +26,8 @@
     "locales": {
       "ar": {
         "title": "الليبرتيز، دبلن — التسوية، 1215–1239 هـ",
-        "excerpt": "وضعت المادّة السادسة من قانون الاتحاد ساعة رسوم لعشرين سنة على المصنّعات الأيرلندية، وتاريخ الانتهاء مكتوب في النص. كانت أنوال مانشستر الآلية تدور ليلًا أصلًا. بيوت الليبرتيز — نساء عند الأنوال وأطفال يلفّون البكرات — نسجت البوبلين يدويًّا تحت نقابة ما زالت تخاطب وستمنستر، بينما جعلت قوانين الاتّحاد تنظيم أهل الورشة جريمة. في سنة 1239 هـ سقطت آخر رسوم الحرير؛ وبحلول السنة التالية أُجّرت قاعة الكومب للميثوديين، والمكّوك لا يزال منحوتًا في يد جورج الثاني فوق غرفة لم تعد تنسج."
+        "excerpt": "وضعت المادّة السادسة من قانون الاتحاد ساعة رسوم لعشرين سنة على المصنّعات الأيرلندية، وتاريخ الانتهاء مكتوب في النص. كانت أنوال مانشستر الآلية تدور ليلًا أصلًا. بيوت الليبرتيز — نساء عند الأنوال وأطفال يلفّون البكرات — نسجت البوبلين يدويًّا تحت نقابة ما زالت تخاطب وستمنستر، بينما جعلت قوانين الاتّحاد تنظيم أهل الورشة جريمة. في سنة 1239 هـ سقطت آخر رسوم الحرير؛ وبحلول السنة التالية أُجّرت قاعة الكومب للميثوديين، والمكّوك لا يزال منحوتًا في يد جورج الثاني فوق غرفة لم تعد تنسج.",
+        "place": "حيّ الليبرتيز، دبلن"
       },
       "he": {
         "title": "הליברטיז, דבלין — השוואת מכסים, תקס״א–תקפ״ד",
@@ -40,7 +48,14 @@
     "lat": 53.3438,
     "lon": -6.2546,
     "place": "Dublin, Ireland",
-    "excerpt": "Joyce compresses a single day — Bloomsday — into a city-scale cosmogram: streets, pubs, the Martello tower at Sandycove, and the night sky over Howth Head. The novel maps Dublin the way an orrery maps planets."
+    "excerpt": "Joyce compresses a single day — Bloomsday — into a city-scale cosmogram: streets, pubs, the Martello tower at Sandycove, and the night sky over Howth Head. The novel maps Dublin the way an orrery maps planets.",
+    "locales": {
+      "ar": {
+        "title": "يوليسيس — دبلن، 16 حزيران/يونيو 1904",
+        "place": "دبلن، أيرلندا",
+        "excerpt": "يضغط جويس يومًا واحدًا — يوم بلوم — في كوزموغرام بحجم مدينة: شوارع، حانات، برج مارتيلو في سانديكوف، وسماء الليل فوق رأس هاوث. الرواية ترسم دبلن كما يرسم الأوراري الكواكب."
+      }
+    }
   },
   {
     "id": "whitman-brooklyn-1855",
@@ -49,7 +64,14 @@
     "lat": 40.702,
     "lon": -73.987,
     "place": "Brooklyn, New York",
-    "excerpt": "Whitman's first edition looks across the East River at crowds, ferries, and the unfinished continent. Crossing Brooklyn Ferry later folds that shoreline into a single continuous present."
+    "excerpt": "Whitman's first edition looks across the East River at crowds, ferries, and the unfinished continent. Crossing Brooklyn Ferry later folds that shoreline into a single continuous present.",
+    "locales": {
+      "ar": {
+        "title": "أوراق العشب — معدّية بروكلين",
+        "place": "بروكلين، نيويورك",
+        "excerpt": "الطبعة الأولى لويتمان تنظر عبر نهر إيست إلى الحشود والمعدّيات والقارة غير المكتملة. و«عبور معدّية بروكلين» لاحقًا يطوي ذلك الشاطئ في حاضر واحد متصل."
+      }
+    }
   },
   {
     "id": "babel-odessa-1920",
@@ -58,7 +80,14 @@
     "lat": 46.4825,
     "lon": 30.7233,
     "place": "Odessa, Ukraine",
-    "excerpt": "Babel's Moldavanka neighborhoods, gang lore, and Civil War sketches fix Odessa as a port of languages and violence in the early Soviet years."
+    "excerpt": "Babel's Moldavanka neighborhoods, gang lore, and Civil War sketches fix Odessa as a port of languages and violence in the early Soviet years.",
+    "locales": {
+      "ar": {
+        "title": "قصص أوديسا — إسحاق بابل",
+        "place": "أوديسا، أوكرانيا",
+        "excerpt": "أحياء مولدافانكا عند بابل، وحكايات الشارع، ورسوم الحرب الأهلية تثبّت أوديسا ميناءً للغات والعنف في السنوات السوفييتية الأولى."
+      }
+    }
   },
   {
     "id": "marquez-aracataca-1967",
@@ -67,7 +96,14 @@
     "lat": 10.591,
     "lon": -74.186,
     "place": "Aracataca, Colombia",
-    "excerpt": "Macondo is drawn from the banana-zone town where García Márquez grew up. The novel's flood, plague, and repeating names sit on a Caribbean coastal plain that still floods."
+    "excerpt": "Macondo is drawn from the banana-zone town where García Márquez grew up. The novel's flood, plague, and repeating names sit on a Caribbean coastal plain that still floods.",
+    "locales": {
+      "ar": {
+        "title": "مئة عام من العزلة — أراكاتاكا",
+        "place": "أراكاتاكا، كولومبيا",
+        "excerpt": "ماكوندو مأخوذة من بلدة منطقة الموز حيث نشأ غارسيا ماركيز. الطوفان والوباء والأسماء المتكررة في الرواية تجلس على سهل ساحلي كاريبي ما زال يغرق."
+      }
+    }
   },
   {
     "id": "dante-florence-1300",
@@ -76,7 +112,14 @@
     "lat": 43.7696,
     "lon": 11.2558,
     "place": "Florence, Italy",
-    "excerpt": "Dante dates the Comedy's journey to Easter week of 1300, with Florence as the political wound behind exile. The city of Guelphs and Ghibellines becomes the map of Hell's factions."
+    "excerpt": "Dante dates the Comedy's journey to Easter week of 1300, with Florence as the political wound behind exile. The city of Guelphs and Ghibellines becomes the map of Hell's factions.",
+    "locales": {
+      "ar": {
+        "title": "الكوميديا الإلهية — فلورنسا",
+        "place": "فلورنسا، إيطاليا",
+        "excerpt": "يؤرّخ دانتي رحلة الكوميديا بأسبوع الفصح سنة 1300 م، وفلورنسا هي الجرح السياسي خلف المنفى. مدينة الغويلفيين والغيبلينيين تصير خريطة فصائل الجحيم."
+      }
+    }
   },
   {
     "id": "beowulf-east-anglia",
@@ -85,7 +128,14 @@
     "lat": 52.2,
     "lon": 1.6,
     "place": "East Anglia, England",
-    "excerpt": "The poem's Geats and Danes sit in a North Sea world; English manuscript culture later anchors it in early medieval East Anglia and Mercia. Mead-halls, sea-crossings, and barrows."
+    "excerpt": "The poem's Geats and Danes sit in a North Sea world; English manuscript culture later anchors it in early medieval East Anglia and Mercia. Mead-halls, sea-crossings, and barrows.",
+    "locales": {
+      "ar": {
+        "title": "بيوولف — شاطئ شرق أنجليا",
+        "place": "شرق أنجليا، إنجلترا",
+        "excerpt": "القصيدة تضع الجيت والدنماركيين في عالم بحر الشمال؛ وثقافة المخطوط الإنجليزية تثبتها لاحقًا في شرق أنجليا وميرسيا في العصور الوسطى المبكرة. قاعات الشراب، عبور البحر، والتلال الجنائزية."
+      }
+    }
   },
   {
     "id": "gilgamesh-uruk",
@@ -94,7 +144,14 @@
     "lat": 31.3222,
     "lon": 45.636,
     "place": "Uruk, Mesopotamia",
-    "excerpt": "The Standard Babylonian epic looks back to Uruk's walls and cedar forests. Flood tablets and dream omens sit near the same latitude as later eclipse watches."
+    "excerpt": "The Standard Babylonian epic looks back to Uruk's walls and cedar forests. Flood tablets and dream omens sit near the same latitude as later eclipse watches.",
+    "locales": {
+      "ar": {
+        "title": "ملحمة جلجامش — أوروك",
+        "place": "أوروك، بلاد الرافدين",
+        "excerpt": "الملحمة البابلية المعيارية تنظر إلى أسوار أوروك وغابات الأرز. ألواح الطوفان ورؤى الأحلام تقع قرب خط العرض نفسه الذي ستُرصد عليه الكسوفات لاحقًا."
+      }
+    }
   },
   {
     "id": "melville-nantucket-1851",
@@ -103,6 +160,13 @@
     "lat": 41.2835,
     "lon": -70.0995,
     "place": "Nantucket, Massachusetts",
-    "excerpt": "Ishmael signs aboard in New Bedford but the book's whaling capital is Nantucket — try-works, charts, and a Pacific chase that starts from a small Atlantic island."
+    "excerpt": "Ishmael signs aboard in New Bedford but the book's whaling capital is Nantucket — try-works, charts, and a Pacific chase that starts from a small Atlantic island.",
+    "locales": {
+      "ar": {
+        "title": "موبي ديك — نانتكِت",
+        "place": "نانتكِت، ماساتشوستس",
+        "excerpt": "يوقّع إسماعيل على السفينة في نيو بدفورد، لكن عاصمة صيد الحيتان في الكتاب هي نانتكِت — معامل الشحم، والخرائط، ومطاردة في المحيط الهادئ تبدأ من جزيرة أطلسية صغيرة."
+      }
+    }
   }
 ]
