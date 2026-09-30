@@ -70,6 +70,15 @@ function qingReignYear(year) {
   return era.name + num + '年';
 }
 
+
+/** Civil year → approximate Hijri year (year-only; 1824 → 1239 هـ). */
+function approxHijriYear(year) {
+  if (year == null || Number.isNaN(year)) return null;
+  // Astronomical year → Hijri: rough civil conversion (not calendar-exact).
+  const hijri = Math.round(year - 622 + (year - 622) / 32);
+  return hijri;
+}
+
 export class ReadingRoom {
   constructor(rootEl) {
     this.root = rootEl;
@@ -116,6 +125,11 @@ export class ReadingRoom {
         if (qing) yearPart = qing;
         else if (year < 1) yearPart = `公元前${1 - year}年`;
         else yearPart = `西元${year}年`;
+      } else if (lang === 'ar') {
+        const h = approxHijriYear(year);
+        if (h == null) yearPart = String(year);
+        else if (h < 1) yearPart = `${1 - h} ق.م.`;
+        else yearPart = `${h} هـ`;
       } else {
         const era = year < 1 ? 'BCE' : 'CE';
         const yDisp = year < 1 ? 1 - year : year;
