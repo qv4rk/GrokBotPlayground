@@ -8,3 +8,4 @@ Append-only. One line per borrowed file.
 - vasturiano/three-globe (MIT) example/img maps via jsDelivr — https://github.com/vasturiano/three-globe
 - vasturiano/globe.gl (MIT) clouds.png and lunar maps via jsDelivr — https://github.com/vasturiano/globe.gl
 - clouds.png credited upstream to https://github.com/turban/webgl-earth
+- Natal freeze horizon split uses CODEX horizontalCoordinates in atlas-cosmogram/js/ephemeris.js (local Keplerian approx; Meeus/JPL-style elements already credited).
