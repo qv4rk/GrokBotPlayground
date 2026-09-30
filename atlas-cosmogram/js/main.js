@@ -114,12 +114,8 @@ async function boot() {
     setCamera: setCam
   }).bind();
   scene.onNodeClick = (data) => {
-    room.open({
-      title: data.title,
-      year: data.year,
-      place: data.place,
-      excerpt: data.excerpt
-    });
+    // Pass full article (incl. locales) so ?lang=ar|he|zh reach Reading Room
+    room.open(data.article || data);
   };
   document.querySelectorAll('[data-toggle-panel]').forEach((btn) => {
     btn.addEventListener('click', () => {
