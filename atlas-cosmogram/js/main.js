@@ -2,6 +2,7 @@ import { CosmogramScene } from './scene.js';
 import { TimeDial } from './antikythera.js';
 import { ReadingRoom } from './readingRoom.js';
 import { dateToJulianDay } from './ephemeris.js';
+import { NatalFreeze } from './natal.js';
 async function loadJSON(path) {
   const res = await fetch(path);
   if (!res.ok) throw new Error(`Failed to load ${path}`);
@@ -9,17 +10,6 @@ async function loadJSON(path) {
 }
 function $(sel) {
   return document.querySelector(sel);
-}
-function formatHorizon(horizon) {
-  if (!horizon) return '';
-  const above = [];
-  const below = [];
-  for (const [name, info] of Object.entries(horizon)) {
-    const label = `${name} (${info.altitude.toFixed(1)}°)`;
-    if (info.above) above.push(label);
-    else below.push(label);
-  }
-  return `Above horizon: ${above.join(', ') || '—'}\nBelow horizon: ${below.join(', ') || '—'}`;
 }
 async function boot() {
   const canvas = document.getElementById('globe-canvas');
@@ -107,37 +97,22 @@ async function boot() {
   obsLat?.addEventListener('change', applyObserver);
   obsLon?.addEventListener('change', applyObserver);
   applyObserver();
-  const natalForm = $('#natal-form');
-  const natalResult = $('#natal-result');
-  natalForm?.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const fd = new FormData(natalForm);
-    const year = parseInt(fd.get('year'), 10);
-    const month = parseInt(fd.get('month'), 10);
-    const day = parseInt(fd.get('day'), 10);
-    const hour = parseInt(fd.get('hour'), 10);
-    const minute = parseInt(fd.get('minute'), 10);
-    const lat = parseFloat(fd.get('lat'));
-    const lon = parseFloat(fd.get('lon'));
-    const jd = dateToJulianDay(year, month, day, hour, minute);
-    dial.setJulianDay(jd);
-    scene.setObserver(lat, lon);
-    if (obsLat) obsLat.value = String(lat);
-    if (obsLon) obsLon.value = String(lon);
-    const horizon = scene.setNatalFreeze(jd, lat, lon);
-    if (natalResult) {
-      natalResult.textContent = formatHorizon(horizon);
-      natalResult.hidden = false;
-    }
-    setCam('planetary');
-  });
-  $('#natal-clear')?.addEventListener('click', () => {
-    scene.clearNatal();
-    if (natalResult) {
-      natalResult.textContent = '';
-      natalResult.hidden = true;
-    }
-  });
+  new NatalFreeze({
+    form: $('#natal-form'),
+    clearBtn: $('#natal-clear'),
+    resultEl: $('#natal-result'),
+    lockDial: (jd) => dial.setJulianDay(jd),
+    onObserver: (lat, lon) => {
+      scene.setObserver(lat, lon);
+      if (obsLat) obsLat.value = String(lat);
+      if (obsLon) obsLon.value = String(lon);
+    },
+    onFreeze: ({ jd, lat, lon, horizon }) => {
+      scene.setNatalFreeze(jd, lat, lon, horizon);
+    },
+    onClear: () => scene.clearNatal(),
+    setCamera: setCam
+  }).bind();
   scene.onNodeClick = (data) => {
     room.open({
       title: data.title,
