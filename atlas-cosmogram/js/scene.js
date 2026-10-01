@@ -1,2 +1,2 @@
-export { CosmogramScene } from './scene-b.js';
-export { default } from './scene-b.js';
+export { CosmogramScene } from './horizon.js';
+export { default } from './horizon.js';

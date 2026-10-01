@@ -109,6 +109,9 @@ async function boot() {
     },
     onFreeze: ({ jd, lat, lon, horizon }) => {
       scene.setNatalFreeze(jd, lat, lon, horizon);
+      const a = scene.natal && scene.natal.horizon && scene.natal.horizon.ascendant;
+      const el = $('#natal-result');
+      if (a && el) setTimeout(() => { el.textContent += `\nAscendant: ${a.sign} ${a.degree.toFixed(1)}°`; }, 0);
     },
     onClear: () => scene.clearNatal(),
     setCamera: setCam
