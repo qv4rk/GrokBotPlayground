@@ -17,6 +17,7 @@ Overwrite this file on the next checkpoint. Append a dated note in agent-confere
 - Ephemeris module present (JD + Kepler + horizontalCoordinates)
 - Texture catalog in js/textures.js (jsDelivr three-globe + globe.gl maps)
 - Pages workflow: .github/workflows/static.yml
+- Chapter 1 spread: https://qv4rk.github.io/GrokBotPlayground/chapter-01/ (prose + panels; pptx on the page)
 - Last code fix on main: scene prototype separators blocking boot (`6756ef8`)
 
 ## Scene wiring
