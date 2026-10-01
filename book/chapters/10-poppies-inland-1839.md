@@ -1,0 +1,62 @@
+---
+title: "POPPIES INLAND, 1839"
+chapter: 10
+book: Smoke on the Mediterranean
+---
+
+# 10. POPPIES INLAND, 1839
+
+![POPPIES INLAND, 1839](../images/image9.jpg)
+
+*Yunnan and Sichuan*
+
+What landed at Lintin as a foreign cargo became, inside a generation, a crop. Yunnan's high valleys. Sichuan's river basins. The poppy stopped being an import and started being the thing that paid.
+
+Two grades owned the inland trade. 云土 Yúntǔ — Yunnan earth. Altitude, rich soil, a smoothness that could stand next to Patna. 川土 Chuāntǔ — Sichuan earth. Dozens of counties in the Red Basin. Worse leaf, more of it, cheaper.
+
+The gazetteers used the same four characters until the phrase itself became a kind of weather report. 废粮种烟 fèi liáng zhòng yān — abandon grain, plant smoke. The 坝子 bàzi, the irrigated valley floors that had fed the Southwest, went under white and purple blossom. A surplus region started buying rice. Bad weather on the leftover grain fields did the rest.
+
+For generations the Southwest had run a grain surplus north along the Yangzi corridor — Sichuan rice feeding Hubei, Yunnan grain moving into Guizhou's mining camps. Once the bàzi went under poppy, that surplus reversed inside a few bad seasons. Counties that had shipped rice out now bought it in, at prices that moved against them twice over: less grain grown at home, and a market price set by neighboring provinces who could see a buyer with no alternative. Local gazetteers from the 1830s onward register a shift in vocabulary as much as in price — village elders petitioning the yamen not about opium at all, but about grain shortfall, framed as a weather problem in years when the harvest had done comparatively little wrong.
+
+Confucian commerce had a rule for this and it was not subtle. 义利之辨 yì lì zhī biàn — the distinction between righteousness and profit. Wealth was supposed to come through 以义取利 yǐ yì qǔ lì: profit taken under right. Decades later Yan Fu, putting Adam Smith into Chinese, reached for 母财 mǔ cái for capital. Mother-wealth. A word that still sounded like something that fed a household.
+
+The mountain trails did not use that word.
+
+正月, Daoguang 21 — January 1841 — Qīng Shílù 清实录. An armed syndicate on the roads between 顺庆 Shùnqìng and 宁远 Níngyuǎn in Sichuan met imperial troops sent to break them. They did not bother with a cover name. The banner was eight characters:
+
+将本求利，舍命取财
+Jiāng běn qiú lì, shě mìng qǔ cái
+Use the stake to seek profit. Risk life to take wealth.
+
+本 běn here is the outlay — cash turned into guns, hired men, cargo the statute forbade. 利 lì is stripped of the old obligation. 舍命 shě mìng is the cost line: their lives, the soldiers', whoever stood on the path. The Shílù recorded the slogan because it was already a public sentence. No one in those hills was translating Smith.
+
+Consumption followed rank.
+
+Gentry, officials, merchants sat in 花烟间 huāyān jiān — flower-smoke rooms — carved pipes, silver lamps, the habit dressed as leisure. Brothels ran the same furniture.
+
+Porters, boatmen, chair-bearers, coolies drank 笼头水 lóngtóu shuǐ — cage-water: dregs and pipe scrapings boiled back into a dark cup. Not leisure. A few hours off the pain. Wages gone. Households after that.
+
+The yamen in the interior had two failures and chose a third. Pull the plants and the villages whose year now lived in the poppy rose. Leave them and the district missed its grain quota and its silver quota both. So the clerks invented a fee schedule. Fines. Inspection money. 土药厘 tǔyào lí — native-drug likin — levied on the grower and the den. Pocketed, or poured into the hole in the local books. The prohibition office became the protection office.
+
+Lin was still at the coast trying to stop the foreign chests. Behind him the interior was already in flower.
+
+
+---
+
+## Sources
+
+The original volume carries no in-text markers. These are the sources grouped to this chapter.
+
+- Qing shilu 清實錄 [Veritable Records of the Qing]. Daoguang chao, 21st year, 1st month (1841). Entry recording the armed syndicate on the Shunqing-Ningyuan roads and the slogan jiang ben qiu li, she ming qu cai 將本求利，捨命取財.
+- Yunnan and Sichuan local gazetteers. Especially entries using the formula fei liang zhong yan 廢糧種煙, "abandon grain, plant smoke."
+- Qing administrative records on native-drug likin and local prohibition-office fees. Tuyao li 土藥釐.
+- Lin Zexu 林則徐. Lin Zexu ji 林則徐集 [Collected Works of Lin Zexu]. Beijing: Zhonghua Shuju. Especially memorials and letters from 1839-1841 on opium suppression in the interior.
+- Bello, David Anthony. Opium and the Limits of Empire: Drug Prohibition in the Chinese Interior, 1729-1850. Cambridge, MA: Harvard University Asia Center, 2005.
+- Dikotter, Frank, Lars Laamann, and Zhou Xun. Narcotic Culture: A History of Drugs in China. Chicago: University of Chicago Press, 2004.
+- Li, Xiaoxiong. Poppies and Politics in China: Sichuan Province, 1840s to 1940s. Newark: University of Delaware Press, 2009.
+- Schwartz, Benjamin I. In Search of Wealth and Power: Yan Fu and the West. Cambridge, MA: Harvard University Press, 1964. For Yan Fu's translation of Adam Smith and the term mu cai 母財.
+- Zheng Yangwen. The Social Life of Opium in China. Cambridge: Cambridge University Press, 2005.
+- Baumler, Alan, ed. Modern China and Opium: A Reader. Ann Arbor: University of Michigan Press, 2001.
+- Perdue, Peter C. Exhausting the Earth: State and Peasant in Hunan, 1500-1850. Cambridge, MA: Harvard University Press, 1987. For comparison of inland agricultural production and state extraction.
+- Dikötter, Frank, Lars Laamann, and Zhou Xun. Narcotic Culture: A History of Drug
+- Qing shilu Daoguang 21 / first month slogan: series cited; juan not assumed.

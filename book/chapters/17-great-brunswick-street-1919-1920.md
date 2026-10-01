@@ -1,0 +1,35 @@
+---
+title: "GREAT BRUNSWICK STREET, 1919-1920"
+chapter: 17
+book: Smoke on the Mediterranean
+---
+
+# 17. GREAT BRUNSWICK STREET, 1919-1920
+
+![GREAT BRUNSWICK STREET, 1919-1920](../images/image24.jpg)
+
+*Dublin*
+
+Just after midnight on April 7, 1919, Éamon "Ned" Broy — a Detective Sergeant working as a confidential clerk inside G Division, the Dublin Metropolitan Police's political intelligence branch — let Michael Collins and a second man, Seán Nunan, in through the front door of the G Division headquarters on Great Brunswick Street. He showed them the back exit onto Townsend Street in case they needed to leave in a hurry. Almost immediately a stone came crashing through a window, unrelated to the break-in and never explained, and the three of them worked on regardless. Broy used the same key to open the political office and a small secret room built into the wall that held the division's actual case files, gave Collins and Nunan candles, and left them to it. Nunan later recalled that the two of them stayed until roughly four in the morning, going through the names and activities of every detective assigned to political work, before walking home separately across a city that had no idea what had just happened inside one of its own police stations.
+
+Broy had joined the DMP in January 1911 for its athletics facilities and its reputation as a more liberal, less overtly political force than the RIC, and moved into the detective branch in 1915 believing Home Rule was close enough to make the question academic. The Rising and its aftermath changed his mind, and by 1917 he had made contact with the republican movement, using his position at G Division's headquarters to copy sensitive files and pass them to Collins through Thomas Gay, the librarian at Capel Street Library, well before the April 1919 night he let Collins in himself to read the material directly. What Collins wanted from that night, as Broy explained afterward, was not just the names — he wanted to understand the shape of the surveillance apparatus itself, "the mentality behind the records," so he could build his own intelligence organization on the same model with what he considered the necessary improvements.
+
+He had the names within days. Junior detectives were followed and pulled into alleyways for a first round of warnings, a deliberate, almost bureaucratic escalation before anyone was killed. The escalation didn't hold. In late July 1919, Broy specifically flagged Detective Sergeant Patrick Smyth — known on the force as "the Dog" — as a dangerous man, and on July 30 Smyth was shot dead near Drumcondra, the first assassination Collins personally authorized. Detective Daniel Hoey was killed outside G Division's own headquarters that September. Michael Downing followed in October, John Barton in November, RIC District Inspector William Redmond — brought in from outside Dublin specifically to break Collins's intelligence network — in January 1920. By the time the killing slowed, seven of the men whose files Broy had shown Collins that April night were dead, and the branch of the British administration whose entire job was knowing what Dublin's republicans were doing no longer had detectives willing to do the job.
+
+The same broad calendar carried a second, more public track. On January 21, 1919 — the same day the newly elected Sinn Féin members who refused to sit at Westminster convened as Dáil Éireann at the Mansion House and declared an Irish Republic — an unauthorized IRA unit under Dan Breen, Seán Treacy, Séumas Robinson, and Seán Hogan ambushed two RIC constables, James McDonnell and Patrick O'Connell, escorting a load of gelignite at Soloheadbeg, County Tipperary, and shot them both dead. Nobody coordinated the two events. A counter-state was declaring its own legitimacy in a Dublin drawing room while, a hundred miles away, men who answered to no one in that room had already opened a shooting war neither the Dáil nor Collins had ordered yet. What Collins's intelligence operation did over the following year was make sure that whichever track the British were watching, they were watching it blind.
+
+Broy was eventually caught, imprisoned, and released only after the July 1921 Truce. The building on Great Brunswick Street where he handed Collins the candles is a Garda station today, renamed for Pearse Street, and a carved stone head from the original DMP barracks — the same building, the same night's work embedded somewhere in its own walls — is still there for anyone who goes looking for it.
+
+
+---
+
+## Sources
+
+The original volume carries no in-text markers. These are the sources grouped to this chapter.
+
+- "A Night on the Files — Michael Collins's Undercover Intelligence Mission of April 1919." The Irish Times (April 7 1919 night, Broy's front-door/back-door arrangement, the stone through the window, Broy's own quote on "the mentality behind the records").
+- "An Exciting Night on Great Brunswick Street Remembered." Come Here To Me! (Seán Nunan's own account, candles, 4am departure, Smyth and Hoey killings, Broy's imprisonment and release after the Truce).
+- Dempsey, Pauric J. and Shaun Boylan. "Broy, Eamon ('Ned')." Dictionary of Irish Biography (Broy's DMP/G Division career, 1917 republican contact, reasons for joining the DMP).
+- Military Archives of Ireland, BMH WS 359 (Seán Nunan) and WS 1280 (Éamon Broy).
+- Foy, Michael T. Michael Collins's Intelligence War. Stroud: Sutton, 2006.
+- Dwyer, T. Ryle. The Squad and the Intelligence Operations of Michael Collins. Co

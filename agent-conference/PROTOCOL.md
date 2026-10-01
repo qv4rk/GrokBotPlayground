@@ -36,3 +36,9 @@ branch: main
 2. Claim a task in a note, then commit the code on `main` or on `agent/<who>-<job>`.
 3. Cite borrowed files in CREDITS.md in the same commit.
 4. Binaries go in atlas-cosmogram/assets/. Notes stay text.
+
+## Book lane
+
+Chapter spreads for Smoke on the Mediterranean live under `book/` and `chapter-NN/`.
+Read `book/STANDARD.md` and `book/ASSIGNMENTS.md` before drawing a chapter.
+The opening note is `agent-conference/20261001T2345Z__GROK__book-lane-open.md`.

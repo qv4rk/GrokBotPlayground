@@ -1,0 +1,38 @@
+---
+title: "CHURCHILL'S INSTRUCTION, SPRING 1922"
+chapter: 20
+book: Smoke on the Mediterranean
+---
+
+# 20. CHURCHILL'S INSTRUCTION, SPRING 1922
+
+![CHURCHILL'S INSTRUCTION, SPRING 1922](../images/image16.jpg)
+
+*Whitehall, London*
+
+Before recruitment for a new Palestine police force began in the spring of 1922, Colonial Secretary Winston Churchill gave Major-General Henry Hugh Tudor an explicit instruction on how to run it: conduct the recruitment, in Churchill's own words, "with a view to eliminating as far as possible the moral connection between the new force and the [Black and Tans and the Auxiliaries], thereby disposing of the inevitable idea that we are importing into Palestine the traditions of recent Irish politics." Churchill understood exactly what the optics were. He had just watched those tactics burn Britain's reputation across Ireland and much of the international press, and he wanted whatever came next in Palestine to look like a clean start. The instruction failed before the new force's first patrol, for a reason built directly into how it was staffed.
+
+The Anglo-Irish Treaty forced the Royal Irish Constabulary's disbandment, which ran from January to August 1922 — Auxiliaries stood down first, then the Black and Tans, then what remained of the old constabulary itself. The Auxiliaries in particular walked away with nothing: no pension, only whatever balance remained on a contract the Treaty had just cut short. Most of the roughly 700 men who would go on to serve in Palestine had, three months earlier, simply been unemployed, their entire professional experience built around a counter-insurgency campaign that had just ended in Britain's political defeat.
+
+On April 30, 1922, 760 of them landed at Haifa as the British Section of the Palestine Gendarmerie — a strike force and riot squad raised at Churchill's direct instigation and recruited through the one man positioned to find them fast: Tudor himself, who had run police operations in Ireland and who took the post of General Officer Commanding and Inspector-General of Police and Prisons in Palestine that June. Well over four-fifths of that draft had served as Black and Tans or Auxiliaries. Separately, thirty-eight percent of the same men were Irish-born — old RIC and Irish-born wartime recruits inside a force that was still majority British. Those are not the same fact. Tudor had been told to make the new force look nothing like the old one, and had then gone and filled it almost entirely with the old one's own men, because they were the only trained, available, unemployed police force in the empire that spring.
+
+The result was exactly what the instruction had been designed to prevent. The British Gendarmerie was known on the ground in Palestine as a Black and Tan outfit before it had completed a single patrol — the reputation traveled with the men rather than the paperwork, and no rebranding exercise conducted in London was going to outrun word of mouth carried by seven hundred and sixty individuals who had just spent up to three years building that exact reputation somewhere else.
+
+The transfer did not end with one landing. By 1926 the Gendarmerie had folded into the regular Palestine Police Force, joined that same year by roughly seventy more ex-RIC recruits, with Irish veterans still trickling into the ranks through the 1940s. By the early 1940s, the majority of district commander positions across Mandate Palestine were held by former Black and Tans — not a temporary deployment that ended when the optics problem became inconvenient, but two decades of command-level authority over both populations in the territory, staffed from top to bottom by men whose formative professional experience was suppressing an insurgency in Ireland with methods Britain's own public had already judged too brutal to tolerate at home.
+
+
+
+---
+
+## Sources
+
+The original volume carries no in-text markers. These are the sources grouped to this chapter.
+
+- "The Black and Tans and Auxiliaries — An Overview." The Irish Story (RIC/Auxiliary disbandment timeline, Jan-Aug 1922, Auxiliaries' loss of pension).
+- "The Formation, Composition, and Conduct of the British Section of the Palestine Gendarmerie, 1922-1926." The Historical Journal, Cambridge Core (recruitment mechanics, Tudor's appointment, force composition estimates).
+- "'The Black and Tans in Palestine' — Irish Connections to the Palestine Police 1922-1948." The Irish Story (Churchill's instruction to Tudor, quoted in full; the Gendarmerie's immediate reputation on the ground).
+- "The Irish Imperial Service: Policing Palestine and Administering the Empire, 1922-1966." Academia.edu (long-term district commander demographics).
+- Gannon, Seán William. Nominal-roll analysis of the April 1922 British Section, Palestine Gendarmerie (38 percent Irish-born, 52 percent English, 7 percent Scottish, 1 percent Welsh; cross-referenced against theauxiliaries.com's independent count from the same roll, and summarized by BBC Northern Ireland as "just under 40 percent").
+- "The Royal Irish Constabulary and Colonial Policing: Lessons and Legacies." Century Ireland, RTÉ (1926 absorption into the Palestine Police Force, continued Irish recruitment through the 1940s).
+- Gannon, Seán William. The Irish Imperial Service: Policing Palestine and Adminis
+- CO 733 Churchill–Tudor Gendarmerie papers: series only until piece numbers are p
