@@ -2,7 +2,9 @@ import { CosmogramScene } from './scene-a.js';
 import * as THREE from 'three';
 import {
   getGeoCoordinates,
-  altitudeAboveHorizon
+  altitudeAboveHorizon,
+  horizontalCoordinates,
+  PLANET_COLORS
 } from './ephemeris.js';
 import { latLonToVector3 } from './globeNodes.js';
 
@@ -19,6 +21,7 @@ this.earth.visible = true;
 this.eclipticGroup.visible = true;
 this.nodes.group.visible = true;
 this.planetGroup.visible = true;
+if (this._natalGroup) this._natalGroup.visible = true;
 } else {
 this.camera = this.observerCam;
 this.controls.enabled = false;
@@ -26,6 +29,7 @@ this.observerFrame.visible = true;
 this.earth.visible = false;
 this.eclipticGroup.visible = false;
 this.nodes.group.visible = false;
+if (this._natalGroup) this._natalGroup.visible = false;
 this._placeObserverCamera();
 this._updateObserverSkyBodies();
 }
@@ -55,60 +59,107 @@ mesh.visible = true;
 }
 this.planetGroup.visible = true;
 },
-setNatalFreeze(jd, lat, lon) {
-while (this._natalGroup.children.length) {
-const c = this._natalGroup.children[0];
-this._natalGroup.remove(c);
-if (c.geometry) c.geometry.dispose();
-if (c.material) c.material.dispose();
-}
+setNatalFreeze(jd, lat, lon, horizonIn) {
+this._clearNatalMeshes();
 this.natal = { jd, lat, lon };
 const pos = latLonToVector3(lat, lon, EARTH_R * 1.03);
-const beacon = new THREE.Mesh(
-new THREE.SphereGeometry(0.04, 16, 16),
-new THREE.MeshBasicMaterial({ color: 0xff66aa, transparent: true, opacity: 1 })
-);
+// Emissive coordinate beacon (natal site on Earth)
+const beaconMat = new THREE.MeshStandardMaterial({
+color: 0xff88bb,
+emissive: 0xff3399,
+emissiveIntensity: 2.2,
+metalness: 0.1,
+roughness: 0.35,
+transparent: true,
+opacity: 1
+});
+const beacon = new THREE.Mesh(new THREE.SphereGeometry(0.045, 20, 20), beaconMat);
 beacon.position.copy(pos);
 beacon.userData = { type: 'natal-beacon' };
 this._natalGroup.add(beacon);
-const pillar = new THREE.Mesh(
-new THREE.CylinderGeometry(0.008, 0.008, 0.35, 8),
-new THREE.MeshBasicMaterial({ color: 0xff66aa, transparent: true, opacity: 0.7 })
+const halo = new THREE.Mesh(
+new THREE.SphereGeometry(0.09, 16, 16),
+new THREE.MeshBasicMaterial({
+color: 0xff66aa,
+transparent: true,
+opacity: 0.28,
+depthWrite: false
+})
 );
-pillar.position.copy(pos).multiplyScalar(1.0);
-pillar.position.normalize().multiplyScalar(EARTH_R * 1.18);
+halo.position.copy(pos);
+halo.userData = { type: 'natal-beacon-halo' };
+this._natalGroup.add(halo);
+const pillar = new THREE.Mesh(
+new THREE.CylinderGeometry(0.01, 0.01, 0.4, 8),
+new THREE.MeshStandardMaterial({
+color: 0xff66aa,
+emissive: 0xff2288,
+emissiveIntensity: 1.4,
+transparent: true,
+opacity: 0.85
+})
+);
+pillar.position.copy(pos).normalize().multiplyScalar(EARTH_R * 1.2);
 pillar.lookAt(0, 0, 0);
 pillar.rotateX(Math.PI / 2);
+pillar.userData = { type: 'natal-pillar' };
 this._natalGroup.add(pillar);
-const horizon = {};
-const bodies = ['sun', 'mercury', 'venus', 'mars', 'jupiter', 'saturn'];
+const bodies = ['sun', 'mercury', 'venus', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune'];
+const horizon = horizonIn ? { ...horizonIn } : {};
 const prevJd = this.jd;
 this.jd = jd;
 this._updatePlanetPositions();
+const ORBIT_SCALE = 0.55;
 for (const name of bodies) {
-const alt = altitudeAboveHorizon(name, jd, lat, lon);
-horizon[name] = { altitude: alt, above: alt > 0 };
-const mesh = this.planetMeshes[name];
-if (!mesh) continue;
-const points = [pos.clone(), mesh.position.clone()];
+if (!horizon[name]) {
+const hc = horizontalCoordinates(name, jd, lat, lon);
+horizon[name] = { altitude: hc.altitude, azimuth: hc.azimuth, above: hc.altitude > 0 };
+}
+let end = null;
+const mesh = this.planetMeshes && this.planetMeshes[name];
+if (mesh) {
+end = mesh.position.clone();
+} else {
+// Celestial direction from geocentric coords when mesh not present (U/N)
+const g = getGeoCoordinates(name, jd);
+const raw = new THREE.Vector3(g.x, g.z, g.y);
+if (raw.lengthSq() < 1e-12) continue;
+const s = ORBIT_SCALE * (name === 'uranus' || name === 'neptune' ? 0.55 : 3.5);
+end = raw.multiplyScalar(s);
+if (end.length() < 1.5) end.setLength(2.4);
+if (end.length() > 12) end.setLength(8);
+}
+const points = [pos.clone(), end];
 const geo = new THREE.BufferGeometry().setFromPoints(points);
-const color = horizon[name].above ? 0x66ffaa : 0x556677;
+const color = horizon[name].above
+? (PLANET_COLORS[name] || 0x66ffaa)
+: 0x445566;
 const line = new THREE.Line(
 geo,
-new THREE.LineBasicMaterial({ color, transparent: true, opacity: 0.75 })
+new THREE.LineBasicMaterial({ color, transparent: true, opacity: horizon[name].above ? 0.85 : 0.45 })
 );
-line.userData = { type: 'natal-ray', planet: name };
+line.userData = { type: 'natal-ray', planet: name, above: horizon[name].above };
 this._natalGroup.add(line);
 }
 this.jd = prevJd;
 this._updatePlanetPositions();
 this.natal.horizon = horizon;
+this._natalGroup.visible = this.mode === 'planetary';
 return horizon;
 },
-clearNatal() {
+_clearNatalMeshes() {
 while (this._natalGroup.children.length) {
-this._natalGroup.remove(this._natalGroup.children[0]);
+const c = this._natalGroup.children[0];
+this._natalGroup.remove(c);
+if (c.geometry) c.geometry.dispose();
+if (c.material) {
+if (Array.isArray(c.material)) c.material.forEach((m) => m.dispose());
+else c.material.dispose();
 }
+}
+},
+clearNatal() {
+this._clearNatalMeshes();
 this.natal = null;
 },
 updateTemporalHorizon(year) {

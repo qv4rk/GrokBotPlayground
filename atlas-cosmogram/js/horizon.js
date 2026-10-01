@@ -111,8 +111,8 @@ Object.assign(CosmogramScene.prototype, {
 // On the globe: a horizon ring around the natal beacon, zenith and nadir
 // lines, and an arrow toward the Ascendant along the ground.
 const _setNatal = CosmogramScene.prototype.setNatalFreeze;
-CosmogramScene.prototype.setNatalFreeze = function (jd, lat, lon) {
-  const horizon = _setNatal.call(this, jd, lat, lon);
+CosmogramScene.prototype.setNatalFreeze = function (jd, lat, lon, horizonIn) {
+  const horizon = _setNatal.call(this, jd, lat, lon, horizonIn) || {};
   this.observer = { lat, lon };
   const R = 1.03, p = latLonToVector3(lat, lon, R), up = p.clone().normalize();
   const north = latLonToVector3(lat + 0.01, lon, R).sub(p).normalize();
@@ -133,7 +133,6 @@ CosmogramScene.prototype.setNatalFreeze = function (jd, lat, lon) {
   put('ZENITH', '#00e5ff', p.clone().addScaledVector(up, 0.62));
   put('ASC ' + a.sign.slice(0, 3).toUpperCase(), '#c9a84c', onGround(a.azimuth, 0.52));
   put('N', '#88aacc', onGround(0, 0.34));
-  for (const [name, h] of Object.entries(horizon)) h.azimuth = bodyAltAz(name, jd, lat, lon).az;
   Object.defineProperty(horizon, 'ascendant', { value: a, enumerable: false });   // keeps formatHorizon's loop unchanged
   return horizon;
 };
