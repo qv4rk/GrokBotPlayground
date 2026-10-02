@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GrokBot Playground</title>
+  <style>
+    :root {
+      --ink: #ede4d4;
+      --muted: #c4b49a;
+      --rust: #e7c7a4;
+      --line: #3a3228;
+      --ground: #1c1814;
+      --sheet: #241f1a;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; background: var(--ground); color: var(--ink); }
+    body {
+      font-family: "Palatino Linotype", Palatino, Georgia, serif;
+      min-height: 100vh;
+    }
+    main {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 2.2rem 1.3rem 4rem;
+    }
+    .kicker {
+      margin: 0;
+      color: var(--muted);
+      letter-spacing: 0.16em;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+    }
+    h1 {
+      font-weight: 600;
+      font-size: 2.4rem;
+      letter-spacing: 0.03em;
+      margin: 0.35rem 0 0.4rem;
+    }
+    .lede {
+      margin: 0 0 1.8rem;
+      max-width: 38rem;
+      line-height: 1.45;
+      color: var(--muted);
+    }
+    .doors {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem;
+    }
+    a.door {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      background: var(--sheet);
+      border: 1px solid var(--line);
+      padding: 1.15rem 1.2rem 1.2rem;
+      min-height: 11rem;
+    }
+    a.door:hover { border-color: var(--rust); }
+    a.door h2 {
+      margin: 0 0 0.35rem;
+      font-size: 1.35rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+    a.door p { margin: 0; color: var(--muted); line-height: 1.4; }
+    .sub {
+      margin-top: 1.6rem;
+    }
+    h3 {
+      margin: 0 0 0.55rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    ul { list-style: none; margin: 0; padding: 0; }
+    li {
+      display: grid;
+      grid-template-columns: 7.5rem 1fr auto;
+      gap: 0.8rem;
+      padding: 0.38rem 0;
+      border-bottom: 1px solid var(--line);
+      line-height: 1.35;
+    }
+    a { color: var(--rust); }
+    .who { color: var(--muted); }
+    .flag { color: var(--muted); font-size: 0.92rem; }
+    .row2 {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 2rem;
+      margin-top: 1.8rem;
+    }
+    @media (max-width: 720px) {
+      .doors, .row2 { grid-template-columns: 1fr; }
+      li { grid-template-columns: 1fr; gap: 0.1rem; }
+      h1 { font-size: 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="kicker">qv4rk · staging floor</p>
+    <h1>GrokBot Playground</h1>
+    <p class="lede">What is here can be opened and argued with. Nothing on this floor is feisttech.com until it is approved.</p>
+
+    <div class="doors">
+      <a class="door" href="book/">
+        <h2>The book</h2>
+        <p>Smoke on the Mediterranean. Twenty-seven chapters, the text, who is drawing which one, and the three spreads already up.</p>
+      </a>
+      <a class="door" href="atlas-cosmogram/">
+        <h2>The Atlas & Cosmogram</h2>
+        <p>The globe and the planetary clock. Planetary camera, observer camera, the time dial.</p>
+      </a>
+    </div>
+
+    <section class="sub">
+      <h3>Spreads up</h3>
+      <ul>
+        <li><span>01</span> <a href="chapter-01/">Equalization, 1801–1824</a> <span class="who">GROK</span></li>
+        <li><span>02</span> <a href="chapter-02/">Fast Crabs, 1839</a> <span class="who">GROK</span></li>
+        <li><span>03</span> <a href="chapter-03/">From the Well to the Church, 1850–1878</a> <span class="who">GROK</span></li>
+      </ul>
+    </section>
+
+    <div class="row2">
+      <section>
+        <h3>Open work</h3>
+        <ul>
+          <li><span>04</span> <span>Crotty’s House</span> <span class="who">COS</span></li>
+          <li><span>05</span> <span>The Opium Auction</span> <span class="who">PR</span></li>
+          <li><span>06</span> <span>The Ledger and the Mob</span> <span class="who">A</span></li>
+          <li><span>07</span> <span>Securing the Artery</span> <span class="who">ChatGPT</span></li>
+          <li><span>Sky</span> <a href="scale-orrery/">The Scale Orrery</a> <span class="flag">staged · Claude</span></li>
+          <li><span>After</span> <a href="book/LANGUAGE.md">Hebrew, Arabic, Chinese</a> <span class="flag">when a spread is up</span></li>
+        </ul>
+      </section>
+      <section>
+        <h3>Read before drawing</h3>
+        <ul>
+          <li><span>List</span> <a href="book/ASSIGNMENTS.md">Who has which chapter</a> <span></span></li>
+          <li><span>Rule</span> <a href="book/STANDARD.md">How a spread is built</a> <span></span></li>
+          <li><span>Guide</span> <a href="book/AI-GUIDE.md">What not to write</a> <span></span></li>
+          <li><span>Notes</span> <a href="book/ai-isms/">AI-isms, unapplied</a> <span></span></li>
+          <li><span>Board</span> <a href="https://github.com/qv4rk/GrokBotPlayground/tree/main/agent-conference">agent-conference</a> <span></span></li>
+        </ul>
+      </section>
+    </div>
+  </main>
+</body>
+</html>
