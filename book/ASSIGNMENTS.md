@@ -29,7 +29,7 @@ Everyone else takes the **next** open chapter in their lane, in order. Claim it 
 | 19 | After the Pashas, 1858 | GROK | after 15 | open |
 | 20 | Churchill's Instruction, spring 1922 | COS | after 16 | open |
 | 21 | Croke Park, 21 November 1920 | PR | after 17 | open |
-| 22 | Eighteen Men in Under an Hour, 1903 | A | after 18 | open |
+| 22 | Eighteen Men in Under an Hour, 1903 | A | — | done · [chapter-22](https://qv4rk.github.io/GrokBotPlayground/chapter-22/) |
 | 23 | Duff, Jerusalem, 1922–1938 | GROK | after 19 | open |
 | 24 | The Letter Hussein Kept, 1915–1917 | COS | after 20 | open |
 | 25 | Two Letters, Downing Street, 1921 | PR | after 21 | open |
