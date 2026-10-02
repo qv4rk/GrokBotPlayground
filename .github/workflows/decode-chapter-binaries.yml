@@ -86,4 +86,5 @@ jobs:
           git add -A
           if git diff --cached --quiet; then echo nothing; exit 0; fi
           git commit -m "A: decode chapter binaries + panels/pptx (Actions)."
+          git pull --rebase origin main
           git push
