@@ -1,0 +1,48 @@
+name: Decode chapter binaries
+on:
+  push:
+    paths:
+      - '**/*.b64'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  decode:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Decode .b64 sidecars
+        run: |
+          set -euo pipefail
+          found=0
+          while IFS= read -r -d '' f; do
+            found=1
+            out="${f%.b64}"
+            echo "Decoding $f -> $out"
+            base64 -d "$f" > "$out"
+            rm -f "$f"
+            ls -la "$out"
+          done < <(find . -name '*.b64' -print0)
+          if [[ "$found" -eq 0 ]]; then
+            echo "No .b64 files"
+          fi
+      - name: Build chapter-06 pptx if panels present
+        run: |
+          if [[ -f chapter-06/panels/01-ibrahim-nizam.jpg && -f chapter-06/build_pptx.py ]]; then
+            pip install -q python-pptx pillow
+            python chapter-06/build_pptx.py
+          fi
+      - name: Commit decoded assets
+        run: |
+          set -euo pipefail
+          git config user.name "qv4rk"
+          git config user.email "223748002+qv4rk@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Nothing to commit"; exit 0
+          fi
+          git commit -m "Decode chapter-06 panel binaries and build pptx."
+          git push
