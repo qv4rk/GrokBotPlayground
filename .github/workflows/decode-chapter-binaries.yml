@@ -11,6 +11,9 @@ on:
       - 'chapter-14/generate_panels.py'
       - 'chapter-14/build_pptx.py'
       - 'chapter-14/panels/MANIFEST.md'
+      - 'chapter-18/generate_panels.py'
+      - 'chapter-18/build_pptx.py'
+      - 'chapter-18/panels/MANIFEST.md'
       - '.github/workflows/decode-chapter-binaries.yml'
       - '**/*.b64'
       - '**/*.b64.*'
@@ -67,31 +70,31 @@ jobs:
                   print('skip tar', tar_path, e)
                   tar_path.unlink(missing_ok=True)
           PY
-      - name: Generate panels (ch14 only when present)
+      - name: Generate panels (ch18 only when present)
         run: |
           pip install -q pillow
-          if [ -f chapter-14/generate_panels.py ]; then python chapter-14/generate_panels.py; fi
-      - name: Build pptx (ch14 only when present)
+          if [ -f chapter-18/generate_panels.py ]; then python chapter-18/generate_panels.py; fi
+      - name: Build pptx (ch18 only when present)
         run: |
           pip install -q python-pptx pillow
-          if [ -f chapter-14/build_pptx.py ]; then python chapter-14/build_pptx.py; fi
-      - name: Cleanup and commit chapter-14 only
+          if [ -f chapter-18/build_pptx.py ]; then python chapter-18/build_pptx.py; fi
+      - name: Cleanup and commit chapter-18 only
         run: |
           set -euo pipefail
           git config user.name "qv4rk"
           git config user.email "223748002+qv4rk@users.noreply.github.com"
-          rm -f chapter-14/index.html.b64
-          rm -f chapter-14/panels/*.b64 chapter-14/panels/*.b64.*
-          rm -f chapter-14/panels/panels_bundle.tar
-          rm -f chapter-14/*.pptx.b64 chapter-14/*.pptx.b64.*
-          git add chapter-14/
+          rm -f chapter-18/index.html.b64
+          rm -f chapter-18/panels/*.b64 chapter-18/panels/*.b64.*
+          rm -f chapter-18/panels/panels_bundle.tar
+          rm -f chapter-18/*.pptx.b64 chapter-18/*.pptx.b64.*
+          git add chapter-18/
           if git diff --cached --quiet; then echo nothing; exit 0; fi
-          git commit -m "A: chapter-14 panels/pptx (Actions)."
+          git commit -m "A: chapter-18 panels/pptx (Actions)."
           git pull --rebase origin main || {
-            echo 'rebase conflict — keep chapter-14 from ours-in-rebase (theirs), keep rest from main'
-            git checkout --theirs -- chapter-14/ || true
-            git checkout --ours -- chapter-06/ chapter-10/ || true
-            git add chapter-14 chapter-06 chapter-10 || true
+            echo 'rebase conflict — keep chapter-18 from ours-in-rebase (theirs), keep rest from main'
+            git checkout --theirs -- chapter-18/ || true
+            git checkout --ours -- chapter-06/ chapter-10/ chapter-14/ || true
+            git add chapter-18 chapter-06 chapter-10 chapter-14 || true
             GIT_EDITOR=true git rebase --continue || true
           }
           git push
