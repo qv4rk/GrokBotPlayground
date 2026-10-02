@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - '**/*.b64'
+      - '**/*.b64.*'
   workflow_dispatch:
 permissions:
   contents: write
@@ -14,21 +15,35 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Decode .b64 sidecars
+      - name: Reassemble chunked .b64.NN and decode all .b64
         run: |
           set -euo pipefail
-          found=0
-          while IFS= read -r -d '' f; do
-            found=1
-            out="${f%.b64}"
-            echo "Decoding $f -> $out"
-            base64 -d "$f" > "$out"
-            rm -f "$f"
-            ls -la "$out"
-          done < <(find . -name '*.b64' -print0)
-          if [[ "$found" -eq 0 ]]; then
-            echo "No .b64 files"
-          fi
+          python3 << 'PY'
+          from pathlib import Path
+          import re, base64, os
+          root = Path('.')
+          # Reassemble chunked files: foo.b64.00, foo.b64.01 -> foo.b64
+          chunks = {}
+          for p in root.rglob('*.b64.*'):
+              m = re.match(r'^(.*\.b64)\.(\d+)$', p.name)
+              if not m: continue
+              key = str(p.parent / m.group(1))
+              chunks.setdefault(key, []).append((int(m.group(2)), p))
+          for key, parts in chunks.items():
+              parts.sort()
+              data = ''.join(p.read_text() for _, p in parts)
+              Path(key).write_text(data)
+              for _, p in parts:
+                  p.unlink()
+              print('reassembled', key, len(data))
+          # Decode every .b64
+          for p in list(root.rglob('*.b64')):
+              out = Path(str(p)[:-4])  # strip .b64
+              out.parent.mkdir(parents=True, exist_ok=True)
+              out.write_bytes(base64.b64decode(p.read_text()))
+              p.unlink()
+              print('decoded', out, out.stat().st_size)
+          PY
       - name: Build chapter-06 pptx if panels present
         run: |
           if [[ -f chapter-06/panels/01-ibrahim-nizam.jpg && -f chapter-06/build_pptx.py ]]; then
@@ -44,5 +59,5 @@ jobs:
           if git diff --cached --quiet; then
             echo "Nothing to commit"; exit 0
           fi
-          git commit -m "Decode chapter-06 panel binaries and build pptx."
+          git commit -m "Decode chapter-06 binaries (panels, html, pptx)."
           git push
