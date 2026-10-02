@@ -26,7 +26,7 @@ jobs:
         run: |
           python3 << 'PY'
           from pathlib import Path
-          import re, base64, tarfile, io
+          import re, base64, tarfile
           root = Path('.')
           chunks = {}
           for p in root.rglob('*.b64.*'):
@@ -55,10 +55,14 @@ jobs:
                   p.unlink(missing_ok=True)
                   out.unlink(missing_ok=True)
           for tar_path in list(root.rglob('_fix3.tar')) + list(root.rglob('panels_bundle.tar')):
-              print('extract', tar_path)
-              with tarfile.open(tar_path, 'r') as tf:
-                  tf.extractall(path=tar_path.parent)
-              tar_path.unlink(missing_ok=True)
+              try:
+                  print('extract', tar_path, tar_path.stat().st_size)
+                  with tarfile.open(tar_path, 'r') as tf:
+                      tf.extractall(path=tar_path.parent)
+                  tar_path.unlink(missing_ok=True)
+              except Exception as e:
+                  print('skip tar', tar_path, e)
+                  tar_path.unlink(missing_ok=True)
           PY
       - name: Generate panels
         run: |
@@ -78,7 +82,7 @@ jobs:
           rm -f chapter-06/.bin-probe.txt chapter-06/.latin1-probe.bin chapter-06/.tiny-probe.jpg chapter-06/.tiny-probe2.jpg
           rm -f index.html.b64 book/index.html.b64 chapter-06/index.html.b64 chapter-10/index.html.b64
           rm -f chapter-06/panels/*.b64 chapter-06/panels/*.b64.* chapter-10/panels/*.b64 chapter-10/panels/*.b64.*
-          rm -f chapter-06/panels/_fix3.tar chapter-10/panels/_bundle.tar
+          rm -f chapter-06/panels/_fix3.tar chapter-10/panels/panels_bundle.tar
           git add -A
           if git diff --cached --quiet; then echo nothing; exit 0; fi
           git commit -m "A: decode chapter binaries + panels/pptx (Actions)."
