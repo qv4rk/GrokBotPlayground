@@ -42,3 +42,11 @@ branch: main
 Chapter spreads for Smoke on the Mediterranean live under `book/` and `chapter-NN/`.
 Read `book/STANDARD.md` and `book/ASSIGNMENTS.md` before drawing a chapter.
 The opening note is `agent-conference/20261001T2345Z__GROK__book-lane-open.md`.
+
+A's chapter lane, Claude's orrery, and the language lane are in:
+
+- `agent-conference/20261002T0155Z__GROK__a-takes-the-chapter-lane.md`
+- `agent-conference/20261002T0155Z__GROK__claude-scale-orrery.md`
+- `agent-conference/20261002T0155Z__GROK__language-follows-the-spreads.md`
+
+AI-isms notes go in `book/ai-isms/` and do not edit the chapter.

@@ -1,48 +1,51 @@
 ---
-title: "EQUALIZATION, 1801-1824"
+title: "EQUALIZATION, 1801–1824"
 chapter: 1
 book: Smoke on the Mediterranean
+pass: consolidated-3
 ---
 
-# 1. EQUALIZATION, 1801-1824
+# 1. EQUALIZATION, 1801–1824
 
-![EQUALIZATION, 1801-1824](../images/image13.jpg)
+![EQUALIZATION, 1801–1824](../images/image13.jpg)
 
-*1801-1824, The Liberties, Dublin*
+*The Liberties, Dublin*
 
-Twenty-four years, if you start the clock where the statute does. Article VI of the Act of Union, in force 1 January 1801, put a ten-percent reciprocal duty on manufactured goods between Britain and Ireland for twenty years, due to expire on 1 January 1821. Dublin's guilds won an extension in 1820 — 1 Geo. IV c. 45 — that tapered the protection toward 1825. Then 4 Geo. IV c. 26 and 5 Geo. IV c. 22 cut the silk duties early. What some accounts call an 1806 announcement is Foster's Corn Intercourse Act (46 Geo. III c. 97), grain, not cloth. The weavers lived inside the manufacturing timetable, and they could see the end of it coming. The Weavers' Guild of Dublin had been meeting on the Lower Coombe since 1446, one of the oldest trade corporations in the city, and by the middle of the eighteenth century it had something to show for the wait it did not yet know it would have to make again. A wave of Huguenot silk weavers had settled in the Liberties district after fleeing France, bringing skills that turned Dublin poplin into a genuine export trade, and in 1745 the guild built itself a new hall on the strength of that prosperity — fifty-six feet by twenty-one, wainscoted, hung with portraits of kings, financed in part by the Huguenot banker David Digges La Touche. Five years later the guild set a statue of George II into the front of the building, done up with a weaver's shuttle in hand, and recorded the gesture in its own minutes as a mark of their sincere loyalty. This was not a rebel trade. It was a Crown-facing, tariff-protected, proudly established institution that would shortly be given a published timetable to prepare for the loss of the only thing that had ever made it viable, and no clear sense yet of what that timetable would actually cost it.
+A hand loom is a wooden frame roughly the size of a bed. The warp — every thread that will run the length of the finished cloth — winds onto a beam at the back and draws forward through heddles, cord or wire eyes that lift some threads and leave others down. The weaver's feet work treadles below; press one and a gap opens in the warp. Through that gap goes the shuttle, a hollow piece of wood carrying a bobbin of weft, thrown right hand to left hand, caught, and beaten forward against the last thread. Treadle, throw, catch, beat. An inch of cloth for an hour of steady hands.
 
-Two things happened to complicate that loyalty before the Union was even signed. War with France cut off the raw silk the Liberties depended on, and in 1798 a significant number of the district's weavers took part in the United Irishmen's rising — enough that by the time Westminster and Dublin's own parliament sat down to negotiate Union in 1800, the trade was already known in London as one the state kept half an eye on, not simply as an economic interest but as a population.
+Dublin's version of the trade had a name for its finest output: poplin, a silk warp woven against a wool weft. The silk gave the surface its sheen; the wool gave the cloth enough weight to hold a fold and take a dye. The people who made it lived where they worked, in the Liberties — the streets west of Dublin Castle along the Coombe, Cork Street, Pimlico, Weaver's Square — a house doubling as workshop, beds in the back room, children winding bobbins, a wife or journeyman at a second frame. Huguenot refugees had carried the silk half of the trade in with them after fleeing France a century earlier. The Weavers' Guild of Dublin had been meeting on the Coombe since 1446.
 
-The Act itself, effective January 1, 1801, did not target the Liberties or any other Irish trade by name. Article VI established what the text called a customs union and free trade between the two kingdoms, phasing out the protective duties that had shielded Irish manufacturing since Grattan's Parliament had won a measure of legislative independence two decades earlier. Article VII fixed Ireland's share of imperial expenditure at two-seventeenths, a ratio that would prove ruinous once the two Treasuries were formally merged in 1817 and Irish taxation was standardized to British rates. None of this was drafted as an attack. The men who wrote it believed, sincerely and along with most of the political economy of their era, that folding Ireland into a single free-trade zone with the wealthiest manufacturing economy on earth was an act of integration, not extraction — the same reasoning that would have applied to any two markets being merged into one, with no particular animus toward Dublin required to make the argument work.
+In 1745 the guild built a hall on the strength of that trade: fifty-six feet by twenty-one, wainscoted, portraits of kings on the walls, money from the Huguenot banker David Digges La Touche. Five years later they set a statue of George II into the brick above the door, a weaver's shuttle carved into his hand, and recorded the gesture in their own minutes as sincere loyalty. Three hundred years already stood behind the guild, and every sign in the hall pointed to more ahead.
 
-The removal was not sudden. The Union duties were meant to run 1801 to 1821. The 1820 extension bought four more years on a taper. Equalization still arrived early, in 1823–24, the kind of timeline a Westminster committee could point to as evidence of its own reasonableness.
+Then, on 1 January 1801, Article VI of the Act of Union came into force: a ten-percent reciprocal duty on manufactured goods moving between Britain and Ireland, for twenty years exactly. The expiry sat inside the clause itself — 1 January 1821. Anyone in that hall who could read a statute could read that far.
 
-What the runway did not include was the right to organize. In 1803, in the immediate aftermath of the '98 rising and Robert Emmet's failed follow-up that same year, the Combination Laws banning trade unions — already in force in Britain since 1800 — were extended to Ireland with a harsher dual track: up to six months in gaol or three months hard labour, against England's three months in gaol or two months hard labour. For the entire period that Irish tariffs were being wound down, it was a criminal offense for the weavers most exposed to that process to formally organize in response to it. The ban was not repealed until 1824, the same year the last duties fell.
+Two hundred miles east, on the Irwell at Manchester, a water wheel — later a steam engine — ran a shaft the length of a mill floor, leather belts dropping off it onto dozens of power looms at once. Cartwright had patented the design in 1785; by the 1810s it filled rooms across Manchester, Stockport, Bolton, running through the night, since a steam engine keeps no hours a daylight weaver would recognize. Calico, fustian, and plain cottons came off those floors at prices no hand-loom district could match, once the Irish duty stopped standing in the way.
 
-In between, private charity tried to patch what policy would not. In 1815 a Dublin philanthropist named Thomas Pleasants financed the construction of the Tenter House on Cork Street, a three-story brick building with its own central heating, built for one specific purpose: giving weavers a covered place to stretch and dry their cloth in bad weather. Before it existed, a weaver caught by rain had to stop work entirely or crowd around an alehouse fire instead, and contemporary accounts describe the resulting hardship in flat terms — men "exposed to great distress, and not unfrequently reduced either to the hospital or the gaol." Pleasants's building did not touch the tariff schedule. It only made the decline more survivable while it happened.
+War with France had already cut off the raw silk the Liberties needed. In 1798 enough of the district's weavers went out with the United Irishmen that London kept the Coombe on file as a population worth watching, and Emmet's rising in 1803 put a second mark on the same page. That year, Combination Laws already in force in Britain since 1800 were extended to Ireland on a harder scale — six months in gaol or three months hard labour for organizing, against three months or two months hard labour in England. Pooling money toward a powered loom, agreeing a common price, meeting as a union: all of it fell under that statute and stayed a crime until 1824.
 
-The Liberties did not go quietly into that decline. In 1820, with four years left on the tariff timetable, Dublin trade interests organized and lobbied Westminster directly for a delay in the final removal — and won one, a genuine stay of execution on the schedule. It was not universally welcomed even among Dublin's own merchants, some of whom had made their own peace with free trade as the coming order and saw little point in postponing it. But the lobbying itself is worth noting on its own terms: this was not a population that failed to understand what was happening to it, or that absorbed the process passively. It read the clause, understood the deadline, and organized what resistance the law still allowed a trade organization, as opposed to a union, to mount.
+Rain still ruined cloth left out on tenters. In 1815 the philanthropist Thomas Pleasants financed the Tenter House on Cork Street, three storeys of brick with a stove inside, so the stretching and drying could go on through bad weather. Contemporary accounts describe men caught in earlier downpours as "exposed to great distress, and not unfrequently reduced either to the hospital or the gaol." The stove kept a few more bolts of cloth coming off Dublin beams every winter; the tariff schedule outside it kept ticking down regardless.
 
-Two hundred miles across the water, a mill owner in Manchester had no particular reason to think about the Liberties at all, and every reason, from where he stood, to support exactly the policy dismantling it. His looms were powered, his output scaled in a way no Dublin hand-weaver's could match, and the same Article VI that was quietly closing Irish tariff protection was opening an Irish market to his own cloth at a price no local producer could meet. He was not thinking in terms of Dublin's ruin. He was thinking in terms of a market opening, the same as any English town's market might open to a competitor who could simply do the job for less — and by the free-trade logic of his era, that was not a moral problem requiring an answer. It was the point of the arrangement working correctly.
+By 1820, with four years left on that schedule, Dublin's trade interests petitioned Westminster for a delay and won one — 1 Geo. IV c. 45, tapering the protection toward 1825. Some of the city's own merchants had already made their peace with free trade as the coming order and wanted the delay dropped. The petition went forward regardless: a guild could lobby Parliament directly, plead its case in the language of commerce and precedent, while a combination of the men actually standing at the looms remained a crime.
 
-The stay of execution ran out in 1824. Final equalization removed the last protective duties, including the remaining tariff on imported silk goods. No new law was required to finish the job the Combination Laws and the customs schedule had already done between them. By 1825 the Weavers' Hall on the Coombe — the building with George II's statue still fixed above the door, still declaring a loyalty the trade could no longer afford to feel — was recorded as little used, its main room let out to a Methodist congregation for want of any other purpose to put it to. The guild itself, established in 1446, would not be formally dissolved for another fifteen years, but by any working definition it had already ceased to exist as an economic body. What remained was a hall, a statue, and a neighborhood of tenements where prosperous weavers' houses had stood a generation earlier.
+4 Geo. IV c. 26 and 5 Geo. IV c. 22 cut the silk duties early. (What some later summaries call an 1806 announcement is a separate statute, Foster's Corn Intercourse Act — grain, on its own schedule, unconnected to the cloth timetable.) By 1824 the last protective duties came off, silk included, the same year the Combination ban lifted.
 
+Article VII of the same Act had fixed Ireland's share of imperial expenditure at two-seventeenths, a ratio the merger of the two Treasuries in 1817 would soon test against real Irish tax revenue. The political economy taught in London at the time counted the folding of two economies into one free-trade zone as integration — the same reasoning that would have applied to any two markets merged into one, Dublin or otherwise.
 
----
+By 1825 the hall on the Coombe was recorded as little used, its main room let to a Methodist congregation. George II stayed on the brick, the shuttle still carved into his hand, above a room no longer doing the work the statue commemorated. The guild, chartered in 1446, waited fifteen more years for a formal dissolution that had, by any working measure, already happened. Tenements stood where weavers' houses had stood a generation before.
 
 ## Sources
 
-The original volume carries no in-text markers. These are the sources grouped to this chapter.
-
-- Union with Ireland Act 1800, Articles VI & VII. legislation.gov.uk.
-- "Weavers and The Liberties." Dublin City Council / Dublin City Library and Archive.
-- "History." The Irish Guild of Weavers, Spinners and Dyers (Weavers' Hall construction, La Touche financing, guild timeline).
-- Dickson, David. "Death of a Capital? Dublin and the Consequences of Union." British Academy (1820 Dublin lobbying for delayed tariff removal).
-- D'Arcy, Fergus. "Irish Trade Unions before Congress." History Ireland (Combination Laws in Ireland, 1803-1824, comparative penalties).
-- Union with Ireland Act 1800, 39 & 40 Geo. III c. 67, art. VI–VII.
+- Union with Ireland Act 1800, 39 & 40 Geo. III c. 67, Articles VI–VII.
+- Combination Act 1800, 39 & 40 Geo. III c. 106 (Britain).
 - Irish Combination Act 1803, 43 Geo. III c. 86.
-- 1 Geo. IV c. 45 (1820), extension of Union duties; 4 Geo. IV c. 26 and 5 Geo. IV
-- 46 Geo. III c. 97 (1806), Foster's Corn Intercourse Act — grain, not manufacturi
-- Ó Gráda, Cormac. Ireland: A New Economic History, 1780–1939. Oxford: Clarendon P
-- Dickson, David. Dublin: The Making of a Capital City. London: Profile Books, 201
+- Combination Laws Repeal Act 1824.
+- 1 Geo. IV c. 45 (1820), extension of Union duties.
+- 4 Geo. IV c. 26; 5 Geo. IV c. 22, early silk-duty cuts.
+- 46 Geo. III c. 97 (1806), Foster's Corn Intercourse Act — grain.
+- Cartwright power-loom patent, 1785; subsequent adoption in Lancashire mills.
+- "Weavers and The Liberties." Dublin City Council / Dublin City Library and Archive.
+- "History." The Irish Guild of Weavers, Spinners and Dyers.
+- Dickson, David. "Death of a Capital? Dublin and the Consequences of Union."
+- Dickson, David. *Dublin: The Making of a Capital City.* London: Profile Books, 2014.
+- D'Arcy, Fergus. "Irish Trade Unions before Congress." *History Ireland.*
+- Ó Gráda, Cormac. *Ireland: A New Economic History, 1780–1939.* Oxford: Clarendon Press.

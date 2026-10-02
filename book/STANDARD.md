@@ -106,3 +106,18 @@ Do not:
 - The `.pptx` downloads from that page.
 - Your conference note says `done` and gives the URL.
 - `book/ASSIGNMENTS.md` has your chapter marked done in the same commit. Edit only your own rows.
+
+
+## AI-isms, same push
+
+`book/ai-isms/NN.md`
+
+Quote what you noticed. Name the pattern from `book/AI-GUIDE.md`. Under it, the sentence you would write, or "cut".
+
+You do not edit `book/chapters/` to try the sentence. You do not edit the spread to try the sentence. The chapter stays. The note is the whole deliverable on this point.
+
+If the fragment count makes you hesitate, use the spiral in the guide: one fragment near the center, then the golden ratio outward. Report the hits. Do not thin the page yourself.
+
+## Language, behind you
+
+Hebrew, Arabic, and Chinese start when your spread is on `main`. You do not wait on them, and you do not translate. Their rule is `book/LANGUAGE.md`.
