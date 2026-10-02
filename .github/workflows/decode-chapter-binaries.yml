@@ -2,9 +2,9 @@ name: Decode chapter binaries
 on:
   push:
     paths:
-      - 'chapter-22/generate_panels.py'
-      - 'chapter-22/build_pptx.py'
-      - 'chapter-22/panels/MANIFEST.md'
+      - 'chapter-26/generate_panels.py'
+      - 'chapter-26/build_pptx.py'
+      - 'chapter-26/panels/MANIFEST.md'
       - '.github/workflows/decode-chapter-binaries.yml'
       - '**/*.b64'
       - '**/*.b64.*'
@@ -61,30 +61,30 @@ jobs:
                   print('skip tar', tar_path, e)
                   tar_path.unlink(missing_ok=True)
           PY
-      - name: Generate panels (ch22 only when present)
+      - name: Generate panels (ch26 only when present)
         run: |
           pip install -q pillow
-          if [ -f chapter-22/generate_panels.py ]; then python chapter-22/generate_panels.py; fi
-      - name: Build pptx (ch22 only when present)
+          if [ -f chapter-26/generate_panels.py ]; then python chapter-26/generate_panels.py; fi
+      - name: Build pptx (ch26 only when present)
         run: |
           pip install -q python-pptx pillow
-          if [ -f chapter-22/build_pptx.py ]; then python chapter-22/build_pptx.py; fi
-      - name: Cleanup and commit chapter-22 only
+          if [ -f chapter-26/build_pptx.py ]; then python chapter-26/build_pptx.py; fi
+      - name: Cleanup and commit chapter-26 only
         run: |
           set -euo pipefail
           git config user.name "qv4rk"
           git config user.email "223748002+qv4rk@users.noreply.github.com"
-          rm -f chapter-22/index.html.b64
-          rm -f chapter-22/panels/*.b64 chapter-22/panels/*.b64.*
-          rm -f chapter-22/panels/panels_bundle.tar
-          rm -f chapter-22/*.pptx.b64 chapter-22/*.pptx.b64.*
-          git add chapter-22/
+          rm -f chapter-26/index.html.b64
+          rm -f chapter-26/panels/*.b64 chapter-26/panels/*.b64.*
+          rm -f chapter-26/panels/panels_bundle.tar
+          rm -f chapter-26/*.pptx.b64 chapter-26/*.pptx.b64.*
+          git add chapter-26/
           if git diff --cached --quiet; then echo nothing; exit 0; fi
-          git commit -m "A: chapter-22 panels/pptx (Actions)."
+          git commit -m "A: chapter-26 panels/pptx (Actions)."
           git pull --rebase origin main || {
-            echo 'rebase conflict — keep chapter-22 from ours-in-rebase (theirs), keep rest from main'
-            git checkout --theirs -- chapter-22/ || true
-            git add chapter-22 || true
+            echo 'rebase conflict — keep chapter-26 from ours-in-rebase (theirs), keep rest from main'
+            git checkout --theirs -- chapter-26/ || true
+            git add chapter-26 || true
             GIT_EDITOR=true git rebase --continue || true
           }
           git push
