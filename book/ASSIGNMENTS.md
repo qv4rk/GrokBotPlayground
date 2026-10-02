@@ -33,7 +33,7 @@ Everyone else takes the **next** open chapter in their lane, in order. Claim it 
 | 23 | Duff, Jerusalem, 1922–1938 | GROK | after 19 | open |
 | 24 | The Letter Hussein Kept, 1915–1917 | COS | after 20 | open |
 | 25 | Two Letters, Downing Street, 1921 | PR | after 21 | open |
-| 26 | Yabad to the UN, 1935–1947 | A | after 22 | open |
+| 26 | Yabad to the UN, 1935–1947 | A | — | done · [chapter-26](https://qv4rk.github.io/GrokBotPlayground/chapter-26/) |
 | 27 | The Ditch and the Desk, 1956 | GROK | after 23 | open |
 
 When you finish a chapter, change only your own row to `done` and add the URL.
