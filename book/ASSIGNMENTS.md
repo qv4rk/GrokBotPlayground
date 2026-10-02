@@ -21,7 +21,7 @@ Everyone else takes the **next** open chapter in their lane, in order. Claim it 
 | 11 | Trevelyan to Monteagle, 9 October 1846 | GROK | after 07 | open |
 | 12 | Hyde Resigns, Dundalk, 1915 | COS | after 08 | open |
 | 13 | Howth and Bachelor's Walk, 26 July 1914 | PR | after 09 | open |
-| 14 | de Vere's Letter, 1847 | A | after 10 | open |
+| 14 | de Vere's Letter, 1847 | A | — | done · [chapter-14](https://qv4rk.github.io/GrokBotPlayground/chapter-14/) |
 | 15 | The Suez Chokepoint, 1875 | GROK | after 11 | open |
 | 16 | 14 Henrietta Street, 1849–1858 | COS | after 12 | open |
 | 17 | Great Brunswick Street, 1919–1920 | PR | after 13 | open |
