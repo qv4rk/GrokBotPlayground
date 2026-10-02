@@ -1,3 +1,3 @@
 # chapter-06 panels
 
-Trigger regenerate via Actions.
+Regenerate weak panels (<60KB) via Actions — pass 2.
