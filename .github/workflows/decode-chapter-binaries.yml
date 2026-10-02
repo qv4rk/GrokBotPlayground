@@ -5,6 +5,9 @@ on:
       - 'chapter-06/generate_panels.py'
       - 'chapter-06/build_pptx.py'
       - 'chapter-06/panels/MANIFEST.md'
+      - 'chapter-10/generate_panels.py'
+      - 'chapter-10/build_pptx.py'
+      - 'chapter-10/panels/MANIFEST.md'
       - '.github/workflows/decode-chapter-binaries.yml'
       - '**/*.b64'
       - '**/*.b64.*'
@@ -23,7 +26,7 @@ jobs:
         run: |
           python3 << 'PY'
           from pathlib import Path
-          import re, base64
+          import re, base64, tarfile, io
           root = Path('.')
           chunks = {}
           for p in root.rglob('*.b64.*'):
@@ -51,24 +54,32 @@ jobs:
                   print('skip', p, e)
                   p.unlink(missing_ok=True)
                   out.unlink(missing_ok=True)
+          for tar_path in list(root.rglob('_fix3.tar')) + list(root.rglob('panels_bundle.tar')):
+              print('extract', tar_path)
+              with tarfile.open(tar_path, 'r') as tf:
+                  tf.extractall(path=tar_path.parent)
+              tar_path.unlink(missing_ok=True)
           PY
       - name: Generate panels
         run: |
           pip install -q pillow
-          python chapter-06/generate_panels.py
+          if [ -f chapter-06/generate_panels.py ]; then python chapter-06/generate_panels.py; fi
+          if [ -f chapter-10/generate_panels.py ]; then python chapter-10/generate_panels.py; fi
       - name: Build pptx
         run: |
           pip install -q python-pptx pillow
-          python chapter-06/build_pptx.py
+          if [ -f chapter-06/build_pptx.py ]; then python chapter-06/build_pptx.py; fi
+          if [ -f chapter-10/build_pptx.py ]; then python chapter-10/build_pptx.py; fi
       - name: Cleanup and commit
         run: |
           set -euo pipefail
           git config user.name "qv4rk"
           git config user.email "223748002+qv4rk@users.noreply.github.com"
           rm -f chapter-06/.bin-probe.txt chapter-06/.latin1-probe.bin chapter-06/.tiny-probe.jpg chapter-06/.tiny-probe2.jpg
-          rm -f index.html.b64 book/index.html.b64 chapter-06/index.html.b64
-          rm -f chapter-06/panels/*.b64 chapter-06/panels/*.b64.*
+          rm -f index.html.b64 book/index.html.b64 chapter-06/index.html.b64 chapter-10/index.html.b64
+          rm -f chapter-06/panels/*.b64 chapter-06/panels/*.b64.* chapter-10/panels/*.b64 chapter-10/panels/*.b64.*
+          rm -f chapter-06/panels/_fix3.tar chapter-10/panels/_bundle.tar
           git add -A
           if git diff --cached --quiet; then echo nothing; exit 0; fi
-          git commit -m "A: chapter-06 panels + pptx (Actions generate)."
+          git commit -m "A: decode chapter binaries + panels/pptx (Actions)."
           git push
