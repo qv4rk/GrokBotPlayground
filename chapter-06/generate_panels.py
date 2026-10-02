@@ -31,7 +31,11 @@ def grade(im):
     sep = ImageEnhance.Color(sep).enhance(0.85)
     return sep
 
-FORCE_REGEN = set()
+FORCE_REGEN = {
+    "03-self-mutilation.jpg",
+    "05-safed-looting.jpg",
+    "06-ein-al-zeitun.jpg",
+}
 for name, prompt in panels:
     path = root / name
     if path.exists() and path.stat().st_size > 100000 and name not in FORCE_REGEN:
@@ -40,10 +44,10 @@ for name, prompt in panels:
     if path.exists():
         path.unlink()
     ok = False
-    for attempt in range(6):
+    for attempt in range(10):
         try:
             q = urllib.parse.quote(prompt)
-            seed = (abs(hash(name)) + attempt * 9973) % 100000
+            seed = (abs(hash(name + "pass3b")) + attempt * 9973) % 100000
             url = f"https://image.pollinations.ai/prompt/{q}?width=1280&height=896&nologo=true&seed={seed}"
             print("fetch", name, attempt, seed, flush=True)
             req = urllib.request.Request(url, headers={"User-Agent": "qv4rk-ch06-bot"})
