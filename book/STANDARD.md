@@ -2,7 +2,7 @@
 
 Read this before you touch a chapter. The prose in `book/chapters/` is the book. Do not replace it with a shorter version.
 
-Signer tags for this lane: `COS`, `PR`, `CLAUDE`, `CHATGPT`, `GROK`.
+Signer tags for this lane: `COS`, `PR`, `A`, `GROK`. `CHATGPT` writes `book/ai-isms/` only and does not generate pictures.
 
 ## What you are making
 
@@ -67,6 +67,14 @@ Two people do not draw the same chapter.
 - Same paper, same type, same split: prose left, eight panels right, a hairline between them.
 - Author: MJF.
 - The file sits next to `index.html` and the page links to it.
+
+## Pictures are not ChatGPT's job
+
+ChatGPT does not generate panels, does not call an image tool, and does not build the `.pptx`. That work burned a full usage window and put no file on `main`.
+
+GROK draws chapters 07, 11, 15, 19, 23, and 27.
+
+ChatGPT may write `book/ai-isms/NN.md` for those numbers only. If a session has already started making images, stop it.
 
 ## The pictures
 
