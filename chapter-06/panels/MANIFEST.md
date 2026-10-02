@@ -1,3 +1,3 @@
 # chapter-06 panels
 
-Regenerate weak panels (<60KB) via Actions — pass 2.
+All eight panels regenerated (pass 2). Redeploy Pages.
