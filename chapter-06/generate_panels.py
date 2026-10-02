@@ -9,10 +9,10 @@ root.mkdir(parents=True, exist_ok=True)
 panels = [
     ("01-ibrahim-nizam.jpg", "graphic novel ink line ochre soot paper 1830s Ottoman Syria Ibrahim Pasha nizam soldiers entering city gate dignified faces no text no captions"),
     ("02-jerusalem-summons.jpg", "graphic novel ink line ochre soot paper 1834 Jerusalem interior council table Ibrahim Pasha facing Palestinian notables mufti sheikhs dignified faces period dress no text no captions"),
-    ("03-self-mutilation.jpg", "graphic novel ink ochre soot village youths rendering themselves unfit for musket conscription lime near eye sombre dignified no gore no text"),
+    ("03-self-mutilation.jpg", "graphic novel ink ochre soot ONE scene 1834 Levant village room young men self-maiming to dodge musket conscription lime cloth eye bandage wrapped trigger finger missing front teeth sombre dignified no gore no faucet no collage portraits no text"),
     ("04-dung-gate.jpg", "graphic novel ink line ochre soot rebels crawling from ancient sewer under Jerusalem stone Dung Gate Bab al-Maghariba peasants with spears streaming into city 1834 no text no captions"),
-    ("05-safed-looting.jpg", "graphic novel ink ochre soot Safed Jewish quarter aftermath wrecked Hebrew press torn Torah scrolls smoke 1834 dignified no gore no text"),
-    ("06-ein-al-zeitun.jpg", "graphic novel ink line ochre soot Galilee Arab village courtyard olive trees unnamed sheikh sheltering twelve-year-old Jewish boy Jacob Saphir 1834 dignified faces no text no captions"),
+    ("05-safed-looting.jpg", "graphic novel ink ochre soot ONE interior Safed 1834 wrecked Hebrew wooden printing press torn Torah scrolls scattered manuscripts smoke looted print shop clear press and scrolls no modern lamps no gore no text"),
+    ("06-ein-al-zeitun.jpg", "graphic novel ink line ochre soot Ein al-Zeitun courtyard olive trees older sheikh sheltering twelve-year-old Jewish boy 1834 dignified faces NO power lines NO wires NO cables across sky stone houses only no text no captions"),
     ("07-hebron-sack.jpg", "graphic novel ink ochre soot Egyptian troops entering Hebron closed Jewish doorway street 1834 sombre no gore no text"),
     ("08-earthquake-safed.jpg", "graphic novel ink line ochre soot Safed hillside town rubble after 1837 earthquake vineyards and olive groves still tended in valley distant travellers dust no text no captions"),
 ]
@@ -31,19 +31,23 @@ def grade(im):
     sep = ImageEnhance.Color(sep).enhance(0.85)
     return sep
 
+FORCE_REGEN = {
+    "03-self-mutilation.jpg",
+    "05-safed-looting.jpg",
+    "06-ein-al-zeitun.jpg",
+}
 for name, prompt in panels:
     path = root / name
-    # regenerate weak synth fallbacks (<60KB) and missing files
-    if path.exists() and path.stat().st_size > 60000:
+    if path.exists() and path.stat().st_size > 100000 and name not in FORCE_REGEN:
         print("keep", path, path.stat().st_size)
         continue
     if path.exists():
         path.unlink()
     ok = False
-    for attempt in range(6):
+    for attempt in range(8):
         try:
             q = urllib.parse.quote(prompt)
-            seed = (abs(hash(name)) + attempt * 9973) % 100000
+            seed = (abs(hash(name + "pass3")) + attempt * 9973) % 100000
             url = f"https://image.pollinations.ai/prompt/{q}?width=1280&height=896&nologo=true&seed={seed}"
             print("fetch", name, attempt, seed, flush=True)
             req = urllib.request.Request(url, headers={"User-Agent": "qv4rk-ch06-bot"})
