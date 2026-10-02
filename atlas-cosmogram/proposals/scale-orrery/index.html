@@ -69,22 +69,31 @@
         <button type="button" id="sunview" class="ghost">From Earth, look at the Sun</button>
       </div>
       <div class="row">
+        <select id="eclipse" aria-label="Eclipse presets"><option value="">Eclipse presets…</option></select>
+      </div>
+      <div class="row">
         <select id="focus" aria-label="Focus on body">
           <option value="">Whole system</option>
           <option value="sun">Sun</option>
           <option value="mercury">Mercury</option>
           <option value="venus">Venus</option>
           <option value="earth">Earth</option>
+          <option value="moon">Moon</option>
           <option value="mars">Mars</option>
           <option value="jupiter">Jupiter</option>
+          <option value="io">Io</option>
+          <option value="europa">Europa</option>
+          <option value="ganymede">Ganymede</option>
+          <option value="callisto">Callisto</option>
           <option value="saturn">Saturn</option>
           <option value="uranus">Uranus</option>
           <option value="neptune">Neptune</option>
         </select>
       </div>
+      <p id="moon-label" class="note"></p>
       <p id="mode-label" class="note"></p>
       <p id="range-label" class="note"></p>
-      <p class="note">Opens on the 1882 transit of Venus. “From Earth, look at the Sun” switches to true scale and a 1° field: Venus is the dot on the disc. Drag to orbit, scroll to zoom. Times are UT.</p>
+      <p class="note">Opens on the 1882 transit of Venus. “From Earth, look at the Sun” switches to true scale and a 1° field: Venus is the dot on the disc. Pick a solar eclipse and do the same to see the Moon on the Sun, seen from Earth's centre. Drag to orbit, scroll to zoom. Times are UT.</p>
     </div>
   </aside>
 
@@ -93,6 +102,7 @@
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
     import { ScaleOrrery } from './orrery.js';
     import { inValidRange } from './elements.js';
+    import { eclipseGeometry } from './moon.js';
     import { dateToJulianDay, jdToCalendar } from '../../js/ephemeris.js';
     import { MAPS } from '../../js/textures.js';
 
@@ -135,14 +145,23 @@
         const c = jdToCalendar(jd + 0.5 / 86400); // the atlas floors minutes; round instead
         const y = c.year < 1 ? `${1 - c.year} BCE` : `${c.year}`;
         $('date-label').textContent = `${y}-${pad(c.month)}-${pad(c.day)} ${pad(c.hour)}:${pad(c.minute)} UT · JD ${jd.toFixed(2)}`;
-        if (c.year >= 1 && c.year <= 9999 && document.activeElement !== $('when')) {
-          $('when').value = `${pad(c.year, 4)}-${pad(c.month)}-${pad(c.day)}T${pad(c.hour)}:${pad(c.minute)}`;
+        if (document.activeElement !== $('when')) {
+          // The date box takes years 1-9999 only; leave it empty for BCE dates.
+          $('when').value = c.year >= 1 && c.year <= 9999
+            ? `${pad(c.year, 4)}-${pad(c.month)}-${pad(c.day)}T${pad(c.hour)}:${pad(c.minute)}`
+            : '';
         }
         const ok = inValidRange(jd);
         $('range-label').textContent = ok
           ? 'Elements valid 1800–2050 (JPL Table 1).'
-          : 'Outside 1800–2050: positions drift. Treat as illustration.';
+          : 'Outside 1800–2050: planets drift and are illustration. Sun, Earth and Moon follow Meeus and stay within about 0.1°.';
         $('range-label').classList.toggle('warn', !ok);
+        const g = eclipseGeometry(jd);
+        const phase = g.phaseAngle < 180 ? 'waxing' : 'waning';
+        const illum = Math.round(50 * (1 - Math.cos(g.phaseAngle * Math.PI / 180)));
+        $('moon-label').textContent =
+          `Moon ${illum}% lit, ${phase} · ${g.solarSep.toFixed(2)}° from the Sun · ${g.lunarSep.toFixed(2)}° from Earth's shadow` +
+          (g.solarSep < 1.58 ? ' · solar eclipse' : g.lunarSep < 1.6 ? ' · lunar eclipse' : '');
       }
 
       function setJd(next) {
@@ -172,13 +191,15 @@
         lastFocusPos.copy(p);
       }
 
-      // From just above Earth toward the Sun, true scale, a 1 degree field.
+      // From Earth's centre toward the Sun, true scale, a 1 degree field. The
+      // globe's faces point outward, so from inside it draws nothing. The
+      // centre matters: two Earth radii up moves the Moon by about 2 degrees.
       function earthTowardSun() {
         if (mode !== 'true') $('scale').click();
         focus = '';
         $('focus').value = '';
         const e = orrery.bodyPosition('earth');
-        camera.position.copy(e).add(new THREE.Vector3(0, orrery.bodyRadius('earth') * 2, 0));
+        camera.position.copy(e);
         controls.target.set(0, 0, 0);
         setFov(1);
       }
@@ -207,6 +228,22 @@
         frameFocus();
       });
       $('sunview').addEventListener('click', earthTowardSun);
+      fetch('../../data/eclipses.json').then((r) => r.json()).then((list) => {
+        for (const e of list) {
+          const o = document.createElement('option');
+          o.value = String(e.jd);
+          const y = e.year < 1 ? `${1 - e.year} BCE` : `${e.year}`;
+          o.textContent = `${e.name} (${y}, ${e.type})`;
+          $('eclipse').appendChild(o);
+        }
+      }).catch(() => {});
+      $('eclipse').addEventListener('change', (ev) => {
+        if (!ev.target.value) return;
+        setJd(Number(ev.target.value));
+        playing = false;
+        $('play').textContent = 'Play';
+        if (focus) frameFocus();
+      });
       $('collapse').addEventListener('click', () => $('panel-orrery').classList.toggle('collapsed'));
       window.addEventListener('resize', () => {
         camera.aspect = window.innerWidth / window.innerHeight;
@@ -216,6 +253,7 @@
 
       // Review hooks: ?focus=earth&mode=true&view=sun
       const q = new URLSearchParams(location.search);
+      if (q.get('jd')) setJd(Number(q.get('jd')));
       if (q.get('mode') === 'true') $('scale').click();
       if (q.get('focus')) { $('focus').value = q.get('focus'); focus = q.get('focus'); frameFocus(); }
       if (q.get('view') === 'sun') earthTowardSun();

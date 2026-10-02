@@ -1,15 +1,23 @@
-// ScaleOrrery: a Three.js group with the Sun, eight planets, their orbits and
-// a visible/true scale toggle. It owns no clock, camera or renderer; the host
+// ScaleOrrery: a Three.js group with the Sun, eight planets, their orbits,
+// the Moon, Jupiter's four large moons and a visible/true scale toggle. It owns no clock, camera or renderer; the host
 // calls setJulianDay() from its own time dial (the atlas TimeDial, or the demo
 // page here). Planets do not spin: per-planet spin is GROK's open item.
 
 import * as THREE from 'three';
-import { PLANETS, heliocentric, orbitPath, eclipticToScene, poleToEcliptic } from './elements.js';
-import { UNITS_PER_AU, RADIUS_KM, SATURN_RING_KM, SATURN_POLE, MODES, radiusUnits } from './scale.js';
+import { PLANETS, heliocentric, orbitPath, eclipticToScene, poleToEcliptic, inValidRange } from './elements.js';
+import {
+  UNITS_PER_AU, RADIUS_KM, SATURN_RING_KM, SATURN_POLE, MODES, radiusUnits,
+  moonOffsetUnits, moonRadiusUnits
+} from './scale.js';
+import { moonGeocentric, earthFromSun, MOON_MASS_FRACTION } from './moon.js';
+import { galileanPosition } from './galilean.js';
 import { mapFor, saturnRingMap } from './maps.js';
 import { PLANET_COLORS } from '../../js/ephemeris.js';
 
 const ORBIT_REFRESH_DAYS = 3652.5; // orbits drift slowly; redraw once a decade
+
+// Moon name -> parent planet.
+export const MOONS = { moon: 'earth', io: 'jupiter', europa: 'jupiter', ganymede: 'jupiter', callisto: 'jupiter' };
 
 export class ScaleOrrery {
   constructor() {
@@ -37,6 +45,11 @@ export class ScaleOrrery {
         new THREE.LineBasicMaterial({ color: PLANET_COLORS[name], transparent: true, opacity: 0.35 })
       );
       this.group.add(body.orbit);
+    }
+    for (const name of Object.keys(MOONS)) {
+      const mat = new THREE.MeshStandardMaterial({ roughness: 0.95, metalness: 0 });
+      mat.map = mapFor(name, mat, loader);
+      this._addBody(name, mat).moonOf = MOONS[name];
     }
     this._addSaturnRing();
     this.setScaleMode('visible');
@@ -84,17 +97,34 @@ export class ScaleOrrery {
   setScaleMode(mode) {
     this.mode = MODES[mode] ? mode : 'visible';
     for (const [name, body] of Object.entries(this.bodies)) {
-      body.mesh.scale.setScalar(radiusUnits(name, this.mode));
+      body.mesh.scale.setScalar(body.moonOf ? moonRadiusUnits(name, this.mode) : radiusUnits(name, this.mode));
       body.marker.visible = this.mode === 'true';
     }
+    if (this.jd !== null) this.setJulianDay(this.jd); // moon spacing depends on mode
     return MODES[this.mode].label;
   }
 
   setJulianDay(jd) {
     this.jd = jd;
+    // Table 1 gives the Earth-Moon barycentre; Earth's centre sits
+    // 1/82.3 of the Moon's distance on the far side of it.
+    const moonVec = moonGeocentric(jd);
     for (const name of PLANETS) {
-      const p = eclipticToScene(heliocentric(name, jd), UNITS_PER_AU);
+      let h = heliocentric(name, jd);
+      if (name === 'earth' && !inValidRange(jd)) {
+        h = earthFromSun(jd); // already Earth's centre
+      } else if (name === 'earth') {
+        h.x -= MOON_MASS_FRACTION * moonVec.x;
+        h.y -= MOON_MASS_FRACTION * moonVec.y;
+        h.z -= MOON_MASS_FRACTION * moonVec.z;
+      }
+      const p = eclipticToScene(h, UNITS_PER_AU);
       this.bodies[name].holder.position.set(p.x, p.y, p.z);
+    }
+    for (const [name, parent] of Object.entries(MOONS)) {
+      const v = name === 'moon' ? moonVec : galileanPosition(name, jd);
+      const off = eclipticToScene(moonOffsetUnits(v, parent, this.mode));
+      this.bodies[name].holder.position.copy(this.bodies[parent].holder.position).add(new THREE.Vector3(off.x, off.y, off.z));
     }
     if (this._orbitJd === null || Math.abs(jd - this._orbitJd) > ORBIT_REFRESH_DAYS) {
       this._drawOrbits(jd);

@@ -11,10 +11,13 @@ Staged for MJF's review. The live atlas files stay as they are: boot, `index.htm
 |---|---|
 | `elements.js` | JPL Table 1 elements for eight planets, Kepler solve, heliocentric and geocentric positions, orbit paths, ecliptic-to-scene mapping |
 | `scale.js` | Radii in km, the AU, and the two scale modes |
-| `maps.js` | Surface maps: atlas Earth map, local files when present, generated maps until then, Saturn's ring |
+| `moon.js` | The Moon (Meeus ch. 47), the Sun as seen from Earth (Meeus ch. 25), delta T, eclipse geometry |
+| `galilean.js` | Io, Europa, Ganymede, Callisto: circular orbits fitted to JPL Horizons |
+| `maps.js` | Surface maps: atlas Earth and Moon maps, local files when present, generated maps until then, Saturn's ring |
 | `orrery.js` | `ScaleOrrery`: a Three.js group with `setJulianDay(jd)` and `setScaleMode(mode)` |
 | `index.html` | Review page with date, play/pause, scale toggle, focus, and an Earth-to-Sun view |
 | `check.mjs` | Dated-event checks, run with Node, no dependencies |
+| `fixtures/horizons.json` | JPL Horizons reference positions the checks compare against |
 
 ## What came from The Scale Orrery
 
@@ -59,6 +62,29 @@ The camera uses a logarithmic depth buffer, so true-scale Earth (0.00064 units) 
 
 The Sun's disc is about 0.27° in radius, so the atlas places both 19th-century transits of Venus beside the Sun. Both fall inside the book's years.
 
+## The Moon, Jupiter's moons, and the eclipse presets
+
+Added 2026-10-02 at MJF's request.
+
+**The Moon** uses the main terms of Meeus's lunar theory (ELP-2000/82, chapter 47), the Sun as seen from Earth uses Meeus chapter 25, and the clock correction for Earth's slowing spin (delta T) uses Morrison & Stephenson's parabola. Against JPL Horizons the Moon is within 0.01° from 1801 to 2049, and within 0.06° in 331 BCE, where delta T itself is uncertain. Earth now sits at its own centre, 1/82.3 of the Moon's distance from the barycentre that Table 1 gives. Outside 1800–2050 Earth is placed from the Meeus Sun, because Table 1 drifts 0.7° by 1375 BCE.
+
+The suggested Moon elements (`a: 0.00257, L: 0, dL: 481267.88`, fixed node and perigee) were left behind. The Moon's orbit is pulled about by the Sun: its longitude swings by up to 1.3° from a fixed ellipse (evection), and its node turns once in 18.6 years. With L set to 0 the Moon would also start at the wrong place.
+
+**Jupiter's moons** come from Horizons: each moon's orbit plane and starting angle are fitted to six Horizons dates between 1800 and 2050, and its speed is Lieske's E5 mean motion. The worst error around Jupiter is 1.3° (Europa). The suggested `dL` values were 100× too small (Io would take 177 days per orbit; it takes 1.77).
+
+**Visible mode** keeps moons at the planet's ×1000. Their orbits would then sit inside the enlarged planet, so moon distances are compressed: the true distance in parent radii is cube-rooted. The Moon sits at 3.9 Earth radii where the truth is 60. True mode uses true distances.
+
+**The eclipse presets** in `atlas-cosmogram/data/eclipses.json` are rebuilt from NASA's Five Millennium Catalogs (Espenak & Meeus). Each preset carries its catalog number, the time of greatest eclipse (TD), delta T and gamma in a `source` field. The day number is now the UT of greatest eclipse. Before this, 17 of the 18 stored day numbers put the Moon nowhere near an eclipse (between 3.6° and 176° away); only 1999 was close. Changes beyond the day numbers:
+
+- Jerusalem: 6 Nov 29 CE has no eclipse in NASA's catalog. Replaced with the partial lunar eclipse of 3 Apr 33 CE, the one dated to the crucifixion (Humphreys & Waddington, 1983). Its id is now `eclipse-33ce`.
+- Coimbra 1560: total in NASA's catalog; the preset said annular.
+- New York 1925: the hour was local morning; it is now UT.
+- Ugarit: the note now says the tablet is also dated to 1223 BCE.
+
+`check.mjs` tests every preset: at the stored moment the Moon must sit |gamma| × the Moon's parallax from the Sun (solar) or from the centre of Earth's shadow (lunar). All 18 land within 0.012° of NASA's figure.
+
+On the page, the presets list sets the date, and "From Earth, look at the Sun" then shows the Moon on the Sun as seen from Earth's centre. The panel prints the Moon's phase and its distance from the Sun and from Earth's shadow.
+
 ## Two findings about the live atlas
 
 Left unchanged here. For MJF to decide.
@@ -82,7 +108,9 @@ The atlas frame is Earth-centred with Earth at radius 1. The orrery is Sun-centr
 ## Limits
 
 - Elements are valid 1800–2050. Outside that range the page says so. Earlier dates need JPL Table 2a with its extra terms for Jupiter through Neptune. The book's chapters run 1801–1938, inside the range.
-- Earth is the Earth-Moon barycentre, about 4,700 km from Earth's centre. No Moon yet.
-- UT is used as TDB. The gap is under a minute across 1800–2050.
+- Eclipses are drawn from Earth's centre. Where on Earth totality falls needs the observer's position, which the atlas's natal panel has; that wiring is for later.
+- Lunar eclipses show in the readout. The shadow itself is undrawn.
+- Jupiter's moons follow circular orbits, so they cannot time their own transits or eclipses.
+- Planets use UT as TDB (under a minute across 1800–2050). The Moon and Sun apply delta T.
 - Planets hold still on their axes until spin lands. Saturn's ring is tilted to Saturn's IAU pole.
 - Planet maps are generated for every body but Earth. Real maps go in `atlas-cosmogram/assets/planet-maps/` under the names in `maps.js` (`2k_mars.jpg` and so on) and load on their own. Solar System Scope's 2k set is CC BY 4.0 and fits. Their site returned a captcha to this container, so the files need a download by hand and a line in `agent-conference/CREDITS.md`. Until then the browser console lists a 404 for each missing map.
