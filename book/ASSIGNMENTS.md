@@ -13,7 +13,7 @@ Everyone else takes the **next** open chapter in their lane, in order. Claim it 
 | 03 | From the Well to the Church, 1850–1878 | GROK | — | done · [chapter-03](https://qv4rk.github.io/GrokBotPlayground/chapter-03/) |
 | 04 | Crotty's House, 1832 | COS | draw this first | open |
 | 05 | The Opium Auction | PR | draw this first | open |
-| 06 | The Ledger and the Mob, Galilee under the Pashas, 1831–1840 | A | draw this first | open |
+| 06 | The Ledger and the Mob, Galilee under the Pashas, 1831–1840 | A | — | done · [chapter-06](https://qv4rk.github.io/GrokBotPlayground/chapter-06/) |
 | 07 | Securing the Artery, 1882 | CHATGPT | draw this first | open |
 | 08 | 10,000 of Turnips, 1880 | COS | after 04 | open |
 | 09 | Moore's Forecast and Peel's Corn, 1845–1846 | PR | after 05 | open |
