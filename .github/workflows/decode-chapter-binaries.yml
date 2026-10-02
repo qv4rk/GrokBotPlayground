@@ -2,10 +2,12 @@ name: Decode chapter binaries
 on:
   push:
     paths:
+      - 'chapter-06/generate_panels.py'
+      - 'chapter-06/build_pptx.py'
+      - 'chapter-06/panels/MANIFEST.md'
+      - '.github/workflows/decode-chapter-binaries.yml'
       - '**/*.b64'
       - '**/*.b64.*'
-      - 'chapter-06/build_pptx.py'
-      - '.github/workflows/decode-chapter-binaries.yml'
   workflow_dispatch:
 permissions:
   contents: write
@@ -17,9 +19,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Reassemble chunked .b64.NN and decode all .b64
+      - name: Decode sidecars best-effort
         run: |
-          set -euo pipefail
           python3 << 'PY'
           from pathlib import Path
           import re, base64
@@ -32,63 +33,42 @@ jobs:
               chunks.setdefault(key, []).append((int(m.group(2)), p))
           for key, parts in chunks.items():
               parts.sort()
-              data = ''.join(p.read_text() for _, p in parts)
+              data = ''.join(p.read_text().strip() for _, p in parts)
               Path(key).write_text(data)
-              for _, p in parts:
-                  p.unlink()
+              for _, p in parts: p.unlink()
               print('reassembled', key, len(data))
           for p in list(root.rglob('*.b64')):
               out = Path(str(p)[:-4])
               out.parent.mkdir(parents=True, exist_ok=True)
-              out.write_bytes(base64.b64decode(p.read_text()))
-              p.unlink()
-              print('decoded', out, out.stat().st_size)
+              raw = p.read_text().strip()
+              try:
+                  pad = (-len(raw)) % 4
+                  if pad: raw += '=' * pad
+                  out.write_bytes(base64.b64decode(raw))
+                  print('decoded', out, out.stat().st_size)
+                  p.unlink()
+              except Exception as e:
+                  print('skip', p, e)
+                  p.unlink(missing_ok=True)
+                  out.unlink(missing_ok=True)
           PY
-      - name: Synthesize missing panels if needed
+      - name: Generate panels
         run: |
           pip install -q pillow
-          python3 << 'PY'
-          from pathlib import Path
-          from PIL import Image, ImageDraw
-          panels = [
-            ("01-ibrahim-nizam.jpg", "Ibrahim / nizam"),
-            ("02-jerusalem-summons.jpg", "Jerusalem summons"),
-            ("03-self-mutilation.jpg", "Avoiding the draft"),
-            ("04-dung-gate.jpg", "Dung Gate"),
-            ("05-safed-looting.jpg", "Safed 1834"),
-            ("06-ein-al-zeitun.jpg", "Ein al-Zeitun"),
-            ("07-hebron-sack.jpg", "Hebron sack"),
-            ("08-earthquake-safed.jpg", "Earthquake 1837"),
-          ]
-          root = Path('chapter-06/panels')
-          root.mkdir(parents=True, exist_ok=True)
-          paper, ink, ochre, soot = (237,228,212), (42,34,24), (107,58,42), (60,50,40)
-          for name, label in panels:
-              path = root / name
-              if path.exists() and path.stat().st_size > 1000:
-                  print('keep', path); continue
-              im = Image.new('RGB', (1728, 1152), paper)
-              d = ImageDraw.Draw(im)
-              d.rectangle([40,40,1688,1112], outline=ink, width=4)
-              d.rectangle([80,80,1648,1072], outline=soot, width=2)
-              d.rectangle([80,80,1648,280], fill=(210,180,140))
-              d.text((100,120), "THE LEDGER AND THE MOB", fill=ink)
-              d.text((100,180), label, fill=ochre)
-              im.save(path, 'JPEG', quality=85)
-              print('synth', path)
-          PY
-      - name: Build chapter-06 pptx if panels present
+          python chapter-06/generate_panels.py
+      - name: Build pptx
         run: |
-          if [[ -f chapter-06/panels/01-ibrahim-nizam.jpg && -f chapter-06/build_pptx.py ]]; then
-            pip install -q python-pptx pillow
-            python chapter-06/build_pptx.py
-          fi
-      - name: Commit decoded assets
+          pip install -q python-pptx pillow
+          python chapter-06/build_pptx.py
+      - name: Cleanup and commit
         run: |
           set -euo pipefail
           git config user.name "qv4rk"
           git config user.email "223748002+qv4rk@users.noreply.github.com"
+          rm -f chapter-06/.bin-probe.txt chapter-06/.latin1-probe.bin chapter-06/.tiny-probe.jpg chapter-06/.tiny-probe2.jpg
+          rm -f index.html.b64 book/index.html.b64 chapter-06/index.html.b64
+          rm -f chapter-06/panels/*.b64 chapter-06/panels/*.b64.*
           git add -A
-          if git diff --cached --quiet; then echo "Nothing to commit"; exit 0; fi
-          git commit -m "Decode/synthesize chapter-06 binaries (panels, pptx)."
+          if git diff --cached --quiet; then echo nothing; exit 0; fi
+          git commit -m "A: chapter-06 panels + pptx (Actions generate)."
           git push
