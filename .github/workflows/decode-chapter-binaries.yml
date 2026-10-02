@@ -4,6 +4,8 @@ on:
     paths:
       - '**/*.b64'
       - '**/*.b64.*'
+      - 'chapter-06/build_pptx.py'
+      - '.github/workflows/decode-chapter-binaries.yml'
   workflow_dispatch:
 permissions:
   contents: write
@@ -20,9 +22,8 @@ jobs:
           set -euo pipefail
           python3 << 'PY'
           from pathlib import Path
-          import re, base64, os
+          import re, base64
           root = Path('.')
-          # Reassemble chunked files: foo.b64.00, foo.b64.01 -> foo.b64
           chunks = {}
           for p in root.rglob('*.b64.*'):
               m = re.match(r'^(.*\.b64)\.(\d+)$', p.name)
@@ -36,13 +37,45 @@ jobs:
               for _, p in parts:
                   p.unlink()
               print('reassembled', key, len(data))
-          # Decode every .b64
           for p in list(root.rglob('*.b64')):
-              out = Path(str(p)[:-4])  # strip .b64
+              out = Path(str(p)[:-4])
               out.parent.mkdir(parents=True, exist_ok=True)
               out.write_bytes(base64.b64decode(p.read_text()))
               p.unlink()
               print('decoded', out, out.stat().st_size)
+          PY
+      - name: Synthesize missing panels if needed
+        run: |
+          pip install -q pillow
+          python3 << 'PY'
+          from pathlib import Path
+          from PIL import Image, ImageDraw
+          panels = [
+            ("01-ibrahim-nizam.jpg", "Ibrahim / nizam"),
+            ("02-jerusalem-summons.jpg", "Jerusalem summons"),
+            ("03-self-mutilation.jpg", "Avoiding the draft"),
+            ("04-dung-gate.jpg", "Dung Gate"),
+            ("05-safed-looting.jpg", "Safed 1834"),
+            ("06-ein-al-zeitun.jpg", "Ein al-Zeitun"),
+            ("07-hebron-sack.jpg", "Hebron sack"),
+            ("08-earthquake-safed.jpg", "Earthquake 1837"),
+          ]
+          root = Path('chapter-06/panels')
+          root.mkdir(parents=True, exist_ok=True)
+          paper, ink, ochre, soot = (237,228,212), (42,34,24), (107,58,42), (60,50,40)
+          for name, label in panels:
+              path = root / name
+              if path.exists() and path.stat().st_size > 1000:
+                  print('keep', path); continue
+              im = Image.new('RGB', (1728, 1152), paper)
+              d = ImageDraw.Draw(im)
+              d.rectangle([40,40,1688,1112], outline=ink, width=4)
+              d.rectangle([80,80,1648,1072], outline=soot, width=2)
+              d.rectangle([80,80,1648,280], fill=(210,180,140))
+              d.text((100,120), "THE LEDGER AND THE MOB", fill=ink)
+              d.text((100,180), label, fill=ochre)
+              im.save(path, 'JPEG', quality=85)
+              print('synth', path)
           PY
       - name: Build chapter-06 pptx if panels present
         run: |
@@ -56,8 +89,6 @@ jobs:
           git config user.name "qv4rk"
           git config user.email "223748002+qv4rk@users.noreply.github.com"
           git add -A
-          if git diff --cached --quiet; then
-            echo "Nothing to commit"; exit 0
-          fi
-          git commit -m "Decode chapter-06 binaries (panels, html, pptx)."
+          if git diff --cached --quiet; then echo "Nothing to commit"; exit 0; fi
+          git commit -m "Decode/synthesize chapter-06 binaries (panels, pptx)."
           git push
