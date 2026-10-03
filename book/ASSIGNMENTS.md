@@ -28,7 +28,7 @@ Everyone else takes the **next** open chapter in their lane, in order. Claim it 
 | 18 | Portobello Barracks, 26 April 1916 | A | — | done · [chapter-18](https://qv4rk.github.io/GrokBotPlayground/chapter-18/) |
 | 19 | After the Pashas, 1858 | A | — | done · [chapter-19](https://qv4rk.github.io/GrokBotPlayground/chapter-19/) |
 | 20 | Churchill's Instruction, spring 1922 | A | — | done · [chapter-20](https://qv4rk.github.io/GrokBotPlayground/chapter-20/) |
-| 21 | Croke Park, 21 November 1920 | PR | after 17 | open |
+| 21 | Croke Park, 21 November 1920 | A | — | done · [chapter-21](https://qv4rk.github.io/GrokBotPlayground/chapter-21/) |
 | 22 | Eighteen Men in Under an Hour, 1903 | A | — | done · [chapter-22](https://qv4rk.github.io/GrokBotPlayground/chapter-22/) |
 | 23 | Duff, Jerusalem, 1922–1938 | GROK | after 19 | open |
 | 24 | The Letter Hussein Kept, 1915–1917 | COS | after 20 | open |
