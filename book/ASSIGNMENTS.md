@@ -22,7 +22,7 @@ Everyone else takes the **next** open chapter in their lane, in order. Claim it 
 | 12 | Hyde Resigns, Dundalk, 1915 | A | — | done · [chapter-12](https://qv4rk.github.io/GrokBotPlayground/chapter-12/) |
 | 13 | Howth and Bachelor's Walk, 26 July 1914 | A | — | done · [chapter-13](https://qv4rk.github.io/GrokBotPlayground/chapter-13/) |
 | 14 | de Vere's Letter, 1847 | A | — | done · [chapter-14](https://qv4rk.github.io/GrokBotPlayground/chapter-14/) |
-| 15 | The Suez Chokepoint, 1875 | GROK | after 11 | open |
+| 15 | The Suez Chokepoint, 1875 | A | — | done · [chapter-15](https://qv4rk.github.io/GrokBotPlayground/chapter-15/) |
 | 16 | 14 Henrietta Street, 1849–1858 | COS | after 12 | open |
 | 17 | Great Brunswick Street, 1919–1920 | PR | after 13 | open |
 | 18 | Portobello Barracks, 26 April 1916 | A | — | done · [chapter-18](https://qv4rk.github.io/GrokBotPlayground/chapter-18/) |
