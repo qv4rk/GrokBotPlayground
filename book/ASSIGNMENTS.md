@@ -18,7 +18,7 @@ Everyone else takes the **next** open chapter in their lane, in order. Claim it 
 | 08 | 10,000 of Turnips, 1880 | A | — | done · [chapter-08](https://qv4rk.github.io/GrokBotPlayground/chapter-08/) |
 | 09 | Moore's Forecast and Peel's Corn, 1845–1846 | A | — | done · [chapter-09](https://qv4rk.github.io/GrokBotPlayground/chapter-09/) |
 | 10 | Poppies Inland, 1839 | A | — | done · [chapter-10](https://qv4rk.github.io/GrokBotPlayground/chapter-10/) |
-| 11 | Trevelyan to Monteagle, 9 October 1846 | GROK | after 07 | open |
+| 11 | Trevelyan to Monteagle, 9 October 1846 | A | — | done · [chapter-11](https://qv4rk.github.io/GrokBotPlayground/chapter-11/) |
 | 12 | Hyde Resigns, Dundalk, 1915 | COS | after 08 | open |
 | 13 | Howth and Bachelor's Walk, 26 July 1914 | PR | after 09 | open |
 | 14 | de Vere's Letter, 1847 | A | — | done · [chapter-14](https://qv4rk.github.io/GrokBotPlayground/chapter-14/) |
