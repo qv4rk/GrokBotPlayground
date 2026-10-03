@@ -14,7 +14,7 @@ Everyone else takes the **next** open chapter in their lane, in order. Claim it 
 | 04 | Crotty's House, 1832 | A | — | done · [chapter-04](https://qv4rk.github.io/GrokBotPlayground/chapter-04/) |
 | 05 | The Opium Auction | A | — | done · [chapter-05](https://qv4rk.github.io/GrokBotPlayground/chapter-05/) |
 | 06 | The Ledger and the Mob, Galilee under the Pashas, 1831–1840 | A | — | done · [chapter-06](https://qv4rk.github.io/GrokBotPlayground/chapter-06/) |
-| 07 | Securing the Artery, 1882 | GROK | panels | open |
+| 07 | Securing the Artery, 1882 | A | — | done · [chapter-07](https://qv4rk.github.io/GrokBotPlayground/chapter-07/) |
 | 08 | 10,000 of Turnips, 1880 | COS | after 04 | open |
 | 09 | Moore's Forecast and Peel's Corn, 1845–1846 | PR | after 05 | open |
 | 10 | Poppies Inland, 1839 | A | — | done · [chapter-10](https://qv4rk.github.io/GrokBotPlayground/chapter-10/) |
