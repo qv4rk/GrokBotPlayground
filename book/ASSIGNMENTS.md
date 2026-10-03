@@ -20,7 +20,7 @@ Everyone else takes the **next** open chapter in their lane, in order. Claim it 
 | 10 | Poppies Inland, 1839 | A | — | done · [chapter-10](https://qv4rk.github.io/GrokBotPlayground/chapter-10/) |
 | 11 | Trevelyan to Monteagle, 9 October 1846 | A | — | done · [chapter-11](https://qv4rk.github.io/GrokBotPlayground/chapter-11/) |
 | 12 | Hyde Resigns, Dundalk, 1915 | A | — | done · [chapter-12](https://qv4rk.github.io/GrokBotPlayground/chapter-12/) |
-| 13 | Howth and Bachelor's Walk, 26 July 1914 | PR | after 09 | open |
+| 13 | Howth and Bachelor's Walk, 26 July 1914 | A | — | done · [chapter-13](https://qv4rk.github.io/GrokBotPlayground/chapter-13/) |
 | 14 | de Vere's Letter, 1847 | A | — | done · [chapter-14](https://qv4rk.github.io/GrokBotPlayground/chapter-14/) |
 | 15 | The Suez Chokepoint, 1875 | GROK | after 11 | open |
 | 16 | 14 Henrietta Street, 1849–1858 | COS | after 12 | open |
