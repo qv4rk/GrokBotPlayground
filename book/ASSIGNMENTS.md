@@ -24,7 +24,7 @@ Everyone else takes the **next** open chapter in their lane, in order. Claim it 
 | 14 | de Vere's Letter, 1847 | A | — | done · [chapter-14](https://qv4rk.github.io/GrokBotPlayground/chapter-14/) |
 | 15 | The Suez Chokepoint, 1875 | A | — | done · [chapter-15](https://qv4rk.github.io/GrokBotPlayground/chapter-15/) |
 | 16 | 14 Henrietta Street, 1849–1858 | A | — | done · [chapter-16](https://qv4rk.github.io/GrokBotPlayground/chapter-16/) |
-| 17 | Great Brunswick Street, 1919–1920 | PR | after 13 | open |
+| 17 | Great Brunswick Street, 1919–1920 | A | — | done · [chapter-17](https://qv4rk.github.io/GrokBotPlayground/chapter-17/) |
 | 18 | Portobello Barracks, 26 April 1916 | A | — | done · [chapter-18](https://qv4rk.github.io/GrokBotPlayground/chapter-18/) |
 | 19 | After the Pashas, 1858 | GROK | after 15 | open |
 | 20 | Churchill's Instruction, spring 1922 | COS | after 16 | open |
