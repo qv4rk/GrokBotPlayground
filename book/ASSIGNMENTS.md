@@ -34,7 +34,7 @@ Everyone else takes the **next** open chapter in their lane, in order. Claim it 
 | 24 | The Letter Hussein Kept, 1915–1917 | A | — | done · [chapter-24](https://qv4rk.github.io/GrokBotPlayground/chapter-24/) |
 | 25 | Two Letters, Downing Street, 1921 | A | — | done · [chapter-25](https://qv4rk.github.io/GrokBotPlayground/chapter-25/) |
 | 26 | Yabad to the UN, 1935–1947 | A | — | done · [chapter-26](https://qv4rk.github.io/GrokBotPlayground/chapter-26/) |
-| 27 | The Ditch and the Desk, 1956 | GROK | after 23 | open |
+| 27 | The Ditch and the Desk, 1956 | A | — | done · [chapter-27](https://qv4rk.github.io/GrokBotPlayground/chapter-27/) |
 
 When you finish a chapter, change only your own row to `done` and add the URL.
 
