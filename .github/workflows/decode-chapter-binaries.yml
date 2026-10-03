@@ -2,13 +2,15 @@ name: Decode chapter binaries
 on:
   push:
     paths:
-      - 'chapter-26/generate_panels.py'
-      - 'chapter-26/build_pptx.py'
-      - 'chapter-26/panels/MANIFEST.md'
+      - 'chapter-*/generate_panels.py'
+      - 'chapter-*/build_pptx.py'
       - '.github/workflows/decode-chapter-binaries.yml'
-      - '**/*.b64'
-      - '**/*.b64.*'
   workflow_dispatch:
+    inputs:
+      chapter:
+        description: 'Chapter folder to build, e.g. 04 or chapter-04. Empty does nothing.'
+        required: false
+        type: string
 permissions:
   contents: write
 jobs:
@@ -16,75 +18,150 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Decode sidecars best-effort
-        run: |
-          python3 << 'PY'
-          from pathlib import Path
-          import re, base64, tarfile
-          root = Path('.')
-          chunks = {}
-          for p in root.rglob('*.b64.*'):
-              m = re.match(r'^(.*\.b64)\.(\d+)$', p.name)
-              if not m: continue
-              key = str(p.parent / m.group(1))
-              chunks.setdefault(key, []).append((int(m.group(2)), p))
-          for key, parts in chunks.items():
-              parts.sort()
-              data = ''.join(p.read_text().strip() for _, p in parts)
-              Path(key).write_text(data)
-              for _, p in parts: p.unlink()
-              print('reassembled', key, len(data))
-          for p in list(root.rglob('*.b64')):
-              out = Path(str(p)[:-4])
-              out.parent.mkdir(parents=True, exist_ok=True)
-              raw = p.read_text().strip()
-              try:
-                  pad = (-len(raw)) % 4
-                  if pad: raw += '=' * pad
-                  out.write_bytes(base64.b64decode(raw))
-                  print('decoded', out, out.stat().st_size)
-                  p.unlink()
-              except Exception as e:
-                  print('skip', p, e)
-                  p.unlink(missing_ok=True)
-                  out.unlink(missing_ok=True)
-          for tar_path in list(root.rglob('_fix3.tar')) + list(root.rglob('panels_bundle.tar')):
-              try:
-                  print('extract', tar_path, tar_path.stat().st_size)
-                  with tarfile.open(tar_path, 'r') as tf:
-                      tf.extractall(path=tar_path.parent)
-                  tar_path.unlink(missing_ok=True)
-              except Exception as e:
-                  print('skip tar', tar_path, e)
-                  tar_path.unlink(missing_ok=True)
-          PY
-      - name: Generate panels (ch26 only when present)
-        run: |
-          pip install -q pillow
-          if [ -f chapter-26/generate_panels.py ]; then python chapter-26/generate_panels.py; fi
-      - name: Build pptx (ch26 only when present)
-        run: |
-          pip install -q python-pptx pillow
-          if [ -f chapter-26/build_pptx.py ]; then python chapter-26/build_pptx.py; fi
-      - name: Cleanup and commit chapter-26 only
+      - name: Install pillow and python-pptx
+        run: pip install -q pillow python-pptx
+      - name: Determine touched chapter directories
         run: |
           set -euo pipefail
+          python3 << 'PY'
+          import os, subprocess
+          from pathlib import Path
+
+          def norm(token):
+              token = (token or '').strip().strip('/')
+              if not token:
+                  return ''
+              if token.startswith('chapter-'):
+                  rest = token.split('chapter-', 1)[1]
+              else:
+                  rest = token
+              digits = ''.join(ch for ch in rest if ch.isdigit())
+              if not digits:
+                  return ''
+              return f'chapter-{int(digits):02d}'
+
+          dirs = []
+          event = os.environ.get('GITHUB_EVENT_NAME', '')
+          if event == 'workflow_dispatch':
+              d = norm(os.environ.get('INPUT_CHAPTER', ''))
+              if d:
+                  dirs.append(d)
+          else:
+              files = set()
+              try:
+                  out = subprocess.check_output(['git', 'diff', '--name-only', 'HEAD~1', 'HEAD'], text=True)
+              except subprocess.CalledProcessError:
+                  out = ''
+              files.update(line.strip() for line in out.splitlines() if line.strip())
+              before = os.environ.get('GITHUB_BEFORE', '')
+              sha = os.environ.get('GITHUB_SHA', '')
+              if before and sha and set(before) != {'0'} and before != sha:
+                  try:
+                      out = subprocess.check_output(['git', 'diff', '--name-only', before, sha], text=True)
+                      files.update(line.strip() for line in out.splitlines() if line.strip())
+                  except subprocess.CalledProcessError as exc:
+                      print('range diff skipped', exc)
+              script_hits = [
+                  f for f in files
+                  if f.startswith('chapter-') and (f.endswith('/generate_panels.py') or f.endswith('/build_pptx.py'))
+              ]
+              workflow_only = any(f.endswith('decode-chapter-binaries.yml') for f in files) and not script_hits
+              if workflow_only:
+                  print('workflow file changed and no chapter script changed; not regenerating old chapters')
+                  dirs = []
+              else:
+                  for f in script_hits:
+                      d = f.split('/', 1)[0]
+                      if d not in dirs:
+                          dirs.append(d)
+          dirs = [d for d in dirs if d != 'chapter-26' and Path(d).is_dir()]
+          Path('/tmp/chapter_dirs.txt').write_text('\n'.join(dirs) + ('\n' if dirs else ''))
+          print('touched:', dirs or '(none)')
+          PY
+        env:
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_BEFORE: ${{ github.event.before }}
+          GITHUB_SHA: ${{ github.sha }}
+          INPUT_CHAPTER: ${{ github.event.inputs.chapter }}
+      - name: Generate panels and pptx
+        run: |
+          set -euo pipefail
+          if [ ! -s /tmp/chapter_dirs.txt ]; then
+            echo 'no chapter dirs'
+            exit 0
+          fi
+          while IFS= read -r d; do
+            [ -z "$d" ] && continue
+            if [ "$d" = "chapter-26" ]; then
+              echo 'skip chapter-26'
+              continue
+            fi
+            echo "== $d"
+            if [ -f "$d/generate_panels.py" ]; then
+              (cd "$d" && python generate_panels.py)
+            fi
+            if [ -f "$d/build_pptx.py" ]; then
+              (cd "$d" && python build_pptx.py)
+            fi
+          done < /tmp/chapter_dirs.txt
+      - name: Commit jpg and pptx only
+        run: |
+          set -euo pipefail
+          if [ ! -s /tmp/chapter_dirs.txt ]; then
+            echo nothing
+            exit 0
+          fi
           git config user.name "qv4rk"
           git config user.email "223748002+qv4rk@users.noreply.github.com"
-          rm -f chapter-26/index.html.b64
-          rm -f chapter-26/panels/*.b64 chapter-26/panels/*.b64.*
-          rm -f chapter-26/panels/panels_bundle.tar
-          rm -f chapter-26/*.pptx.b64 chapter-26/*.pptx.b64.*
-          git add chapter-26/
-          if git diff --cached --quiet; then echo nothing; exit 0; fi
-          git commit -m "A: chapter-26 panels/pptx (Actions)."
+          labels=()
+          while IFS= read -r d; do
+            [ -z "$d" ] && continue
+            [ "$d" = "chapter-26" ] && continue
+            shopt -s nullglob
+            files=( "$d"/*.jpg "$d"/panels/*.jpg "$d"/*.pptx )
+            shopt -u nullglob
+            if [ ${#files[@]} -gt 0 ]; then
+              git add -- "${files[@]}"
+            fi
+            num="${d#chapter-}"
+            labels+=("$num")
+          done < /tmp/chapter_dirs.txt
+          if git diff --cached --quiet; then
+            echo nothing
+            exit 0
+          fi
+          if [ "${#labels[@]}" -eq 1 ]; then
+            msg="A: chapter-${labels[0]} panels and pptx (Actions)."
+          else
+            joined=$(IFS=,; echo "${labels[*]}")
+            msg="A: chapter-${joined} panels and pptx (Actions)."
+          fi
+          git commit -m "$msg"
           git pull --rebase origin main || {
-            echo 'rebase conflict — keep chapter-26 from ours-in-rebase (theirs), keep rest from main'
-            git checkout --theirs -- chapter-26/ || true
-            git add chapter-26 || true
+            echo 'rebase conflict — keep new jpgs in touched chapter dirs; do not revert other agents'
+            conflicted=$(git diff --name-only --diff-filter=U || true)
+            while IFS= read -r f; do
+              [ -z "$f" ] && continue
+              keep_new=0
+              while IFS= read -r d; do
+                [ -z "$d" ] && continue
+                case "$f" in
+                  "$d"/*.jpg|"$d"/panels/*.jpg|"$d"/*.pptx) keep_new=1 ;;
+                esac
+              done < /tmp/chapter_dirs.txt
+              if [ "$keep_new" -eq 1 ]; then
+                git checkout --theirs -- "$f" || git checkout --ours -- "$f" || true
+              else
+                git checkout --ours -- "$f" || true
+              fi
+              git add -- "$f" || true
+            done <<< "$conflicted"
             GIT_EDITOR=true git rebase --continue || true
           }
-          git push
+          git push origin HEAD:main
