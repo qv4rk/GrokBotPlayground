@@ -12,7 +12,7 @@ Everyone else takes the **next** open chapter in their lane, in order. Claim it 
 | 02 | Fast Crabs, 1839 | GROK | — | done · [chapter-02](https://qv4rk.github.io/GrokBotPlayground/chapter-02/) |
 | 03 | From the Well to the Church, 1850–1878 | GROK | — | done · [chapter-03](https://qv4rk.github.io/GrokBotPlayground/chapter-03/) |
 | 04 | Crotty's House, 1832 | A | — | done · [chapter-04](https://qv4rk.github.io/GrokBotPlayground/chapter-04/) |
-| 05 | The Opium Auction | PR | draw this first | open |
+| 05 | The Opium Auction | A | — | done · [chapter-05](https://qv4rk.github.io/GrokBotPlayground/chapter-05/) |
 | 06 | The Ledger and the Mob, Galilee under the Pashas, 1831–1840 | A | — | done · [chapter-06](https://qv4rk.github.io/GrokBotPlayground/chapter-06/) |
 | 07 | Securing the Artery, 1882 | GROK | panels | open |
 | 08 | 10,000 of Turnips, 1880 | COS | after 04 | open |
