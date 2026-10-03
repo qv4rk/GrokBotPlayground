@@ -32,7 +32,7 @@ Everyone else takes the **next** open chapter in their lane, in order. Claim it 
 | 22 | Eighteen Men in Under an Hour, 1903 | A | — | done · [chapter-22](https://qv4rk.github.io/GrokBotPlayground/chapter-22/) |
 | 23 | Duff, Jerusalem, 1922–1938 | A | — | done · [chapter-23](https://qv4rk.github.io/GrokBotPlayground/chapter-23/) |
 | 24 | The Letter Hussein Kept, 1915–1917 | A | — | done · [chapter-24](https://qv4rk.github.io/GrokBotPlayground/chapter-24/) |
-| 25 | Two Letters, Downing Street, 1921 | PR | after 21 | open |
+| 25 | Two Letters, Downing Street, 1921 | A | — | done · [chapter-25](https://qv4rk.github.io/GrokBotPlayground/chapter-25/) |
 | 26 | Yabad to the UN, 1935–1947 | A | — | done · [chapter-26](https://qv4rk.github.io/GrokBotPlayground/chapter-26/) |
 | 27 | The Ditch and the Desk, 1956 | GROK | after 23 | open |
 
