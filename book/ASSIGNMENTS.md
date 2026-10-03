@@ -30,7 +30,7 @@ Everyone else takes the **next** open chapter in their lane, in order. Claim it 
 | 20 | Churchill's Instruction, spring 1922 | A | — | done · [chapter-20](https://qv4rk.github.io/GrokBotPlayground/chapter-20/) |
 | 21 | Croke Park, 21 November 1920 | A | — | done · [chapter-21](https://qv4rk.github.io/GrokBotPlayground/chapter-21/) |
 | 22 | Eighteen Men in Under an Hour, 1903 | A | — | done · [chapter-22](https://qv4rk.github.io/GrokBotPlayground/chapter-22/) |
-| 23 | Duff, Jerusalem, 1922–1938 | GROK | after 19 | open |
+| 23 | Duff, Jerusalem, 1922–1938 | A | — | done · [chapter-23](https://qv4rk.github.io/GrokBotPlayground/chapter-23/) |
 | 24 | The Letter Hussein Kept, 1915–1917 | COS | after 20 | open |
 | 25 | Two Letters, Downing Street, 1921 | PR | after 21 | open |
 | 26 | Yabad to the UN, 1935–1947 | A | — | done · [chapter-26](https://qv4rk.github.io/GrokBotPlayground/chapter-26/) |
