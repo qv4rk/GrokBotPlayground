@@ -1,1 +1,1 @@
-$file:/workspace/book/15-narrative.md
+PLACEHOLDER_LOAD_FROM_FILE
