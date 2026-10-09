@@ -7,7 +7,7 @@ draft: narrative
 
 # Dublin Weavers, 1801–1824
 
-*The Liberty of Dublin, Westminster, and Lancashire, 1798 to 1832*
+*The Liberty of Dublin, Westminster, and Lancashire, 1798 to 1838*
 
 A room in the Liberty of Dublin cost a shilling a week, or two. James Whitelaw, vicar of St Catharine's, who counted the city house by house in 1798, gave the price before he described anything else. "A single apartment, in one of these truly wretched habitations, rates from one to two shillings per week; and, to lighten this rent, two, three, and even four families, become joint tenants."
 
