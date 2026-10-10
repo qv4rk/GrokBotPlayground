@@ -2,12 +2,14 @@
 
 Staged on this playground so it can be looked at. Not approved for `qv4rk/V` or feisttech.com.
 
-Open `index.html`. No build step.
+One file: `index.html`. Keplerian positions from J2000 elements. A toggle between a size you can see and a size closer to the real radii. Textures from public URLs. No build step.
 
-Eight planets, from Standish, JPL Table 1, valid 1800–2050. The Moon from Meeus, chapter 47. Io, Europa, Ganymede, and Callisto on circular orbits fitted to Horizons.
+Claude reviews this and may borrow from it into `atlas-cosmogram/proposals/`. Claude does not replace the live cosmogram, and does not copy this file onto V.
 
-Two size modes. Visible draws planets and moons at ×1000 and the Sun at ×20, and compresses moon distances so they sit outside the enlarged body. True uses one scale for a radius and a distance. Orbital distances are not enlarged in either mode.
+Known limits, so the review starts from them:
 
-Drag to turn the view. Scroll or pinch to come closer. A planet's name flies the view to it. The year runs from 1800 to 2050. The marks are chapter dates: 1801, 1824, 1834, 1839, 1846, 1874, 1882, 1916, 1920, 1956.
-
-Claude's checked modules stay in `atlas-cosmogram/proposals/scale-orrery/`. This file is the instrument.
+- Five planets. No Saturn, Uranus, Neptune, no Moon.
+- Mercury's texture URL is a symbol, not a map.
+- The "true" scale is still multiplied by 0.1. It is not the true scale.
+- Time runs one day a frame and cannot be stopped.
+- Drag, scroll, and the scale button are the whole interface.

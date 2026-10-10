@@ -1,947 +1,223 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Scale Orrery</title>
   <style>
-    :root {
-      --ground: #0c0b09;
-      --sheet: rgba(16, 13, 10, 0.88);
-      --ink: #ede4d4;
-      --muted: #b3a48e;
-      --brass: #c4a574;
-      --line: #3a3228;
-      --danger: #d7a08a;
-    }
-    * { box-sizing: border-box; }
-    html, body { margin: 0; height: 100%; background: var(--ground); color: var(--ink); }
-    body {
-      font-family: Palatino, "Palatino Linotype", Georgia, serif;
-      overflow: hidden;
-    }
-    canvas { display: block; width: 100%; height: 100%; touch-action: none; }
-    #labels { position: fixed; inset: 0; pointer-events: none; overflow: hidden; }
-    .name {
-      position: absolute;
-      left: 0; top: 0;
-      font-size: 12px;
-      letter-spacing: 0.04em;
-      color: var(--ink);
-      text-shadow: 0 1px 2px #000;
-      white-space: nowrap;
-    }
-    .name small { color: var(--muted); font-size: 10px; margin-left: 0.35em; }
-    #hud {
-      position: fixed;
-      top: 12px;
-      left: 12px;
-      width: min(340px, calc(100vw - 24px));
-      max-height: calc(100vh - 24px);
-      overflow: auto;
-      background: var(--sheet);
-      border: 1px solid var(--line);
-      padding: 14px 14px 12px;
-      backdrop-filter: blur(8px);
-    }
-    .kicker {
-      margin: 0;
-      color: var(--muted);
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      font-size: 10px;
-    }
-    h1 { margin: 2px 0 0; font-size: 26px; font-weight: 600; letter-spacing: 0.02em; }
-    #date {
-      margin: 8px 0 0;
-      font-family: ui-monospace, "Cascadia Mono", monospace;
-      font-size: 15px;
-      color: var(--brass);
-    }
-    #marknote { margin: 4px 0 0; color: var(--muted); font-size: 14px; line-height: 1.35; min-height: 1.2em; }
-    .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 12px; }
-    button, select {
-      font: inherit;
-      color: var(--ink);
-      background: transparent;
-      border: 1px solid var(--line);
-      min-height: 44px;
-      padding: 0 12px;
-    }
-    button { cursor: pointer; }
-    button:hover, button[aria-pressed="true"] { border-color: var(--brass); color: var(--brass); }
-    button.grow { flex: 1; }
-    label.rate {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      color: var(--muted);
-      font-size: 11px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-    input[type="range"] { width: 100%; accent-color: var(--brass); min-height: 28px; }
-    #lie { margin: 8px 0 0; color: var(--muted); font-size: 13px; line-height: 1.4; }
-    #marks, #bodies {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 10px;
-    }
-    #marks button, #bodies button {
-      min-height: 36px;
-      padding: 0 8px;
-      font-size: 13px;
-    }
-    #readout {
-      margin-top: 12px;
-      border-top: 1px solid var(--line);
-      padding-top: 8px;
-      font-size: 14px;
-      line-height: 1.45;
-    }
-    #readout b { font-weight: 600; }
-    #readout .dim { color: var(--muted); }
-    .foot { margin: 10px 0 0; color: var(--muted); font-size: 11px; line-height: 1.4; }
-    #warn { color: var(--danger); margin: 6px 0 0; font-size: 13px; min-height: 0; }
-    @media (max-width: 800px) {
-      #hud {
-        top: auto;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        max-height: 48vh;
-        border-left: 0;
-        border-right: 0;
-        border-bottom: 0;
-      }
-      h1 { font-size: 22px; }
-    }
+    body { margin: 0; overflow: hidden; background: #000; font-family: monospace; color: white; }
+    canvas { display: block; width: 100vw; height: 100vh; }
+    #ui { position: absolute; top: 20px; left: 20px; background: rgba(0,0,0,0.7); padding: 15px; border: 1px solid #445; border-radius: 8px; }
+    button { background: #223; color: #fff; border: 1px solid #556; padding: 8px 12px; cursor: pointer; font-family: monospace; margin-top: 10px;}
+    button:hover { background: #445; }
+    .note { font-size: 11px; color: #aaa; margin-top: 5px; max-width: 250px; line-height: 1.4; }
   </style>
+  <!-- No build step required: Import Three.js directly via ES Modules -->
   <script type="importmap">
     {
       "imports": {
-        "three": "https://esm.sh/three@0.170.0"
+        "three": "https://esm.sh/three@0.160.0",
+        "three/addons/": "https://esm.sh/three@0.160.0/examples/jsm/"
       }
     }
   </script>
 </head>
 <body>
-  <div id="labels"></div>
-  <aside id="hud">
-    <p class="kicker">Playground staging</p>
-    <h1>The Scale Orrery</h1>
-    <p id="date">—</p>
-    <p id="marknote"></p>
-    <p id="warn"></p>
-    <div class="row">
-      <button id="play" type="button" class="grow">Pause</button>
-      <label class="rate">Days / sec
-        <input id="rate" type="range" min="0" max="200" value="40">
-      </label>
-    </div>
-    <div class="row">
-      <button id="scale" type="button" class="grow">Visible sizes</button>
-      <button id="wide" type="button">Whole sky</button>
-    </div>
-    <p id="lie"></p>
-    <label class="rate" style="margin-top:10px">Year
-      <input id="year" type="range" min="1800" max="2050" step="0.01" value="1801">
-    </label>
-    <div id="marks"></div>
-    <div id="bodies"></div>
-    <div id="readout"></div>
-    <p class="foot">Planets: Standish, JPL Table 1, valid 1800–2050. Moon: Meeus, chapter 47. Galilean moons: circular, fitted to Horizons. Distances stay true in both size modes.</p>
-  </aside>
+  <div id="ui">
+    <h3>The Scale Orrery</h3>
+    <div id="date-display">Date: </div>
+    <button id="toggle-scale">Mode: Visible Scale</button>
+    <div class="note"><b>Visible Scale:</b> Planets enlarged so you can see them.<br><b>True Scale:</b> Real sizes (Earth is tiny compared to Sun/Jupiter).<br><br>Drag to orbit, scroll to zoom.</div>
+  </div>
+
   <script type="module">
-    import * as THREE from "three";
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-    const DEG = Math.PI / 180;
+    // --- 1. ASTRONOMICAL MATH (from your snippet) ---
     const J2000 = 2451545.0;
-    const AU_KM = 149597870.7;
-    const UNITS = 15;
-    const VALID_FROM = 2378496.5;
-    const VALID_TO = 2470172.5;
-
-    const ELEMENTS = {
-      mercury: { a: [0.38709927, 0.00000037], e: [0.20563593, 0.00001906], I: [7.00497902, -0.00594749], L: [252.2503235, 149472.67411175], varpi: [77.45779628, 0.16047689], node: [48.33076593, -0.12534081] },
-      venus:   { a: [0.72333566, 0.0000039], e: [0.00677672, -0.00004107], I: [3.39467605, -0.0007889], L: [181.9790995, 58517.81538729], varpi: [131.60246718, 0.00268329], node: [76.67984255, -0.27769418] },
-      earth:   { a: [1.00000261, 0.00000562], e: [0.01671123, -0.00004392], I: [-0.00001531, -0.01294668], L: [100.46457166, 35999.37244981], varpi: [102.93768193, 0.32327364], node: [0, 0] },
-      mars:    { a: [1.52371034, 0.00001847], e: [0.0933941, 0.00007882], I: [1.84969142, -0.00813131], L: [-4.55343205, 19140.30268499], varpi: [-23.94362959, 0.44441088], node: [49.55953891, -0.29257343] },
-      jupiter: { a: [5.202887, -0.00011607], e: [0.04838624, -0.00013253], I: [1.30439695, -0.00183714], L: [34.39644051, 3034.74612775], varpi: [14.72847983, 0.21252668], node: [100.47390909, 0.20469106] },
-      saturn:  { a: [9.53667594, -0.0012506], e: [0.05386179, -0.00050991], I: [2.48599187, 0.00193609], L: [49.95424423, 1222.49362201], varpi: [92.59887831, -0.41897216], node: [113.66242448, -0.28867794] },
-      uranus:  { a: [19.18916464, -0.00196176], e: [0.04725744, -0.00004397], I: [0.77263783, -0.00242939], L: [313.23810451, 428.48202785], varpi: [170.9542763, 0.40805281], node: [74.01692503, 0.04240589] },
-      neptune: { a: [30.06992276, 0.00026291], e: [0.00859048, 0.00005105], I: [1.77004347, 0.00035372], L: [-55.12002969, 218.45945325], varpi: [44.96476227, -0.32241464], node: [131.78422574, -0.00508664] }
-    };
-
-    const BODIES = [
-      { id: "mercury", name: "Mercury", r: 2439.7, day: 58.6462, tilt: 0.03, hue: [140, 136, 128], kind: "rock" },
-      { id: "venus", name: "Venus", r: 6051.8, day: -243.018, tilt: 177.4, hue: [214, 186, 140], kind: "cloud" },
-      { id: "earth", name: "Earth", r: 6378.137, day: 0.99727, tilt: 23.44, hue: [70, 110, 150], kind: "earth" },
-      { id: "mars", name: "Mars", r: 3396.2, day: 1.02596, tilt: 25.19, hue: [176, 92, 58], kind: "mars" },
-      { id: "jupiter", name: "Jupiter", r: 71492, day: 0.41354, tilt: 3.13, hue: [196, 164, 122], kind: "band" },
-      { id: "saturn", name: "Saturn", r: 60268, day: 0.44401, tilt: 26.73, hue: [214, 190, 146], kind: "band", ring: [1.239, 2.269] },
-      { id: "uranus", name: "Uranus", r: 25559, day: -0.71833, tilt: 97.77, hue: [168, 206, 206], kind: "band", ring: [1.6, 2.05] },
-      { id: "neptune", name: "Neptune", r: 24764, day: 0.67125, tilt: 28.32, hue: [64, 96, 168], kind: "band" }
-    ];
-
-    const MOON_R = { moon: 1737.4, io: 1821.6, europa: 1560.8, ganymede: 2634.1, callisto: 2410.3 };
-    const GALILEAN = {
-      io:       { inc: 2.2126, node: -23.1476, u0: 41.179, n: 203.488955432, a: 421800 },
-      europa:   { inc: 1.791, node: -27.3713, u0: 239.829, n: 101.37472455, a: 671100 },
-      ganymede: { inc: 2.2141, node: -16.8272, u0: 236.908, n: 50.31760911, a: 1070400 },
-      callisto: { inc: 2.0169, node: -22.0574, u0: 101.697, n: 21.571071314, a: 1882700 }
-    };
-
-    const MARKS = [
-      { y: 1801, m: 1, d: 1.5, label: "1801", note: "Equalization. The Act of Union is days old." },
-      { y: 1824, m: 6, d: 21.5, label: "1824", note: "The Combination Acts are repealed." },
-      { y: 1834, m: 6, d: 15.5, label: "1834", note: "Safed. Thirty-three days." },
-      { y: 1839, m: 6, d: 3.5, label: "1839", note: "Humen. The opium goes into the water." },
-      { y: 1846, m: 10, d: 9.5, label: "1846", note: "Trevelyan to Monteagle." },
-      { y: 1874, m: 12, d: 9.5, label: "1874", note: "Venus crosses the Sun." },
-      { y: 1882, m: 12, d: 6.5, label: "1882", note: "Venus again. Egypt is occupied." },
-      { y: 1916, m: 4, d: 24.5, label: "1916", note: "Portobello. Easter Monday." },
-      { y: 1920, m: 11, d: 21.5, label: "1920", note: "Croke Park." },
-      { y: 1956, m: 10, d: 29.5, label: "1956", note: "The ditch and the desk." }
-    ];
-
-    function wrap180(deg) {
-      return ((((deg + 180) % 360) + 360) % 360) - 180;
-    }
-    function gregorianJD(y, m, day) {
-      let Y = y, M = m;
-      if (M <= 2) { Y -= 1; M += 12; }
-      const A = Math.floor(Y / 100);
-      const B = 2 - A + Math.floor(A / 4);
-      return Math.floor(365.25 * (Y + 4716)) + Math.floor(30.6001 * (M + 1)) + day + B - 1524.5;
-    }
-    function jdToDate(jd) {
-      let Z = Math.floor(jd + 0.5);
-      const F = jd + 0.5 - Z;
-      let A = Z;
-      if (Z >= 2299161) {
-        const alpha = Math.floor((Z - 1867216.25) / 36524.25);
-        A = Z + 1 + alpha - Math.floor(alpha / 4);
-      }
-      const B = A + 1524;
-      const C = Math.floor((B - 122.1) / 365.25);
-      const D = Math.floor(365.25 * C);
-      const E = Math.floor((B - D) / 30.6001);
-      const day = B - D - Math.floor(30.6001 * E) + F;
-      const month = E < 14 ? E - 1 : E - 13;
-      const year = month > 2 ? C - 4716 : C - 4715;
-      return { year, month, day };
-    }
-    const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    function formatJD(jd) {
-      const { year, month, day } = jdToDate(jd);
-      const d = Math.floor(day);
-      return `${d} ${MONTHS[month - 1]} ${year}`;
-    }
-
-    function solveKepler(M, e) {
-      let E = M + e * Math.sin(M);
-      for (let k = 0; k < 30; k++) {
+    const d2r = Math.PI / 180;
+    const julianCenturies = (jdt) => (jdt - J2000) / 36525;
+    
+    function kepler(M, e) {
+      let E = M;
+      for (let k = 0; k < 60; k++) {
         const d = (M - E + e * Math.sin(E)) / (1 - e * Math.cos(E));
         E += d;
         if (Math.abs(d) < 1e-12) break;
       }
       return E;
     }
-    function elementsAt(id, jd) {
-      const el = ELEMENTS[id];
-      const T = (jd - J2000) / 36525;
-      const at = (k) => el[k][0] + el[k][1] * T;
-      const varpi = at("varpi");
-      const node = at("node");
-      return { a: at("a"), e: at("e"), I: at("I"), node, omega: varpi - node, M: wrap180(at("L") - varpi) };
-    }
-    function orbitToEcliptic(el, E) {
-      const xp = el.a * (Math.cos(E) - el.e);
-      const yp = el.a * Math.sqrt(1 - el.e * el.e) * Math.sin(E);
-      const cw = Math.cos(el.omega * DEG), sw = Math.sin(el.omega * DEG);
-      const cO = Math.cos(el.node * DEG), sO = Math.sin(el.node * DEG);
-      const cI = Math.cos(el.I * DEG), sI = Math.sin(el.I * DEG);
+
+    function orb2ecl(r, nu, i_d, Om_d, om_d) {
+      const i = i_d * d2r, Om = Om_d * d2r, om = om_d * d2r;
+      const xo = r * Math.cos(nu), yo = r * Math.sin(nu);
+      const cO = Math.cos(Om), sO = Math.sin(Om);
+      const co = Math.cos(om), so = Math.sin(om);
+      const ci = Math.cos(i),  si = Math.sin(i);
       return {
-        x: (cw * cO - sw * sO * cI) * xp + (-sw * cO - cw * sO * cI) * yp,
-        y: (cw * sO + sw * cO * cI) * xp + (-sw * sO + cw * cO * cI) * yp,
-        z: sw * sI * xp + cw * sI * yp
+        x: (cO*co-sO*so*ci)*xo + (-cO*so-sO*co*ci)*yo,
+        y: (sO*co+cO*so*ci)*xo + (-sO*so+cO*co*ci)*yo,
+        z: si*(so*xo + co*yo)
       };
     }
-    function heliocentric(id, jd) {
-      const el = elementsAt(id, jd);
-      return orbitToEcliptic(el, solveKepler(el.M * DEG, el.e));
-    }
-    function toScene(p, s = UNITS) {
-      return new THREE.Vector3(p.x * s, p.z * s, -p.y * s);
+
+    function getPlanetPos(p, jdt) {
+      const T = julianCenturies(jdt);
+      const a = p.a + p.da*T;
+      const e = p.e + p.de*T;
+      const i = p.i + p.di*T;
+      const L = ((p.L + p.dL*T) % 360 + 360) % 360;
+      const W = p.W + p.dW*T;
+      const N = p.N + p.dN*T;
+      const om = ((W - N) % 360 + 360) % 360;
+      const M  = ((L - W) % 360 + 360) % 360;
+      const E  = kepler(M * d2r, e);
+      const nu = 2 * Math.atan2(Math.sqrt(1+e)*Math.sin(E/2), Math.sqrt(1-e)*Math.cos(E/2));
+      const r = a * (1 - e * Math.cos(E));
+      return orb2ecl(r, nu, i, N, om);
     }
 
-    function radiusUnits(km, mode, sun) {
-      const factor = sun ? (mode === "true" ? 1 : 20) : (mode === "true" ? 1 : 1000);
-      return (km / AU_KM) * UNITS * factor;
-    }
-    function moonOffset(vecAU, parentKm, parentRadiusUnits, mode) {
-      if (mode === "true") return toScene(vecAU);
-      const d = Math.hypot(vecAU.x, vecAU.y, vecAU.z) || 1e-12;
-      const dKm = d * AU_KM;
-      const dUnits = parentRadiusUnits * Math.cbrt(dKm / parentKm);
-      const k = dUnits / d;
-      return toScene({ x: vecAU.x * k / UNITS, y: vecAU.y * k / UNITS, z: vecAU.z * k / UNITS });
-    }
+    // --- 2. PLANET DATA (with real radius in km) ---
+    const EARTH_RADIUS_KM = 6371;
+    // Public texture URLs for demonstration
+    const TEX_URL = "https://unpkg.com/three-globe/example/img/"; 
 
-    const sin = (d) => Math.sin(d * DEG);
-    const cos = (d) => Math.cos(d * DEG);
-    const wrap360 = (d) => ((d % 360) + 360) % 360;
-    const LR = [
-      [0,0,1,0,6288774,-20905355],[2,0,-1,0,1274027,-3699111],[2,0,0,0,658314,-2955968],
-      [0,0,2,0,213618,-569925],[0,1,0,0,-185116,48888],[0,0,0,2,-114332,-3149],
-      [2,0,-2,0,58793,246158],[2,-1,-1,0,57066,-152138],[2,0,1,0,53322,-170733],
-      [2,-1,0,0,45758,-204586],[0,1,-1,0,-40923,-129620],[1,0,0,0,-34720,108743],
-      [0,1,1,0,-30383,104755],[2,0,0,-2,15327,10321],[0,0,1,2,-12528,0],
-      [0,0,1,-2,10980,79661],[4,0,-1,0,10675,-34782],[0,0,3,0,10034,-23210],
-      [4,0,-2,0,8548,-21636],[2,1,-1,0,-7888,24208],[2,1,0,0,-6766,30824],
-      [1,0,-1,0,-5163,-8379],[1,1,0,0,4987,-16675],[2,-1,1,0,4036,-12831],
-      [2,0,2,0,3994,-10445],[4,0,0,0,3861,-11650],[2,0,-3,0,3665,14403],
-      [0,1,-2,0,-2689,-7003],[2,0,-1,2,-2602,0],[2,-1,-2,0,2390,10056],
-      [1,0,1,0,-2348,6322],[2,-2,0,0,2236,-9884],[0,1,2,0,-2120,5751],
-      [0,2,0,0,-2069,0],[2,-2,-1,0,2048,-4950],[2,0,1,-2,-1773,4130],
-      [2,0,0,2,-1595,0],[4,-1,-1,0,1215,-3958],[0,0,2,2,-1110,0],
-      [3,0,-1,0,-892,3258],[2,1,1,0,-810,2616],[4,-1,-2,0,759,-1897],
-      [0,2,-1,0,-713,-2117],[2,2,-1,0,-700,2354],[2,1,-2,0,691,0],
-      [2,-1,0,-2,596,0],[4,0,1,0,549,-1423],[0,0,4,0,537,-1117],
-      [4,-1,0,0,520,-1571],[1,0,-2,0,-487,-1739],[2,1,0,-2,-399,0],
-      [0,0,2,-2,-381,-4421],[1,1,1,0,351,0],[3,0,-2,0,-340,0],
-      [4,0,-3,0,330,0],[2,-1,2,0,327,0],[0,2,1,0,-323,1165],
-      [1,1,-1,0,299,0],[2,0,3,0,294,0],[2,0,-1,-2,0,8752]
+    const PLANETS = [
+      { id:'mer', name:'Mercury', radiusKm: 2439, a:0.387099, e:0.20563, i:7.004, L:252.25, W:77.45, N:48.33, da:3.7e-7, de:0.000019, di:-0.0059, dL:149472.67, dW:0.16, dN:-0.125, 
+        tex: 'https://upload.wikimedia.org/wikipedia/commons/9/92/Mercury_symbol.png' }, // fallback
+      { id:'ven', name:'Venus', radiusKm: 6051, a:0.723335, e:0.00677, i:3.394, L:181.97, W:131.60, N:76.67, da:3.9e-6, de:-0.000041, di:-0.00078, dL:58517.81, dW:0.0026, dN:-0.277, 
+        tex: 'https://upload.wikimedia.org/wikipedia/commons/1/1c/Venus_map_NASA_JPL_Magellan.jpg' },
+      { id:'ter', name:'Earth', radiusKm: EARTH_RADIUS_KM, a:1.000002, e:0.01671, i:-0.000015, L:100.46, W:102.93, N:0, da:0.000005, de:-0.000043, di:-0.0129, dL:35999.37, dW:0.32, dN:0, 
+        tex: TEX_URL + 'earth-blue-marble.jpg', bump: TEX_URL + 'earth-topology.png' },
+      { id:'mar', name:'Mars', radiusKm: 3389, a:1.523710, e:0.09339, i:1.849, L:-4.55, W:-23.94, N:49.55, da:0.000018, de:0.000078, di:-0.0081, dL:19140.30, dW:0.44, dN:-0.29, 
+        tex: 'https://upload.wikimedia.org/wikipedia/commons/f/f0/Mars_map.jpg' },
+      { id:'jup', name:'Jupiter', radiusKm: 71492, a:5.202887, e:0.04838, i:1.304, L:34.39, W:14.72, N:100.47, da:-0.00011, de:-0.00013, di:-0.0018, dL:3034.74, dW:0.21, dN:0.20, 
+        tex: 'https://upload.wikimedia.org/wikipedia/commons/e/e2/Jupiter.jpg' }
     ];
-    const LAT = [
-      [0,0,0,1,5128122],[0,0,1,1,280602],[0,0,1,-1,277693],[2,0,0,-1,173237],
-      [2,0,-1,1,55413],[2,0,-1,-1,46271],[2,0,0,1,32573],[0,0,2,1,17198],
-      [2,0,1,-1,9266],[0,0,2,-1,8822],[2,-1,0,-1,8216],[2,0,-2,-1,4324],
-      [2,0,1,1,4200],[2,1,0,-1,-3359],[2,-1,-1,1,2463],[2,-1,0,1,2211],
-      [2,-1,-1,-1,2065],[0,1,-1,-1,-1870],[4,0,-1,-1,1828],[0,1,0,1,-1794],
-      [0,0,0,3,-1749],[0,1,-1,1,-1565],[1,0,0,1,-1491],[0,1,1,1,-1475],
-      [0,1,1,-1,-1410],[0,1,0,-1,-1344],[1,0,0,-1,-1335],[0,0,3,1,1107],
-      [4,0,0,-1,1021],[4,0,-1,1,833]
-    ];
-    function moonOfDate(jd) {
-      const T = (jd - J2000) / 36525;
-      const T2 = T * T, T3 = T2 * T, T4 = T3 * T;
-      const Lp = 218.3164477 + 481267.88123421 * T - 0.0015786 * T2 + T3 / 538841 - T4 / 65194000;
-      const D = 297.8501921 + 445267.1114034 * T - 0.0018819 * T2 + T3 / 545868 - T4 / 113065000;
-      const M = 357.5291092 + 35999.0502909 * T - 0.0001536 * T2 + T3 / 24490000;
-      const Mp = 134.9633964 + 477198.8675055 * T + 0.0087414 * T2 + T3 / 69699 - T4 / 14712000;
-      const F = 93.272095 + 483202.0175233 * T - 0.0036539 * T2 - T3 / 3526000 + T4 / 863310000;
-      const A1 = 119.75 + 131.849 * T;
-      const A2 = 53.09 + 479264.29 * T;
-      const A3 = 313.45 + 481266.484 * T;
-      const E = 1 - 0.002516 * T - 0.0000074 * T2;
-      const eFac = (m) => (Math.abs(m) === 1 ? E : Math.abs(m) === 2 ? E * E : 1);
-      let sl = 0, sr = 0, sb = 0;
-      for (const [d, m, mp, f, cl, cr] of LR) {
-        const arg = d * D + m * M + mp * Mp + f * F;
-        const k = eFac(m);
-        sl += cl * k * sin(arg);
-        sr += cr * k * cos(arg);
-      }
-      for (const [d, m, mp, f, cb] of LAT) sb += cb * eFac(m) * sin(d * D + m * M + mp * Mp + f * F);
-      sl += 3958 * sin(A1) + 1962 * sin(Lp - F) + 318 * sin(A2);
-      sb += -2235 * sin(Lp) + 382 * sin(A3) + 175 * sin(A1 - F) + 175 * sin(A1 + F) + 127 * sin(Lp - Mp) - 115 * sin(Lp + Mp);
-      return { lon: wrap360(Lp + sl / 1e6), lat: sb / 1e6, dist: 385000.56 + sr / 1000 };
-    }
-    function moonGeocentric(jd) {
-      const m = moonOfDate(jd);
-      const T = (jd - J2000) / 36525;
-      const lon = m.lon - (5029.0966 * T) / 3600;
-      const r = m.dist / AU_KM;
-      return {
-        vec: { x: r * cos(m.lat) * cos(lon), y: r * cos(m.lat) * sin(lon), z: r * sin(m.lat) },
-        distKm: m.dist,
-        lon: m.lon,
-        lat: m.lat
-      };
-    }
-    function sunLon(jd) {
-      const T = (jd - J2000) / 36525;
-      const L0 = 280.46646 + 36000.76983 * T + 0.0003032 * T * T;
-      const M = 357.52911 + 35999.05029 * T - 0.0001537 * T * T;
-      const C = (1.914602 - 0.004817 * T - 0.000014 * T * T) * sin(M) + (0.019993 - 0.000101 * T) * sin(2 * M) + 0.000289 * sin(3 * M);
-      return wrap360(L0 + C);
-    }
-    function galilean(name, jd) {
-      const m = GALILEAN[name];
-      const u = (m.u0 + m.n * (jd - J2000)) * DEG;
-      const O = m.node * DEG, i = m.inc * DEG;
-      const r = m.a / AU_KM;
-      return {
-        x: r * (Math.cos(O) * Math.cos(u) - Math.sin(O) * Math.sin(u) * Math.cos(i)),
-        y: r * (Math.sin(O) * Math.cos(u) + Math.cos(O) * Math.sin(u) * Math.cos(i)),
-        z: r * (Math.sin(u) * Math.sin(i))
-      };
-    }
 
-    function rng(seed) {
-      let s = seed >>> 0;
-      return () => { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; };
-    }
-    function planetTexture(body) {
-      const w = 1024, h = 512;
-      const c = document.createElement("canvas");
-      c.width = w; c.height = h;
-      const g = c.getContext("2d");
-      const [R, G, B] = body.hue;
-      const rand = rng([...body.id].reduce((n, ch) => n * 33 + ch.charCodeAt(0), 9));
-      const fill = (k, a = 1) => {
-        g.globalAlpha = a;
-        g.fillStyle = `rgb(${(R * k) | 0},${(G * k) | 0},${(B * k) | 0})`;
-      };
-      fill(0.85); g.fillRect(0, 0, w, h);
-      if (body.kind === "band") {
-        for (let y = 0; y < h; y++) {
-          const lat = (y / h - 0.5) * Math.PI;
-          const k = 0.78 + 0.28 * Math.sin(lat * (body.id === "jupiter" ? 14 : 9) + Math.sin(y * 0.05));
-          fill(k); g.fillRect(0, y, w, 1);
-        }
-        if (body.id === "jupiter") {
-          g.globalAlpha = 0.85;
-          g.fillStyle = "#a8503a";
-          g.beginPath();
-          g.ellipse(w * 0.62, h * 0.62, 54, 28, 0, 0, Math.PI * 2);
-          g.fill();
-        }
-        if (body.id === "neptune") {
-          g.globalAlpha = 0.7;
-          g.fillStyle = "#d8e4f0";
-          g.beginPath();
-          g.ellipse(w * 0.3, h * 0.42, 22, 16, 0, 0, Math.PI * 2);
-          g.fill();
-        }
-      } else if (body.kind === "earth") {
-        fill(0.55); g.fillRect(0, 0, w, h);
-        g.globalAlpha = 0.95;
-        const blobs = [[0.18,0.38,0.12,0.16],[0.28,0.55,0.08,0.18],[0.52,0.32,0.14,0.1],[0.58,0.48,0.07,0.14],[0.72,0.4,0.16,0.12],[0.78,0.62,0.1,0.16],[0.48,0.7,0.06,0.08]];
-        for (const [x, y, rx, ry] of blobs) {
-          g.fillStyle = rand() > 0.45 ? "#6e8f52" : "#8a7a48";
-          g.beginPath();
-          g.ellipse(x * w, y * h, rx * w, ry * h, rand(), 0, Math.PI * 2);
-          g.fill();
-        }
-        g.fillStyle = "#f4f7fb";
-        g.fillRect(0, 0, w, 28);
-        g.fillRect(0, h - 28, w, 28);
-      } else if (body.kind === "mars") {
-        fill(1); g.fillRect(0, 0, w, h);
-        for (let i = 0; i < 40; i++) {
-          fill(0.7 + rand() * 0.45, 0.35);
-          g.beginPath();
-          g.ellipse(rand() * w, rand() * h, 20 + rand() * 80, 10 + rand() * 30, rand() * 3, 0, Math.PI * 2);
-          g.fill();
-        }
-        g.globalAlpha = 0.9;
-        g.fillStyle = "#f3efe6";
-        g.fillRect(0, 0, w, 22);
-        g.fillRect(0, h - 18, w, 18);
-      } else {
-        fill(1); g.fillRect(0, 0, w, h);
-        for (let i = 0; i < (body.kind === "cloud" ? 80 : 220); i++) {
-          fill(0.75 + rand() * 0.4, body.kind === "cloud" ? 0.18 : 0.45);
-          g.beginPath();
-          g.arc(rand() * w, rand() * h, body.kind === "cloud" ? 18 + rand() * 40 : 2 + rand() * 14, 0, Math.PI * 2);
-          g.fill();
-        }
-      }
-      g.globalAlpha = 1;
-      const tex = new THREE.CanvasTexture(c);
-      tex.colorSpace = THREE.SRGBColorSpace;
-      tex.anisotropy = 8;
-      return tex;
-    }
-    function ringTexture(thin) {
-      const n = 512;
-      const c = document.createElement("canvas");
-      c.width = n; c.height = n;
-      const g = c.getContext("2d");
-      const rand = rng(thin ? 3 : 11);
-      const r0 = n * (thin ? 0.39 : 0.27);
-      for (let r = n / 2; r > r0; r -= 1) {
-        const t = (r - r0) / (n / 2 - r0);
-        const gap = !thin && Math.abs(t - 0.58) < 0.02 ? 0.05 : 1;
-        const a = (thin ? 0.22 : 0.25 + 0.5 * (0.4 + rand() * 0.6)) * gap * (t < 0.15 ? 0.45 : 1);
-        g.strokeStyle = thin ? `rgba(180,210,210,${a})` : `rgba(226,208,170,${a})`;
-        g.beginPath();
-        g.arc(n / 2, n / 2, r, 0, Math.PI * 2);
-        g.stroke();
-      }
-      const tex = new THREE.CanvasTexture(c);
-      tex.colorSpace = THREE.SRGBColorSpace;
-      return tex;
-    }
-    function sunTexture() {
-      const n = 512;
-      const c = document.createElement("canvas");
-      c.width = n; c.height = n;
-      const g = c.getContext("2d");
-      const img = g.createImageData(n, n);
-      const rand = rng(1);
-      for (let y = 0; y < n; y++) {
-        for (let x = 0; x < n; x++) {
-          const lat = y / n;
-          const k = 0.82 + 0.18 * Math.sin(lat * 18) * Math.sin(x * 0.2) + (rand() - 0.5) * 0.05;
-          const i = (y * n + x) * 4;
-          img.data[i] = Math.min(255, 255 * k);
-          img.data[i + 1] = Math.min(255, 214 * k);
-          img.data[i + 2] = Math.min(255, 120 * k);
-          img.data[i + 3] = 255;
-        }
-      }
-      g.putImageData(img, 0, 0);
-      const tex = new THREE.CanvasTexture(c);
-      tex.colorSpace = THREE.SRGBColorSpace;
-      return tex;
-    }
-
-    const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let mode = "visible";
-    let playing = !reduced;
-    let daysPerSec = 40;
-    let jd = gregorianJD(1801, 1, 1.5);
-    let lock = null;
-    let fly = null;
-
+    // --- 3. THREE.JS SETUP ---
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x0c0b09);
-    const camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, 0.0001, 8000);
-    camera.position.set(30, 90, 240);
+    scene.background = new THREE.Color(0x050510);
+    
+    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 10000);
+    camera.position.set(0, 30, 80);
+
     const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-    renderer.setSize(innerWidth, innerHeight);
-    renderer.outputColorSpace = THREE.SRGBColorSpace;
-    document.body.prepend(renderer.domElement);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    document.body.appendChild(renderer.domElement);
 
-    let dragging = false;
-    let lastX = 0, lastY = 0, lastDist = 0;
-    const spherical = new THREE.Spherical().setFromVector3(camera.position);
-    function applyCamera() {
-      camera.position.setFromSpherical(spherical);
-      camera.lookAt(0, 0, 0);
-    }
-    renderer.domElement.addEventListener("pointerdown", (e) => {
-      dragging = true;
-      lastX = e.clientX; lastY = e.clientY;
-      renderer.domElement.setPointerCapture(e.pointerId);
-    });
-    renderer.domElement.addEventListener("pointerup", () => { dragging = false; });
-    renderer.domElement.addEventListener("pointermove", (e) => {
-      if (!dragging || e.pointerType === "touch" && e.isPrimary === false) return;
-      const dx = e.clientX - lastX, dy = e.clientY - lastY;
-      lastX = e.clientX; lastY = e.clientY;
-      if (lock) {
-        const offset = camera.position.clone().sub(bodies[lock].pivot.position);
-        const q = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), -dx * 0.005);
-        const right = new THREE.Vector3(1, 0, 0).applyQuaternion(camera.quaternion);
-        q.multiply(new THREE.Quaternion().setFromAxisAngle(right, -dy * 0.005));
-        offset.applyQuaternion(q);
-        camera.position.copy(bodies[lock].pivot.position).add(offset);
-        camera.lookAt(bodies[lock].pivot.position);
-      } else {
-        spherical.theta -= dx * 0.005;
-        spherical.phi = Math.max(0.08, Math.min(Math.PI - 0.08, spherical.phi - dy * 0.005));
-        applyCamera();
-      }
-    });
-    renderer.domElement.addEventListener("wheel", (e) => {
-      e.preventDefault();
-      zoomBy(e.deltaY > 0 ? 1.08 : 0.92);
-    }, { passive: false });
-    renderer.domElement.addEventListener("touchstart", (e) => {
-      if (e.touches.length === 2) {
-        const a = e.touches[0], b = e.touches[1];
-        lastDist = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
-      }
-    }, { passive: true });
-    renderer.domElement.addEventListener("touchmove", (e) => {
-      if (e.touches.length === 2) {
-        const a = e.touches[0], b = e.touches[1];
-        const d = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
-        if (lastDist) zoomBy(lastDist / d);
-        lastDist = d;
-      }
-    }, { passive: true });
-    function zoomBy(f) {
-      if (lock && bodies[lock]) {
-        const target = bodies[lock].pivot.position;
-        const offset = camera.position.clone().sub(target).multiplyScalar(f);
-        const min = Math.max(bodies[lock].radiusNow() * 2.2, 0.002);
-        if (offset.length() < min) offset.setLength(min);
-        if (offset.length() > 1600) offset.setLength(1600);
-        camera.position.copy(target).add(offset);
-      } else {
-        spherical.radius = Math.max(0.05, Math.min(1600, spherical.radius * f));
-        applyCamera();
-      }
-    }
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
 
-    scene.add(new THREE.AmbientLight(0x6a5c48, 0.35));
-    const sunLight = new THREE.PointLight(0xfff4e0, 60, 0, 0);
+    // Lighting
+    scene.add(new THREE.AmbientLight(0x222222));
+    const sunLight = new THREE.PointLight(0xffffff, 3, 500);
     scene.add(sunLight);
 
-    const sun = new THREE.Mesh(
-      new THREE.SphereGeometry(1, 64, 32),
-      new THREE.MeshBasicMaterial({ map: sunTexture() })
-    );
+    // Sun (Textured)
+    const textureLoader = new THREE.TextureLoader();
+    const sunGeom = new THREE.SphereGeometry(3, 64, 64);
+    const sunMat = new THREE.MeshBasicMaterial({ 
+      map: textureLoader.load('https://upload.wikimedia.org/wikipedia/commons/b/b4/The_Sun_by_the_Atmospheric_Imaging_Assembly_of_NASA%27s_Solar_Dynamics_Observatory_-_20100819.jpg')
+    });
+    const sun = new THREE.Mesh(sunGeom, sunMat);
     scene.add(sun);
 
-    const starPositions = new Float32Array(1600 * 3);
-    for (let i = 0; i < 1600; i++) {
-      const u = Math.random(), v = Math.random();
-      const th = 2 * Math.PI * u;
-      const ph = Math.acos(2 * v - 1);
-      const r = 2400;
-      starPositions[i * 3] = r * Math.sin(ph) * Math.cos(th);
-      starPositions[i * 3 + 1] = r * Math.cos(ph);
-      starPositions[i * 3 + 2] = r * Math.sin(ph) * Math.sin(th);
-    }
-    const starGeo = new THREE.BufferGeometry();
-    starGeo.setAttribute("position", new THREE.BufferAttribute(starPositions, 3));
-    scene.add(new THREE.Points(starGeo, new THREE.PointsMaterial({ color: 0xede4d4, size: 1.1, sizeAttenuation: false })));
-
-    const labelLayer = document.getElementById("labels");
-    const bodies = {};
-    const orbits = {};
-    for (const body of BODIES) {
-      const pivot = new THREE.Group();
-      const orient = new THREE.Group();
-      orient.rotation.z = body.tilt * DEG;
-      const spin = new THREE.Mesh(
-        new THREE.SphereGeometry(1, 48, 32),
-        new THREE.MeshStandardMaterial({ map: planetTexture(body), roughness: 0.82, metalness: 0.02 })
-      );
-      orient.add(spin);
-      let ring = null;
-      if (body.ring) {
-        ring = new THREE.Mesh(
-          new THREE.RingGeometry(body.ring[0], body.ring[1], 96),
-          new THREE.MeshBasicMaterial({
-            map: ringTexture(body.id === "uranus"),
-            transparent: true,
-            side: THREE.DoubleSide,
-            depthWrite: false
-          })
-        );
-        ring.rotation.x = Math.PI / 2;
-        orient.add(ring);
-      }
-      pivot.add(orient);
-      scene.add(pivot);
-      const label = document.createElement("div");
-      label.className = "name";
-      label.textContent = body.name;
-      labelLayer.appendChild(label);
-      const lineGeo = new THREE.BufferGeometry();
-      const linePos = new Float32Array(257 * 3);
-      lineGeo.setAttribute("position", new THREE.BufferAttribute(linePos, 3));
-      const line = new THREE.Line(lineGeo, new THREE.LineBasicMaterial({
-        color: new THREE.Color(`rgb(${body.hue[0]},${body.hue[1]},${body.hue[2]})`),
-        transparent: true,
-        opacity: 0.38
-      }));
-      scene.add(line);
-      bodies[body.id] = {
-        spec: body, pivot, spin, ring, label,
-        radiusNow: () => radiusUnits(body.r, mode, false)
+    // Distance Scale: 1 AU = 15 units in 3D space
+    const AU_SCALE = 15;
+    
+    // Create Planet Meshes
+    const planetMeshes = [];
+    PLANETS.forEach(p => {
+      // Base scale: Earth = 1 unit radius in "True Scale"
+      const trueScale = p.radiusKm / EARTH_RADIUS_KM;
+      
+      // Load detailed textures
+      const matParams = { 
+        map: p.tex ? textureLoader.load(p.tex) : null,
+        roughness: 0.8,
+        metalness: 0.1
       };
-      orbits[body.id] = { line, linePos, lineGeo };
-    }
+      
+      // Add bump map for Earth
+      if (p.bump) {
+        matParams.bumpMap = textureLoader.load(p.bump);
+        matParams.bumpScale = 0.05;
+      }
 
-    const moonMesh = new THREE.Mesh(
-      new THREE.SphereGeometry(1, 32, 16),
-      new THREE.MeshStandardMaterial({ color: 0xc8c2b4, roughness: 1 })
-    );
-    scene.add(moonMesh);
-    const moonLabel = document.createElement("div");
-    moonLabel.className = "name";
-    moonLabel.textContent = "Moon";
-    labelLayer.appendChild(moonLabel);
-
-    const galileanMeshes = {};
-    for (const name of Object.keys(GALILEAN)) {
-      const mesh = new THREE.Mesh(
-        new THREE.SphereGeometry(1, 20, 12),
-        new THREE.MeshStandardMaterial({
-          color: name === "io" ? 0xd8c25a : name === "europa" ? 0xcbbfa8 : name === "ganymede" ? 0x8f8574 : 0x5e564c,
-          roughness: 0.9
-        })
-      );
+      const mat = new THREE.MeshStandardMaterial(matParams);
+      const mesh = new THREE.Mesh(new THREE.SphereGeometry(1, 64, 64), mat);
+      
       scene.add(mesh);
-      galileanMeshes[name] = mesh;
-    }
-
-    function refreshScales() {
-      sun.scale.setScalar(radiusUnits(695700, mode, true));
-      for (const id of Object.keys(bodies)) {
-        const b = bodies[id];
-        const s = b.radiusNow();
-        b.spin.scale.setScalar(s);
-        if (b.ring) b.ring.scale.setScalar(s);
-      }
-      const mf = mode === "true" ? 1 : 1000;
-      moonMesh.scale.setScalar((MOON_R.moon / AU_KM) * UNITS * mf);
-      for (const name of Object.keys(galileanMeshes)) {
-        galileanMeshes[name].scale.setScalar((MOON_R[name] / AU_KM) * UNITS * mf);
-      }
-    }
-
-    function refreshOrbits() {
-      for (const id of Object.keys(orbits)) {
-        const el = elementsAt(id, jd);
-        const { linePos, lineGeo } = orbits[id];
-        for (let k = 0; k <= 256; k++) {
-          const p = toScene(orbitToEcliptic(el, (k / 256) * Math.PI * 2));
-          linePos[k * 3] = p.x; linePos[k * 3 + 1] = p.y; linePos[k * 3 + 2] = p.z;
-        }
-        lineGeo.attributes.position.needsUpdate = true;
-        lineGeo.computeBoundingSphere();
-      }
-    }
-
-    const dateEl = document.getElementById("date");
-    const noteEl = document.getElementById("marknote");
-    const warnEl = document.getElementById("warn");
-    const lieEl = document.getElementById("lie");
-    const readout = document.getElementById("readout");
-    const playBtn = document.getElementById("play");
-    const scaleBtn = document.getElementById("scale");
-    const yearSlider = document.getElementById("year");
-    const rateSlider = document.getElementById("rate");
-
-    function setLie() {
-      lieEl.textContent = mode === "true"
-        ? "True sizes. One scale for a radius and a distance. From out here the planets are points. Choose one."
-        : "Visible sizes. Planets and moons ×1000. The Sun ×20, or it covers Mercury’s orbit. Moon distances are compressed so they sit outside the enlarged body. Orbits are not enlarged.";
-    }
-    function syncChrome() {
-      playBtn.textContent = playing ? "Pause" : "Run";
-      playBtn.setAttribute("aria-pressed", playing ? "true" : "false");
-      scaleBtn.textContent = mode === "true" ? "True sizes" : "Visible sizes";
-      setLie();
-    }
-
-    const marksEl = document.getElementById("marks");
-    for (const mark of MARKS) {
-      const b = document.createElement("button");
-      b.type = "button";
-      b.textContent = mark.label;
-      b.addEventListener("click", () => {
-        jd = gregorianJD(mark.y, mark.m, mark.d);
-        playing = false;
-        syncChrome();
+      
+      // Save reference with scale factors
+      planetMeshes.push({ 
+        mesh: mesh, 
+        data: p, 
+        trueScale: trueScale * 0.1, // scaled down slightly so they fit better 
+        visibleScale: Math.max(0.3, trueScale * 0.2) // Minimum size so smaller planets are visible
       });
-      marksEl.appendChild(b);
-    }
-    const bodiesEl = document.getElementById("bodies");
-    function addBodyButton(id, name) {
-      const b = document.createElement("button");
-      b.type = "button";
-      b.textContent = name;
-      b.addEventListener("click", () => beginFly(id));
-      bodiesEl.appendChild(b);
-    }
-    for (const body of BODIES) addBodyButton(body.id, body.name);
-    addBodyButton("moon", "Moon");
-
-    playBtn.addEventListener("click", () => { playing = !playing; syncChrome(); });
-    scaleBtn.addEventListener("click", () => {
-      mode = mode === "true" ? "visible" : "true";
-      refreshScales();
-      syncChrome();
-    });
-    document.getElementById("wide").addEventListener("click", () => {
-      lock = null;
-      fly = {
-        from: camera.position.clone(),
-        to: new THREE.Vector3(40, 160, 520),
-        lookFrom: camera.getWorldDirection(new THREE.Vector3()).add(camera.position),
-        lookTo: new THREE.Vector3(0, 0, 0),
-        t: 0
-      };
-    });
-    rateSlider.addEventListener("input", () => { daysPerSec = Number(rateSlider.value); });
-    yearSlider.addEventListener("input", () => {
-      if (yearSlider.dataset.sync === "1") return;
-      playing = false;
-      const year = Number(yearSlider.value);
-      const y = Math.floor(year);
-      const frac = year - y;
-      jd = gregorianJD(y, 1, 1.5) + frac * 365.25;
-      syncChrome();
-    });
-    addEventListener("keydown", (e) => {
-      if (e.target.matches("input, button")) return;
-      if (e.code === "Space") { e.preventDefault(); playing = !playing; syncChrome(); }
-      if (e.key === "t" || e.key === "T") { mode = "true"; refreshScales(); syncChrome(); }
-      if (e.key === "v" || e.key === "V") { mode = "visible"; refreshScales(); syncChrome(); }
     });
 
-    const positions = {};
-    function beginFly(id) {
-      lock = id;
-      const target = positions[id];
-      if (!target) return;
-      const radius = id === "moon"
-        ? moonMesh.scale.x
-        : bodies[id].radiusNow();
-      const dir = camera.position.clone().sub(target);
-      if (dir.lengthSq() < 1e-8) dir.set(1, 0.35, 1);
-      dir.normalize();
-      const dist = Math.max(radius * 7, mode === "true" ? 0.02 : 1.2);
-      fly = {
-        from: camera.position.clone(),
-        to: target.clone().add(dir.multiplyScalar(dist)),
-        lookFrom: new THREE.Vector3(0, 0, 0),
-        lookTo: target.clone(),
-        t: 0,
-        id
-      };
-      const dir0 = camera.getWorldDirection(new THREE.Vector3());
-      fly.lookFrom = camera.position.clone().add(dir0);
+    // Starfield (Background)
+    const starsGeo = new THREE.BufferGeometry();
+    const starsArray = new Float32Array(3000 * 3);
+    for(let i=0; i < 3000; i++) {
+      starsArray[i*3] = (Math.random() - 0.5) * 1000;
+      starsArray[i*3+1] = (Math.random() - 0.5) * 1000;
+      starsArray[i*3+2] = (Math.random() - 0.5) * 1000;
     }
+    starsGeo.setAttribute('position', new THREE.BufferAttribute(starsArray, 3));
+    scene.add(new THREE.Points(starsGeo, new THREE.PointsMaterial({color: 0xffffff, size: 0.5})));
 
-    const v = new THREE.Vector3();
-    const placed = [];
-    function placeLabel(el, world, minPx) {
-      v.copy(world).project(camera);
-      if (v.z > 1) { el.style.display = "none"; return; }
-      const x = (v.x * 0.5 + 0.5) * innerWidth;
-      const y = (-v.y * 0.5 + 0.5) * innerHeight;
-      if (minPx) {
-        for (const p of placed) {
-          if (Math.hypot(p.x - x, p.y - y) < 22) { el.style.display = "none"; return; }
-        }
-        placed.push({ x, y });
-      }
-      el.style.display = "block";
-      el.style.transform = `translate(${x}px, ${y}px) translate(-50%, -140%)`;
-    }
+    // --- 4. UI & ANIMATION LOOP ---
+    let useTrueScale = false;
+    document.getElementById('toggle-scale').addEventListener('click', (e) => {
+      useTrueScale = !useTrueScale;
+      e.target.innerText = useTrueScale ? "Mode: True Scale" : "Mode: Visible Scale";
+    });
 
-    let orbitStamp = -1e9;
-    let last = performance.now();
-    const followOffset = new THREE.Vector3();
-    let haveFollow = false;
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
 
-    function frame(now) {
-      requestAnimationFrame(frame);
-      const dt = Math.min((now - last) / 1000, 0.1);
-      last = now;
-      if (playing) jd += daysPerSec * dt;
-      if (jd - orbitStamp > 20) { refreshOrbits(); orbitStamp = jd; }
+    let currentJD = J2000; // Start at J2000 epoch
+    const dateDisplay = document.getElementById('date-display');
 
-      const helio = {};
-      for (const body of BODIES) {
-        helio[body.id] = heliocentric(body.id, jd);
-        const pos = toScene(helio[body.id]);
-        bodies[body.id].pivot.position.copy(pos);
-        positions[body.id] = pos;
-        const turns = jd / body.day;
-        bodies[body.id].spin.rotation.y = turns * Math.PI * 2;
-      }
-      const moon = moonGeocentric(jd);
-      const earthR = bodies.earth.radiusNow();
-      const moonPos = positions.earth.clone().add(moonOffset(moon.vec, 6378.137, earthR, mode));
-      moonMesh.position.copy(moonPos);
-      positions.moon = moonPos;
-      const jupR = bodies.jupiter.radiusNow();
-      for (const name of Object.keys(GALILEAN)) {
-        const rel = galilean(name, jd);
-        galileanMeshes[name].position.copy(positions.jupiter).add(moonOffset(rel, 71492, jupR, mode));
-      }
+    function animate() {
+      requestAnimationFrame(animate);
+      
+      // Advance time (approx 1 day per frame)
+      currentJD += 1;
+      const date = new Date((currentJD - 2440587.5) * 86400000);
+      dateDisplay.innerText = "Date: " + date.toISOString().split('T')[0];
 
-      if (fly) {
-        fly.t += dt / 0.85;
-        const k = fly.t >= 1 ? 1 : 1 - Math.pow(1 - fly.t, 3);
-        camera.position.lerpVectors(fly.from, fly.to, k);
-        const look = fly.lookFrom.clone().lerp(fly.lookTo, k);
-        camera.lookAt(look);
-        if (fly.t >= 1) {
-          if (fly.id) {
-            followOffset.copy(camera.position).sub(positions[fly.id]);
-            haveFollow = true;
-          } else {
-            spherical.setFromVector3(camera.position);
-            haveFollow = false;
-          }
-          fly = null;
-        }
-      } else if (lock && positions[lock]) {
-        if (!haveFollow) {
-          followOffset.copy(camera.position).sub(positions[lock]);
-          haveFollow = true;
-        }
-        camera.position.copy(positions[lock]).add(followOffset);
-        camera.lookAt(positions[lock]);
-      }
+      // Update planets using Keplerian math
+      planetMeshes.forEach(pm => {
+        // Apply math
+        const pos = getPlanetPos(pm.data, currentJD);
+        
+        // Map Ecliptic (x, y, z) to Three.js (X, Z, -Y)
+        pm.mesh.position.set(pos.x * AU_SCALE, pos.z * AU_SCALE, -pos.y * AU_SCALE);
+        
+        // Rotate planet on its axis
+        pm.mesh.rotation.y += 0.01;
 
-      placed.length = 0;
-      for (const body of BODIES) {
-        const forced = lock === body.id;
-        placeLabel(bodies[body.id].label, positions[body.id], !forced);
-      }
-      const showMoon = lock === "moon" || lock === "earth" || camera.position.distanceTo(positions.earth) < (mode === "true" ? 0.4 : 25);
-      if (showMoon) placeLabel(moonLabel, moonPos, lock !== "moon");
-      else moonLabel.style.display = "none";
+        // Apply scaling mode
+        const targetScale = useTrueScale ? pm.trueScale : pm.visibleScale;
+        pm.mesh.scale.setScalar(targetScale);
+      });
 
-      dateEl.textContent = formatJD(jd);
-      const yearNow = jdToDate(jd).year + (jdToDate(jd).day / 365);
-      if (document.activeElement !== yearSlider) {
-        yearSlider.dataset.sync = "1";
-        yearSlider.value = String(Math.min(2050, Math.max(1800, yearNow)));
-        yearSlider.dataset.sync = "0";
-      }
-      let note = "";
-      for (const mark of MARKS) {
-        const mjd = gregorianJD(mark.y, mark.m, mark.d);
-        if (Math.abs(jd - mjd) < 2) note = mark.note;
-      }
-      noteEl.textContent = note;
-      warnEl.textContent = jd < VALID_FROM || jd > VALID_TO ? "These elements are tabulated for 1800 through 2050." : "";
-
-      const focus = lock && positions[lock] ? lock : "earth";
-      if (focus === "moon") {
-        readout.innerHTML = `<b>Moon</b><br><span class="dim">${Math.round(moon.distKm).toLocaleString()} km from Earth’s centre</span>`;
-      } else {
-        const spec = bodies[focus].spec;
-        const p = helio[focus];
-        const au = Math.hypot(p.x, p.y, p.z);
-        const hours = Math.abs(spec.day) * 24;
-        const h = Math.floor(hours);
-        const min = Math.round((hours - h) * 60);
-        const spin = spec.day < 0 ? `${h} h ${min} m, retrograde` : `${h} h ${min} m`;
-        readout.innerHTML = `<b>${spec.name}</b><br><span class="dim">${au.toFixed(3)} AU from the Sun · radius ${Math.round(spec.r).toLocaleString()} km · day ${spin} · tilt ${spec.tilt}°</span>`;
-      }
-      const sunL = sunLon(jd);
-      const sep = Math.abs(wrap180(moon.lon - sunL));
-      const sepSun = Math.min(sep, 360 - sep);
-      if (sepSun < 1.6 || Math.abs(sepSun - 180) < 1.6) {
-        const kind = sepSun < 1.6 ? "The Moon stands near the Sun." : "The Moon stands opposite the Sun.";
-        noteEl.textContent = note ? `${note} ${kind}` : kind;
-      }
-
-      sun.rotation.y += dt * 0.05;
+      sun.rotation.y += 0.002;
+      controls.update();
       renderer.render(scene, camera);
     }
 
-    addEventListener("resize", () => {
-      camera.aspect = innerWidth / innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(innerWidth, innerHeight);
-    });
-
-    refreshScales();
-    refreshOrbits();
-    syncChrome();
-    spherical.setFromVector3(camera.position);
-    frame(performance.now());
+    animate();
   </script>
 </body>
 </html>
