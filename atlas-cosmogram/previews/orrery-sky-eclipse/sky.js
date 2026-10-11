@@ -9,7 +9,7 @@ import {
 
 const DEG = Math.PI / 180;
 const AU_KM = 149597870.7;
-const DATA = 'https://cdn.jsdelivr.net/gh/ofrohn/d3-celestial@7e720a3de062059d4c5400a379146a601d9010e0/data/';
+const DATA = 'https://cdn.jsdelivr.net/gh/ofrohn/d3-celestial@0.7.32/data/';
 const PLANETS = ['mercury', 'venus', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune'];
 const COLORS = { mercury:0xc5c5bb, venus:0xffe6aa, mars:0xe08360,
   jupiter:0xe1c99e, saturn:0xd7c99a, uranus:0x95e0db, neptune:0x739fee };
@@ -63,11 +63,7 @@ export class ObserverSky {
     lunarMap.colorSpace = THREE.SRGBColorSpace;
     this.moon.material.map = lunarMap;
     this.scene.add(this.sun, this.moon);
-    this.eclipseRim = new THREE.Mesh(
-      new THREE.RingGeometry(1,1.35,64),
-      new THREE.MeshBasicMaterial({ color:0xfff0cb, transparent:true, opacity:0.48,
-        side:THREE.DoubleSide, depthWrite:false }));
-    this.scene.add(this.eclipseRim);
+    this.catalogStatus = 'loading';
     this.planets = new Map();
     for (const name of PLANETS) {
       const dot = new THREE.Points(
@@ -88,12 +84,14 @@ export class ObserverSky {
         })));
       this.stars = responses[0].features.filter((f) => f.properties.mag <= 5.5)
         .map((f) => ({ ra:f.geometry.coordinates[0], dec:f.geometry.coordinates[1],
-          mag:f.properties.mag }));
+          mag:f.properties.mag, name:f.properties.name || f.properties.desig || 'Star' }));
       this.lines = responses[1].features.flatMap((f) =>
         f.geometry.coordinates.flatMap((line) =>
           line.slice(1).map((p,i) => [line[i], p])));
+      this.catalogStatus = 'ready';
       this.update(this.jd, this.lat, this.lon, this.orrery);
     } catch (error) {
+      this.catalogStatus = 'unavailable';
       console.warn('Constellation catalog could not load', error);
     }
   }
@@ -150,10 +148,6 @@ export class ObserverSky {
     }
     const sep = angularSeparation(bodies.sun.vector,bodies.moon.vector);
     const eclipse = sep < bodies.sun.radius + bodies.moon.radius;
-    this.eclipseRim.visible = eclipse && sep < bodies.moon.radius-bodies.sun.radius;
-    this.eclipseRim.position.copy(this.sun.position).multiplyScalar(0.999);
-    this.eclipseRim.lookAt(0,0,0);
-    this.eclipseRim.scale.setScalar(this.sun.scale.x);
     const nearNew = Math.cos((m.lon-s.lon)*DEG) > 0.9;
     this.moon.material.color.setHex(eclipse || nearNew ? 0x111923 : 0xd9d9d6);
     this.moon.material.needsUpdate = true;
@@ -195,9 +189,10 @@ export class ObserverSky {
   rotate(dx,dy) {
     const dir = new THREE.Vector3();
     this.camera.getWorldDirection(dir);
-    dir.applyAxisAngle(new THREE.Vector3(0,1,0),-dx*0.005);
+    const radiansPerPixel = this.camera.fov * DEG / window.innerHeight;
+    dir.applyAxisAngle(new THREE.Vector3(0,1,0),-dx*radiansPerPixel);
     const right = new THREE.Vector3().crossVectors(dir,new THREE.Vector3(0,1,0)).normalize();
-    dir.applyAxisAngle(right,-dy*0.005);
+    dir.applyAxisAngle(right,-dy*radiansPerPixel);
     this.camera.lookAt(dir);
   }
 
