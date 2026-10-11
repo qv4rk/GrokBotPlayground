@@ -1,0 +1,48 @@
+ 
+ Irish Land Act, 1903 (Amount of Agreements). (Hansard, 30 March 1909) 
+ var appInsights=window.appInsights||function(a){
+ function b(a){c[a]=function(){var b=arguments;c.queue.push(function(){c[a].apply(c,b)})}}var c={config:a},d=document,e=window;setTimeout(function(){var b=d.createElement("script");b.src=a.url||"https://az416426.vo.msecnd.net/scripts/a/ai.0.js",d.getElementsByTagName("script")[0].parentNode.appendChild(b)});try{c.cookie=d.cookie}catch(a){}c.queue=[];for(var f=["Event","Exception","Metric","PageView","Trace","Dependency"];f.length;)b("track"+f.pop());if(b("setAuthenticatedUserContext"),b("clearAuthenticatedUserContext"),b("startTrackEvent"),b("stopTrackEvent"),b("startTrackPage"),b("stopTrackPage"),b("flush"),!a.disableExceptionTracking){f="onerror",b("_"+f);var g=e[f];e[f]=function(a,b,d,e,h){var i=g&&g(a,b,d,e,h);return!0!==i&&c["_"+f](a,b,d,e,h),i}}return c
+ }({
+ instrumentationKey:"c0960a0f-30ad-4a9a-b508-14c6a4f61179",
+ cookieDomain:".parliament.uk"
+ });
+ window.appInsights=appInsights,appInsights.queue&&0===appInsights.queue.length&&appInsights.trackPageView();
+ Search Help 
+ HANSARD 1803–2005 
+ →
+ 1900s
+ →
+ 1909
+ →
+ March 1909
+ →
+ 30 March 1909
+ →
+ Commons Sitting
+ →
+ ORAL ANSWERS TO QUESTIONS. 
+ Irish Land Act, 1903 (Amount of Agreements). 
+ HC Deb 30 March 1909 vol 3 c183 
+ 183 
+ § 
+ Mr. KETTLE 
+ asked what was the number and what was the amount of the purchase agreements lodged, under the Act of 1903, between 1st November, 1908, and 24th November, 1908, and also between 1st November, 1908, and 1st March, 1909?
+ § 
+ Mr. CHERRY 
+ The Estates Commissioners inform me that the number of purchase agreements lodged between 1st November, 1908, and 24th November, 1908, was 2,483, representing a purchase money of £817,539. The number of purchase agreements lodged between 1st November, 1908, and 1st March, 1909, was 5,430, representing a purchase money of £1,653,571.
+ § 
+ Mr. MOORE 
+ May I ask whether it is the case that since 24th November these agreements are only represented by 39 originating applications?
+ § 
+ Mr. CHERRY 
+ I really do not know. If the hon. Gentleman will put down a question I will ascertain for him.
+ Back to
+ Royal Irish Constabulary (Strength, etc.)
+ Forward to
+ Discharges from Woolwich Arsenal.
+ Noticed a typo? | Report other issues | © UK Parliament 
+ var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+ var pageTracker = _gat._getTracker("UA-3110135-1");
+ pageTracker._initData();
+ (function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a47a491c1f0475e2',t:'MTc5MTUxNjQwNQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})(); 

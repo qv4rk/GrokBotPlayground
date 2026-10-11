@@ -1,0 +1,166 @@
+
+Menu
+People
+Places
+Sport
+Genealogical Resources
+Online Resources
+Burial Grounds
+News & Events
+Contact
+JOIN THE LIBRARY	
+People
+Places
+More
+Burial Grounds
+Genealogical Resources
+Online Resources
+Sport
+News & Events
+Contact
+Search
+JOIN THE LIBRARY	
+Search
+Menu
+Land Purchase – The Leinster Estate – Meeting at Maynooth 1903
+Kildare Local Studies
+24 May 2020
+Places
+, 
+Social History
+MEETING OF TENANTS
+THE LEINSTER NEGOTIATIONS
+THE ESTATE SOLD TO THE TENANTS
+PROPOSALS ON OTHER ESTATES
+MEETING AT MAYNOOTH
+The Leinster Leader, Saturday September 25, 1903
+On Monday a meeting of the tenants of “Maynooth Manor” the part of the estate of the Duke of Leinster situated around the town of Maynooth, assembled at the Town Hall, Maynooth, for the purpose of taking into consideration the offer of the Trustees of the present Duke, who is a minor, to sell the estate to the tenantry under the new Land Act for 25 years purchase. It will be remembered that a meeting of the tenantry in the Athy district, which is the larger portion of the estate, was held last week to consider the proposal of the Trustees, and that they decided to offer to buy at 24 years’ purchase. A committee appointed by the Athy meeting had a conference with the agent of the estate, Mr Hamilton, on Thursday last, when the Trustees through Mr Hamilton, intimated that they were not prepared to sell at less than 25 years’ purchase. It was then arranged that a meeting of the Maynooth tenants (called for Monday) should be held, and that a general meeting of the tenants of the entire estate, at which the Maynooth men should be represented, would take place at Athy on Tuesday.
+There are something like about seventy tenants of the “Maynooth Manor” estate, the net rental of which is stated to be well over £9,000 a year, and there was about fifty of the tenants in attendance or represented at Monday’s meeting. Among those present were:- The Rev. Mr. Creed, Mr. Laurence Ball, J.P.; Mr Shaw, Mr R McKenna, J.P. C.C., Mr Mark Travers, Mr Philip Brady, Messrs McGrath (two), Mr Patterson, Mr Langan, Captain Murray, Mr T. Byrne, Mr Jas. O’Grady, solicitor; Mr Robert Mooney, Mr Joseph Mooney, Mr Denis Dunne, Mr Daniel Dunne, etc. Mr Stephen J. Brown, J.P. Naas, chairman Kildare County Council attended the meeting as solicitor for some of the Maynooth tenants.
+When the meeting assembled shortly after two o’clock, a motion was made that Mr. Laurence Ball do take the chair. Mr. Ball, however, demurred, and at his suggestion the chair was taken by Mr. Shaw. The Chairman then said that the first question to consider was whether the Press should be represented at their meeting – Mr. Ball said the Trustees were consulting in private, and he suggested that the tenants should also consult in private. This view was adopted by the meeting – and the Press representative pre-sat withdrew. He was subsequently informed by Mr. J. Ball and Mr. Shaw that the meeting, which lasted an hour and a half, had decided to appoint a deputation to attend the Athy meeting on Tuesday, the deputation to consist of Messrs Shaw, Ball, Langan, Travers, McGrath, Patterson and McKenna, with Mr Stephen J. Brown solicitor….
+This newspaper report was one of several in the local newspapers throughout the second half of 1903 that provided accounts of negotiations around the break-up of the large land estates in County Kildare as a consequence of the Wyndham Land Act. Similar accounts of meetings of the tenants of the Trench Estate and Aylmer Estate were included in this edition.
+Tags
+#
+ Land
+#
+ Leinster Estate
+#
+ Maynooth
+#
+ Tenant
+Kildare Local Studies
+Articles: 1790
+Previous 
+Post
+What would Shackleton do? Podcast Series							
+Next 
+Post
+BLOWING UP OF MAYNOOTH TOWN HALL							
+Categories
+Categories
+Select Category
+Agriculture  (4)
+Articles & Essays  (20)
+Built Heritage  (53)
+Burial Grounds  (37)
+County Kildare  (77)
+Decade of Centenaries  (164)
+Digitised Resources  (33)
+Folklore  (26)
+Genealogical Resources  (117)
+Industrial Heritage  (48)
+Kildare County Archives  (50)
+Kildare Observer 1880-1935  (14)
+Looking Back  (99)
+Military History  (132)
+Natural Heritage  (1)
+News & Events  (100)
+Newspaper Articles  (592)
+Nothing New Under the Sun  (106)
+Obituaries  (59)
+Online Resources  (20)
+People  (257)
+Places  (171)
+Politics  (16)
+Social History  (147)
+Specific Areas Within Co. Kildare  (1)
+Sport  (80)
+Uncategorised  (319)
+(([dropdownId,homeUrl])=>{const dropdown=document.getElementById(dropdownId);function onSelectChange(){setTimeout(()=>{if('escape'===dropdown.dataset.lastkey){return}
+if(dropdown.value&&dropdown.value!=='-1'&&dropdown instanceof HTMLSelectElement){const url=new URL(homeUrl);url.searchParams.set(dropdown.name,dropdown.value);location.href=url.href}},250)}
+function onKeyUp(event){if('Escape'===event.key){dropdown.dataset.lastkey='escape'}else{delete dropdown.dataset.lastkey}}
+function onClick(){delete dropdown.dataset.lastkey}
+dropdown.addEventListener('keyup',onKeyUp);dropdown.addEventListener('click',onClick);dropdown.addEventListener('change',onSelectChange)})(["wp-block-categories-1","https://kildarelibraries.ie/ehistory"])
+Tags
+agriculture
+ (1)
+Allenwood
+ (1)
+anti-tithe
+ (1)
+archives
+ (2)
+arts
+ (1)
+Athy
+ (5)
+Ballitore
+ (1)
+Ballymore-Eustace
+ (2)
+Ballytore
+ (1)
+Castletown
+ (2)
+Celbridge
+ (3)
+Curragh
+ (5)
+Decade of Centenaries
+ (2)
+Decade of Commemorations
+ (3)
+GAA
+ (2)
+horse-racing
+ (3)
+industry
+ (4)
+kilcock
+ (2)
+Naas
+ (6)
+Naas Town Hall
+ (2)
+Newbridge
+ (2)
+Nurney
+ (2)
+poor law
+ (4)
+Punchestown
+ (2)
+Rathangan
+ (2)
+South Kildare
+ (2)
+Suncroft
+ (2)
+Treaty
+ (2)
+War of Independence
+ (2)
+workhouse
+ (2)
+Recent Posts
+First Tractor in Ireland
+Digital collection of World War I gravestones and memorials in County Kildare now online
+150th Anniversary of the Catalpa Rescue
+The Ballitore Papers now available online to mark the 200th anniversary of the death of Mary Leadbeater in 1826
+Kildare Wallpaper Factory
+Related Posts
+First Tractor in Ireland
+7 October 2026
+The Ballitore Papers now available online to mark the 200th anniversary of the death of Mary Leadbeater in 1826
+26 June 2026
+Ballyfair Fete
+2 June 2026
