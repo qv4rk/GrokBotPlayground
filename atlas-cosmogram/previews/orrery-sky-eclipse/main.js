@@ -184,10 +184,9 @@ try {
     if(gesture?.id===e.pointerId&&Math.hypot(e.clientX-gesture.x,e.clientY-gesture.y)>8)gesture.moved=true;
     if(view!=='sky'||!pointers.has(e.pointerId))return;
     const old=pointers.get(e.pointerId);pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
-    if(pointers.size===1){sunLock=false;const d=skyCamera.getWorldDirection(new THREE.Vector3()),k=skyCamera.fov*rad/innerHeight;
-      d.applyAxisAngle(skyCamera.up,-(e.clientX-old.x)*k);
-      const right=new THREE.Vector3().crossVectors(d,skyCamera.up).normalize();
-      d.applyAxisAngle(right,-(e.clientY-old.y)*k);skyCamera.lookAt(skyCamera.position.clone().add(d));
+    if(pointers.size===1){sunLock=false;const k=skyCamera.fov*rad/innerHeight;
+      skyCamera.quaternion.multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,1,0),-(e.clientX-old.x)*k));
+      skyCamera.quaternion.multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1,0,0),-(e.clientY-old.y)*k));
     }else if(pointers.size===2){const [a,b]=[...pointers.values()],d=Math.hypot(a.x-b.x,a.y-b.y);if(pinch&&d>0)fov(skyCamera.fov*pinch/d);pinch=d;}
   });
   function end(e){if(gesture?.id===e.pointerId&&!gesture.moved&&e.type==='pointerup')tapAt(e.clientX,e.clientY);
