@@ -88,7 +88,7 @@ try {
     $('scrub').value=Math.max(-120,Math.min(120,offset));$('offset').textContent=`${offset>=0?'+':''}${offset.toFixed(1)} min`;
   }
   function setDate(next) {
-    date=new Date(next);if(!Number.isFinite(+date))return;
+    const requestedDate=new Date(next);if(!Number.isFinite(+requestedDate))return;date=requestedDate;
     const previousGast=state.gast;
     state=ephemeris(date);updateOrrery();eclipse.update(state,lat,lon);cosmosTransform();dateBox();
     if(view==='sky'){

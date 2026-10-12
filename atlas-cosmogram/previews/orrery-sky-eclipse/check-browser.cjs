@@ -20,6 +20,10 @@ const assert=require('assert/strict');
  fs.mkdirSync(out,{recursive:true});
  await page.screenshot({path:path.join(out,'earth-shadow-desktop.png')});
  console.log('state',await page.evaluate(()=>({view:__atlas.view,center:__atlas.eclipse.center,counts:__atlas.cosmos.counts})));
+ const validEpoch=await page.evaluate(()=>__atlas.state.jd);
+ await page.locator('#date').fill('');await page.locator('#back').click();
+ assert(Math.abs(await page.evaluate(()=>__atlas.state.jd)-(validEpoch-1/1440))<1e-8);
+ await page.locator('#peak').click();
  const gpuErrors=await page.evaluate(async()=>{
    const T=await import('./vendor/three.module.js'),physics=await import('./physics.mjs');
    const {overlapGLSL}=await import('./eclipse-scene.js');
