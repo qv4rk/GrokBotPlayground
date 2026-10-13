@@ -76,17 +76,21 @@ export function createPhenomena(scene) {
   const rand = () => { seed = seed * 16807 % 2147483647; return (seed - 1) / 2147483646; };
   const inc = SWIFT.i * DEG, node = SWIFT.O * DEG;
   const normal = new THREE.Vector3(Math.sin(inc) * Math.sin(node), -Math.sin(inc) * Math.cos(node), Math.cos(inc));
-  for (let k = 0; k < 3200; k++) {
+  for (let k = 0; k < 900; k++) {
     const u = (rand() + rand() + rand() - 1.5) * 2.8 * DEG, p = streamPoint(NODE + u);
-    const width = 0.006 + Math.abs(u) * 0.05;
+    const width = 0.003 + Math.abs(u) * 0.025;
     const off = normal.clone().multiplyScalar((rand() * 2 - 1) * width);
     const cross = p.clone().normalize().cross(normal).normalize().multiplyScalar((rand() * 2 - 1) * width);
     positions.push((p.x + off.x + cross.x) * SCALE, (p.z + off.z + cross.z) * SCALE, -(p.y + off.y + cross.y) * SCALE);
   }
   const pg = new THREE.BufferGeometry(); pg.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-  perseids.add(new THREE.Points(pg, new THREE.PointsMaterial({ color: 0xffa24a, size: 0.11, sizeAttenuation: true, transparent: true, opacity: 0.82, depthWrite: false, blending: THREE.AdditiveBlending })));
-  const pMarker = marker('Perseid stream · Swift–Tuttle orbit crossing', 0xffa24a);
-  pMarker.position.copy(scenePoint(streamPoint(NODE))); perseids.add(pMarker);
+  perseids.add(new THREE.Points(pg, new THREE.PointsMaterial({ color: 0xe7bd68, size: 2, sizeAttenuation: false, transparent: true, opacity: 0.52, depthWrite: false })));
+  // A screen-sized point marks the orbit crossing. A spherical marker reads as a planet
+  // when the camera focuses here, so the Perseid layer intentionally has no 3-D body.
+  const pMarker = new THREE.Points(new THREE.BufferGeometry().setAttribute('position',
+    new THREE.Float32BufferAttribute(scenePoint(streamPoint(NODE)).toArray(), 3)),
+    new THREE.PointsMaterial({ color: 0xffd98a, size: 6, sizeAttenuation: false }));
+  pMarker.name = 'Perseid stream · Earth crossing'; pMarker.userData.type = 'small-body'; perseids.add(pMarker);
   perseids.userData.description = 'Orbital dust-stream schematic; not individual meteor paths.';
 
   const stations = new THREE.Group(); stations.name = 'Satellites'; root.add(stations);

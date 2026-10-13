@@ -120,6 +120,9 @@ export class EclipseScene {
   }
   update(state,lat,lon) {
     this.state=state;this.center=shadowCenter(state);
+    if(!this.center&&state.catalogExact&&state.catalogSite){
+      const site=state.catalogSite;this.center={position:observer(state,site.lat,site.lon),lat:site.lat,lon:site.lon,isCatalogSite:true};
+    }
     this.earthFrame.rotation.y=state.gast*Math.PI/180;
     this.sun.position.copy(point(state.sun));this.moon.position.copy(point(state.moon));
     for(const [name,p]of this.planets){const v=Astronomy.RotateVector(state.rotation,Astronomy.GeoVector(name,state.time,true));
@@ -175,6 +178,7 @@ export class EclipseScene {
     }
   }
   setEvent(event) {
+    if(event.catalogRecord){this.path.geometry.setFromPoints([]);return;}
     const points=[];
     for(let minutes=-110;minutes<=110;minutes+=1.5){
       const s=ephemeris(new Date(event.eclipse.peak.date.getTime()+minutes*60000)),c=shadowCenter(s);

@@ -8,6 +8,9 @@ import {createPhenomena} from './phenomena.js';
 import {Astronomy as A,EVENTS,AU,EARTH_A,ephemeris,observer,sceneVector,atPoint,shadowCenter,rayEllipsoid} from './physics.mjs';
 const $=id=>document.getElementById(id),rad=Math.PI/180;
 const title=s=>s[0].toUpperCase()+s.slice(1);
+let eclipseCatalog={eclipses:[]};
+try { const r=await fetch(new URL('./data/eclipse-catalog.json',import.meta.url));if(r.ok)eclipseCatalog=await r.json(); }
+catch(error) { console.warn('Eclipse catalog unavailable:',error); }
 let renderer;
 try {
   renderer=new THREE.WebGLRenderer({canvas:$('space'),antialias:true,alpha:true,logarithmicDepthBuffer:true,preserveDrawingBuffer:true});
@@ -18,6 +21,10 @@ try {
   const phenomena=createPhenomena(orbitScene);
   const eclipse=new EclipseScene();
   orrery.bodies.earth.mesh.geometry.dispose();orrery.bodies.earth.mesh.geometry=eclipse.earth.geometry.clone();
+  const shadowMark=new THREE.Group();shadowMark.name='Visible eclipse shadow marker · enlarged for clarity';
+  const shadowOuter=new THREE.Mesh(new THREE.CircleGeometry(1,48),new THREE.MeshBasicMaterial({color:0x9babc1,transparent:true,opacity:.28,depthWrite:false,side:THREE.DoubleSide,polygonOffset:true,polygonOffsetFactor:-2}));
+  const shadowCore=new THREE.Mesh(new THREE.CircleGeometry(1,48),new THREE.MeshBasicMaterial({color:0x05070c,transparent:true,opacity:.82,depthWrite:false,side:THREE.DoubleSide,polygonOffset:true,polygonOffsetFactor:-3}));
+  shadowMark.add(shadowOuter,shadowCore);orrery.bodies.earth.mesh.add(shadowMark);shadowMark.visible=false;
   const orbitCamera=new THREE.PerspectiveCamera(45,innerWidth/innerHeight,1e-7,100000);
   const earthCamera=new THREE.PerspectiveCamera(45,innerWidth/innerHeight,1e-5,100000);
   const skyCamera=new THREE.PerspectiveCamera(70,innerWidth/innerHeight,1e-7,100000);
@@ -26,12 +33,23 @@ try {
   orbitControls.enableDamping=earthControls.enableDamping=true;
   earthControls.minDistance=.015;earthControls.maxDistance=300;
   const cosmos=await makeCosmos(8000);cosmos.setCulture('both');
+  const catalogEvents=(eclipseCatalog.eclipses||[]).map(record=>{
+    const date=new Date(record.greatest.ut1_model_iso),site=record.site;
+    const stamp=record.greatest.ut1_model_iso.slice(0,10);
+    const lon=site.longitude_deg_east,lonText=`${Math.abs(lon).toFixed(1)}°${lon<0?'W':'E'}`;
+    const lat=site.latitude_deg,latText=`${Math.abs(lat).toFixed(1)}°${lat<0?'S':'N'}`;
+    return {id:record.id,name:`${stamp} · ${title(record.type)} · ${latText}, ${lonText}`,source:'catalog',catalogRecord:record,
+      eclipse:{peak:{date},latitude:lat,longitude:lon}};
+  }).filter(e=>Number.isFinite(+e.eclipse.peak.date));
+  const ALL_EVENTS=EVENTS.concat(catalogEvents);
   const eclipticToEquatorial=new THREE.Matrix4();
   let view='earth',event=EVENTS[0],date=event.eclipse.peak.date,state=ephemeris(date),playing=false;
   let mode='visible',focus='',lat=event.eclipse.latitude,lon=event.eclipse.longitude,following=true;
   let lastEarth=new THREE.Vector3(),lastFocus=new THREE.Vector3(),sunLock=false;
   const bodyNames={sun:'Sun',mercury:'Mercury',venus:'Venus',earth:'Earth',mars:'Mars',jupiter:'Jupiter',saturn:'Saturn',uranus:'Uranus',neptune:'Neptune',moon:'Moon',io:'Io',europa:'Europa',ganymede:'Ganymede',callisto:'Callisto'};
   for(const e of EVENTS){const o=new Option(e.name,e.id);$('event').add(o);}
+  if(catalogEvents.length){const group=document.createElement('optgroup');group.label=`Uploaded eclipse catalog · ${catalogEvents.length} records`;
+    for(const e of catalogEvents)group.add(new Option(e.name,e.id));$('event').add(group);}
   for(const [name,label] of Object.entries(bodyNames)) $('focus').add(new Option(label,name));
   for(const [name,label] of [['oumuamua','ʻOumuamua'],['nine','Planet Nine · hypothetical'],['perseids','Perseid stream crossing'],['satellites','ISS · live satellite TLE']])$('focus').add(new Option(label,name));
   const nameNodes=cosmos.centres.map(c=>{
@@ -42,6 +60,16 @@ try {
   function eclScene(vector) {
     const v=A.RotateVector(A.Rotation_EQJ_ECL(),vector);
     return new THREE.Vector3(v.x,v.z,-v.y);
+  }
+  function updateShadowMark() {
+    const c=eclipse.center;if(!c){shadowMark.visible=false;return;}
+    const eqj=A.RotateVector(A.Rotation_EQD_EQJ(state.time),new A.Vector(c.position[0],c.position[1],c.position[2],state.time));
+    const ecl=A.RotateVector(A.Rotation_EQJ_ECL(),eqj),dir=new THREE.Vector3(ecl.x,ecl.z,-ecl.y).normalize();
+    const inv=orrery.bodies.earth.mesh.getWorldQuaternion(new THREE.Quaternion()).invert();dir.applyQuaternion(inv).normalize();
+    shadowMark.position.copy(dir).multiplyScalar(1.004);shadowMark.quaternion.setFromUnitVectors(new THREE.Vector3(0,0,1),dir);
+    const obsc=state.catalogExact?event.catalogRecord.site.obscuration:1,umbra=state.catalogExact?event.catalogRecord.site.umbra:!c.isCatalogSite;
+    shadowOuter.scale.setScalar(0.045+0.11*Math.sqrt(Math.max(0,obsc)));shadowCore.scale.setScalar(umbra?.052:.018);shadowCore.visible=umbra;
+    shadowMark.visible=true;
   }
   function fromEqDate(vector) {
     return eclScene(A.RotateVector(A.Rotation_EQD_EQJ(state.time),new A.Vector(vector[0],vector[1],vector[2],state.time)));
@@ -136,7 +164,12 @@ try {
   function setDate(next) {
     const requestedDate=new Date(next);if(!Number.isFinite(+requestedDate))return;date=requestedDate;
     const previousGast=state.gast;
-    state=ephemeris(date);updateOrrery();eclipse.update(state,lat,lon);cosmosTransform();dateBox();
+    state=ephemeris(date);
+    if(event.catalogRecord&&Math.abs(+date-+event.eclipse.peak.date)<1000){
+      const g=event.catalogRecord.geometry,r=event.catalogRecord;state={...state,sun:g.sun_eqd_km,moon:g.moon_eqd_km,gast:g.earth_gast_deg,catalogExact:true,
+        catalogSite:{lat:r.site.latitude_deg,lon:r.site.longitude_deg_east}};
+    }
+    updateOrrery();eclipse.update(state,lat,lon);updateShadowMark();cosmosTransform();dateBox();
     if(view==='sky'){
       skyCamera.quaternion.premultiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,1,0),(state.gast-previousGast)*rad));
       anchorSky();if(sunLock)skyCamera.lookAt(eclipse.sun.position);
@@ -148,7 +181,8 @@ try {
     }
     if(view==='orrery'&&focus){const p=selectedPosition(focus),delta=p.clone().sub(lastFocus);orbitCamera.position.add(delta);orbitControls.target.add(delta);lastFocus.copy(p);}
     const center=eclipse.center;
-    $('shadow').textContent=center?`Calculated shadow axis: ${center.lat.toFixed(4)}° N · ${center.lon.toFixed(4)}° E`:'Shadow axis does not intersect Earth at this time';
+    const shadowLabel=center?.isCatalogSite?`Catalog greatest-eclipse site${event.catalogRecord.site.umbra?' · inside umbra':' · no umbra at this site'}: `:'Calculated shadow axis: ';
+    $('shadow').textContent=center?shadowLabel+`${Math.abs(center.lat).toFixed(4)}° ${center.lat<0?'S':'N'} · ${Math.abs(center.lon).toFixed(4)}° ${center.lon<0?'W':'E'}`:'Shadow axis does not intersect Earth at this time';
     const local=atPoint(state,observer(state,lat,lon));
     $('sky-status').textContent=`At observer: ${local.kind} · ${(local.obscuration*100).toFixed(2)}% Sun covered · altitude ${local.altitude.toFixed(1)}°`;
     eclipse.corona.visible=view==='sky'&&local.kind==='Total';
@@ -176,7 +210,7 @@ try {
   function frameOrbit() {
     orbitCamera.fov=45;orbitCamera.updateProjectionMatrix();
     if(!focus){orbitCamera.position.set(0,350,650);orbitControls.target.set(0,0,0);}
-    else{const p=selectedPosition(focus),r=orrery.bodies[focus]?orrery.bodyRadius(focus):0.8;
+    else{const p=selectedPosition(focus),r=focus==='perseids'?4.5:orrery.bodies[focus]?orrery.bodyRadius(focus):0.8;
       orbitControls.target.copy(p);orbitCamera.position.copy(p).add(new THREE.Vector3(0,.35,1).normalize().multiplyScalar(r*6));lastFocus.copy(p);}
     orbitControls.update();
   }
@@ -191,9 +225,16 @@ try {
     setDate(date);
   }
   function useEvent(id) {
-    event=EVENTS.find(e=>e.id===id)||EVENTS[0];date=event.eclipse.peak.date;
+    event=ALL_EVENTS.find(e=>e.id===id)||EVENTS[0];date=event.eclipse.peak.date;
     lat=event.eclipse.latitude;lon=event.eclipse.longitude;$('lat').value=lat.toFixed(4);$('lon').value=lon.toFixed(4);
-    eclipse.setEvent(event);$('nasa-source').href=event.source;setDate(date);
+    eclipse.setEvent(event);$('nasa-source').href=event.source==='catalog'?'https://github.com/qv4rk/GrokBotPlayground/blob/main/atlas-cosmogram/previews/orrery-sky-eclipse/data/eclipse-catalog.json':event.source;
+    $('nasa-source').textContent=event.catalogRecord?'Uploaded eclipse catalog':'NASA eclipse reference';setDate(date);
+    const info=$('event-info');
+    if(event.catalogRecord){const r=event.catalogRecord,s=r.site,miss=r.greatest.axis_miss_km,dur=s.totality_duration_seconds;
+      info.textContent=`Uploaded catalog · ${title(r.type)} eclipse · ${s.umbra?'umbra at selected site':'penumbra only at selected site'} · ${(s.obscuration*100).toFixed(2)}% obscuration · `+
+        `site ${Math.abs(s.latitude_deg).toFixed(4)}° ${s.latitude_deg<0?'S':'N'}, ${Math.abs(s.longitude_deg_east).toFixed(4)}° ${s.longitude_deg_east<0?'W':'E'} · `+
+        `axis miss ${miss.toFixed(1)} km${dur==null?'':` · totality ${dur.toFixed(1)} s`}. Exact catalog geometry is applied at greatest eclipse; between-event track points are not in this catalog.`;
+    } else info.textContent='Reference eclipse · calculated from the Atlas ephemeris.';
     if(view==='earth')frameEarth();if(view==='sky')lookSun();
   }
   const camera=()=>view==='orrery'?orbitCamera:view==='earth'?earthCamera:skyCamera;
