@@ -4,6 +4,7 @@ import {ScaleOrrery} from './orrery/orrery.js';
 import {moonOffsetUnits} from './orrery/scale.js';
 import {makeCosmos,raDecToScene} from './cosmos.js';
 import {EclipseScene} from './eclipse-scene.js';
+import {createPhenomena} from './phenomena.js';
 import {Astronomy as A,EVENTS,AU,EARTH_A,ephemeris,observer,sceneVector,atPoint,shadowCenter,rayEllipsoid} from './physics.mjs';
 const $=id=>document.getElementById(id),rad=Math.PI/180;
 const title=s=>s[0].toUpperCase()+s.slice(1);
@@ -14,6 +15,7 @@ try {
   renderer.outputColorSpace=THREE.SRGBColorSpace;
   const orbitScene=new THREE.Scene();orbitScene.background=new THREE.Color(0x020306);
   const orrery=new ScaleOrrery();orbitScene.add(orrery.group);
+  const phenomena=createPhenomena(orbitScene);
   const eclipse=new EclipseScene();
   orrery.bodies.earth.mesh.geometry.dispose();orrery.bodies.earth.mesh.geometry=eclipse.earth.geometry.clone();
   const orbitCamera=new THREE.PerspectiveCamera(45,innerWidth/innerHeight,1e-7,100000);
@@ -31,6 +33,7 @@ try {
   const bodyNames={sun:'Sun',mercury:'Mercury',venus:'Venus',earth:'Earth',mars:'Mars',jupiter:'Jupiter',saturn:'Saturn',uranus:'Uranus',neptune:'Neptune',moon:'Moon',io:'Io',europa:'Europa',ganymede:'Ganymede',callisto:'Callisto'};
   for(const e of EVENTS){const o=new Option(e.name,e.id);$('event').add(o);}
   for(const [name,label] of Object.entries(bodyNames)) $('focus').add(new Option(label,name));
+  for(const [name,label] of [['oumuamua','ʻOumuamua'],['nine','Planet Nine · hypothetical'],['perseids','Perseid stream crossing'],['satellites','ISS · live satellite TLE']])$('focus').add(new Option(label,name));
   const nameNodes=cosmos.centres.map(c=>{
     const el=document.createElement('span');el.className='star-name';el.textContent=c.name;
     $('constellation-labels').appendChild(el);return {el,dir:c.dir};
@@ -42,6 +45,42 @@ try {
   }
   function fromEqDate(vector) {
     return eclScene(A.RotateVector(A.Rotation_EQD_EQJ(state.time),new A.Vector(vector[0],vector[1],vector[2],state.time)));
+  }
+  function selectedPosition(name) { return orrery.bodies[name] ? orrery.bodyPosition(name) : phenomena.positions[name] || phenomena.streamNode; }
+  function setLayers() {
+    phenomena.groups.oumuamua.visible=$('layer-oumuamua').checked;
+    phenomena.groups.nine.visible=$('layer-nine').checked;
+    phenomena.groups.perseids.visible=$('layer-perseids').checked;
+    phenomena.groups.satellites.visible=$('layer-satellites').checked;
+  }
+  function nextPerseidPassage() {
+    let year=date.getUTCFullYear(), start=new Date(Date.UTC(year,7,9)), end=new Date(Date.UTC(year,7,16));
+    const nearest=y=>{
+      let best=null,dist=Infinity;
+      for(let t=Date.UTC(y,7,9);t<=Date.UTC(y,7,16);t+=30*60000){
+        const d=new Date(t),v=eclScene(A.HelioVector(A.Body.Earth,A.MakeTime(d))).multiplyScalar(15),gap=v.distanceTo(phenomena.streamNode);
+        if(gap<dist){dist=gap;best=d;}
+      }
+      return best;
+    };
+    let hit=nearest(year);if(hit<date)hit=nearest(++year);return hit;
+  }
+  let stationRec=null, stationEpoch='', stationPathAt=0;
+  function temeToScene(pos,when) {
+    const t=A.MakeTime(when);
+    const eqj=A.RotateVector(A.Rotation_EQD_EQJ(t),new A.Vector(pos.x/EARTH_A,pos.y/EARTH_A,pos.z/EARTH_A,t));
+    const ecl=A.RotateVector(A.Rotation_EQJ_ECL(),eqj);
+    return new THREE.Vector3(ecl.x,ecl.z,-ecl.y).add(orrery.bodyPosition('earth'));
+  }
+  async function loadStations() {
+    try {
+      const res=await fetch('https://celestrak.org/NORAD/elements/gp.php?GROUP=stations&FORMAT=tle',{cache:'no-store'});
+      if(!res.ok)throw new Error(`CelesTrak HTTP ${res.status}`);
+      const rows=(await res.text()).trim().split(/\r?\n/);
+      for(let i=0;i+2<rows.length;i++)if(/ISS \(ZARYA\)/i.test(rows[i])){stationRec=window.satellite.twoline2satrec(rows[i+1],rows[i+2]);stationEpoch=new Date().toISOString();break;}
+      if(!stationRec)throw new Error('ISS TLE not found');
+      stationPathAt=0;$('extras-status').textContent=`ISS orbit from CelesTrak · TLE fetched ${stationEpoch.slice(0,10)} UTC.`;updateOrrery();
+    } catch(error) { $('extras-status').textContent='Satellite TLE unavailable; the other layers work offline.';console.warn('Satellite TLE:',error); }
   }
   function updateOrrery() {
     orrery.setJulianDay(state.jd);
@@ -72,6 +111,13 @@ try {
     }
     const saturnRing=orrery.bodies.saturn.mesh.children[0];
     if(saturnRing)saturnRing.quaternion.setFromAxisAngle(new THREE.Vector3(1,0,0),-Math.PI/2);
+    phenomena.update(date);
+    if(stationRec){
+      const pv=window.satellite.propagate(stationRec,date);
+      if(pv.position){const sat=temeToScene(pv.position,date);phenomena.setSatellitePosition(sat);phenomena.positions.satellites=sat;}
+      if(!stationPathAt||Math.abs(+date-stationPathAt)>300000){const path=[];for(let m=0;m<=95;m++){const d=new Date(+date+m*60000),q=window.satellite.propagate(stationRec,d);if(q.position)path.push(temeToScene(q.position,d));}
+        phenomena.setSatelliteOrbit(path);stationPathAt=+date;}
+    }
   }
   function cosmosTransform() {
     const r=A.Rotation_ECL_EQD(state.time);
@@ -100,7 +146,7 @@ try {
       if(center){const p=new THREE.Vector3(...sceneVector(center));const delta=p.clone().sub(lastEarth);
         if(lastEarth.lengthSq()){earthCamera.position.add(delta);earthControls.target.add(delta);}lastEarth.copy(p);}
     }
-    if(view==='orrery'&&focus){const p=orrery.bodyPosition(focus),delta=p.clone().sub(lastFocus);orbitCamera.position.add(delta);orbitControls.target.add(delta);lastFocus.copy(p);}
+    if(view==='orrery'&&focus){const p=selectedPosition(focus),delta=p.clone().sub(lastFocus);orbitCamera.position.add(delta);orbitControls.target.add(delta);lastFocus.copy(p);}
     const center=eclipse.center;
     $('shadow').textContent=center?`Calculated shadow axis: ${center.lat.toFixed(4)}° N · ${center.lon.toFixed(4)}° E`:'Shadow axis does not intersect Earth at this time';
     const local=atPoint(state,observer(state,lat,lon));
@@ -130,7 +176,7 @@ try {
   function frameOrbit() {
     orbitCamera.fov=45;orbitCamera.updateProjectionMatrix();
     if(!focus){orbitCamera.position.set(0,350,650);orbitControls.target.set(0,0,0);}
-    else{const p=orrery.bodyPosition(focus),r=orrery.bodyRadius(focus);
+    else{const p=selectedPosition(focus),r=orrery.bodies[focus]?orrery.bodyRadius(focus):0.8;
       orbitControls.target.copy(p);orbitCamera.position.copy(p).add(new THREE.Vector3(0,.35,1).normalize().multiplyScalar(r*6));lastFocus.copy(p);}
     orbitControls.update();
   }
@@ -152,7 +198,7 @@ try {
   }
   const camera=()=>view==='orrery'?orbitCamera:view==='earth'?earthCamera:skyCamera;
   const scene=()=>view==='orrery'?orbitScene:eclipse.scene;
-  const tapPoints=()=>view==='orrery'?Object.values(orrery.bodies).map(b=>b.mesh):[eclipse.moon,eclipse.sun,eclipse.earth,...(eclipse.beacon.visible?[eclipse.beacon]:[]),...[...eclipse.planets.values()]];
+  const tapPoints=()=>view==='orrery'?[...Object.values(orrery.bodies).map(b=>b.mesh),...phenomena.markers]:[eclipse.moon,eclipse.sun,eclipse.earth,...(eclipse.beacon.visible?[eclipse.beacon]:[]),...[...eclipse.planets.values()]];
   function tapAt(x,y) {
     const ray=new THREE.Raycaster();ray.setFromCamera(new THREE.Vector2(x/innerWidth*2-1,1-y/innerHeight*2),camera());
     const hit=ray.intersectObjects(tapPoints(),false)[0];let name=hit?.object.name;
@@ -203,12 +249,39 @@ try {
   $('vantage').onchange=frameEarth;
   $('track-center').onclick=()=>{following=!following;$('track-center').classList.toggle('active',following);if(following)frameEarth();};
   $('focus').onchange=()=>{focus=$('focus').value;frameOrbit();};
+  $('perseid-season').onclick=()=>{
+    playing=false;$('play').textContent='Play';$('layer-perseids').checked=true;setLayers();
+    focus='perseids';$('focus').value=focus;setView('orrery');setDate(nextPerseidPassage());frameOrbit();
+    $('extras-status').textContent='Earth’s calculated closest approach to the modeled Swift–Tuttle node. The stream width is illustrative.';
+  };
+  for(const id of ['layer-oumuamua','layer-nine','layer-perseids','layer-satellites'])$(id).onchange=()=>setLayers();
+  $('layer-satellites').addEventListener('change',()=>{if($('layer-satellites').checked&&!stationRec)loadStations();});
   $('scale').onclick=()=>{mode=mode==='visible'?'true':'visible';orrery.setScaleMode(mode);setDate(date);frameOrbit();$('scale').textContent=mode==='visible'?'Show true scale':'Show visible scale';};
   $('observer').onclick=()=>{const a=Number($('lat').value),b=Number($('lon').value);if(!Number.isFinite(a)||!Number.isFinite(b)||Math.abs(a)>90||Math.abs(b)>180)return;playing=false;$('play').textContent='Play';lat=a;lon=b;setView('sky');wideSky();};
   $('sun').onclick=()=>lookSun();$('zenith').onclick=wideSky;$('fov').oninput=()=>fov(Number($('fov').value));
   $('culture').onchange=()=>{cosmos.setCulture($('culture').value);cosmos.group.visible=$('culture').value!=='off';};
   $('cones').onchange=()=>{eclipse.cones.visible=$('cones').checked;eclipse.footprint.visible=$('cones').checked;};
   $('track').onchange=()=>eclipse.path.visible=$('track').checked;
+  function exactViewURL() {
+    const u=new URL('https://feisttech.com/cosmos/'),q=u.searchParams,c=camera();
+    q.set('view',view);q.set('t',date.toISOString());q.set('event',event.id);
+    q.set('lat',lat.toFixed(6));q.set('lon',lon.toFixed(6));q.set('focus',focus);q.set('scale',mode);
+    q.set('culture',$('culture').value);q.set('cones',$('cones').checked?'1':'0');q.set('track',$('track').checked?'1':'0');q.set('names',$('names').checked?'1':'0');q.set('fov',skyCamera.fov.toFixed(2));
+    q.set('layers',[ $('layer-oumuamua').checked?'oumuamua':'', $('layer-nine').checked?'nine':'', $('layer-perseids').checked?'perseids':'', $('layer-satellites').checked?'satellites':'' ].filter(Boolean).join(','));
+    q.set('cam',c.position.toArray().map(n=>n.toFixed(4)).join(','));
+    const look=view==='orrery'?orbitControls.target:view==='earth'?earthControls.target:null;
+    if(look)q.set('look',look.toArray().map(n=>n.toFixed(4)).join(','));else q.delete('look');
+    if(view==='sky')q.set('rot',skyCamera.quaternion.toArray().map(n=>n.toFixed(6)).join(','));else q.delete('rot');
+    return u;
+  }
+  async function shareView() {
+    const url=exactViewURL();
+    try {
+      if(navigator.share)await navigator.share({title:'The Atlas · Solar System & Sky',text:`${view} · ${date.toISOString()}`,url:url.href});
+      else {await navigator.clipboard.writeText(url.href);$('extras-status').textContent='Exact Atlas view link copied.';}
+    } catch(error) {if(error?.name!=='AbortError'){try{await navigator.clipboard.writeText(url.href);$('extras-status').textContent='Exact Atlas view link copied.';}catch{$('extras-status').textContent=url.href;}}}
+  }
+  $('share').onclick=shareView;
   $('collapse').onclick=()=>{const hidden=$('dock').classList.toggle('collapsed');$('collapse').textContent=hidden?'+':'−';$('collapse').setAttribute('aria-expanded',String(!hidden));};
   $('sources').onclick=()=>$('about').showModal();$('close-about').onclick=()=>$('about').close();
   $('png').onclick=()=>{const current=scene(),background=current.background;current.background=null;
@@ -222,6 +295,17 @@ try {
   window.addEventListener('resize',()=>{renderer.setSize(innerWidth,innerHeight);for(const c of [orbitCamera,earthCamera,skyCamera]){c.aspect=innerWidth/innerHeight;c.updateProjectionMatrix();}});
   useEvent('1999');setView('earth');if(innerWidth<700){$('dock').classList.add('collapsed');$('collapse').textContent='+';$('collapse').setAttribute('aria-expanded','false');}
   const query=new URLSearchParams(location.search);if(query.get('event'))useEvent(query.get('event'));if(query.get('view'))setView(query.get('view'));
+  if(query.get('scale')==='true'){mode='true';orrery.setScaleMode(mode);$('scale').textContent='Show visible scale';}
+  if(['both','western','chinese','off'].includes(query.get('culture'))){$('culture').value=query.get('culture');cosmos.setCulture(query.get('culture'));}
+  if(query.has('cones'))$('cones').checked=query.get('cones')==='1';if(query.has('track'))$('track').checked=query.get('track')==='1';if(query.has('names'))$('names').checked=query.get('names')==='1';
+  const layers=(query.get('layers')||'').split(',');$('layer-oumuamua').checked=layers.includes('oumuamua');$('layer-nine').checked=layers.includes('nine');$('layer-perseids').checked=layers.includes('perseids');$('layer-satellites').checked=layers.includes('satellites');setLayers();if($('layer-satellites').checked)loadStations();
+  if(query.get('focus')){$('focus').value=query.get('focus');focus=$('focus').value;}
+  if(query.get('t'))setDate(new Date(query.get('t')));
+  const vec=(key,n)=>{const a=(query.get(key)||'').split(',').map(Number);return a.length===n&&a.every(Number.isFinite)?a:null;};
+  const cam=vec('cam',3);if(cam)camera().position.fromArray(cam);
+  const look=vec('look',3);if(look&&view==='orrery')orbitControls.target.fromArray(look);else if(look&&view==='earth')earthControls.target.fromArray(look);
+  const rot=vec('rot',4);if(rot&&view==='sky')skyCamera.quaternion.fromArray(rot);
+  if(cam||look){orbitControls.update();earthControls.update();}
   let previous=performance.now(),elapsed=0;
   renderer.setAnimationLoop(now=>{
     const dt=Math.min(.1,(now-previous)/1000);previous=now;elapsed+=dt;

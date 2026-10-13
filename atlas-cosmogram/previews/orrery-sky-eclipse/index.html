@@ -5,7 +5,7 @@
 <canvas id="space" aria-label="Interactive solar system, Earth shadow and sky"></canvas>
 <div id="constellation-labels" aria-hidden="true"></div>
 <header><h1>The Atlas · Solar System & Sky</h1><nav>
-<button id="png" title="Save transparent PNG">Save PNG</button><button id="sources">Sources</button>
+<button id="share" title="Share this exact Atlas view">Share view</button><button id="png" title="Save transparent PNG">Save PNG</button><button id="sources">Sources</button>
 </nav></header>
 <div id="selection" role="status" hidden></div><p id="error" role="alert" hidden></p>
 <aside id="dock"><div class="dock-head"><div class="views" aria-label="View">
@@ -18,7 +18,15 @@
 <select id="speed" aria-label="Time speed"><option value="1">1 second/s</option><option value="60" selected>1 minute/s</option><option value="600">10 minutes/s</option><option value="86400">1 day/s</option><option value="2592000">1 month/s</option></select><button id="forward" aria-label="Forward one minute">+1 min</button></div>
 <label class="scrub-label">Eclipse timeline <span id="offset"></span><input id="scrub" type="range" min="-120" max="120" step="0.05" value="0" aria-label="Minutes from greatest eclipse"></label>
 <div class="row" id="earth-tools"><select id="vantage" aria-label="Earth camera"><option value="oblique">Oblique · ground footprint</option><option value="overhead">Above the shadow</option><option value="orbital">400 km orbital viewpoint</option><option value="moon">From the Moon</option><option value="alignment">Earth–Moon shadow cones</option></select><button id="track-center">Follow shadow</button></div>
-<div class="row" id="orrery-tools" hidden><select id="focus" aria-label="Focus celestial body"><option value="">Whole system</option></select><button id="scale">Show true scale</button></div>
+<div id="orrery-tools" hidden>
+<div class="row"><select id="focus" aria-label="Focus celestial body"><option value="">Whole system</option></select><button id="scale">Show true scale</button></div>
+<div class="row extras" aria-label="Solar system layers">
+<label><input id="layer-oumuamua" type="checkbox"> ʻOumuamua</label>
+<label><input id="layer-nine" type="checkbox"> Planet Nine · hypothesis</label>
+<label><input id="layer-perseids" type="checkbox"> Perseid stream</label>
+<label><input id="layer-satellites" type="checkbox"> Satellites</label>
+</div><div class="row"><button id="perseid-season">Jump to next Perseid crossing</button></div><p id="extras-status" class="readout" aria-live="polite">Perseid particles show a schematic Swift–Tuttle dust-stream orbit, not individual meteor tracks. Planet Nine is a hypothetical orbit.</p>
+</div>
 <div class="row"><label>Latitude<input id="lat" type="number" min="-90" max="90" step="0.0001" inputmode="decimal"></label><label>Longitude · east<input id="lon" type="number" min="-180" max="180" step="0.0001" inputmode="decimal"></label><button id="observer">Use this place</button></div>
 <div class="row" id="sky-tools" hidden><button id="sun">Look at Sun</button><button id="zenith">Wide sky</button><label>Field of view<input id="fov" type="range" min="0.65" max="100" step="0.05" value="70"></label></div>
 <div class="row settings"><label>Constellations<select id="culture"><option value="both">Western + Chinese</option><option value="western">Western</option><option value="chinese">Chinese</option><option value="off">Off</option></select></label><label><input id="names" type="checkbox" checked> Names</label><label><input id="cones" type="checkbox"> Shadow cones</label><label><input id="track" type="checkbox" checked> Ground track</label></div>
@@ -31,5 +39,5 @@
 <p><a id="nasa-source" href="https://eclipse.gsfc.nasa.gov/SEmono/TSE1999/TSE1999.html">NASA eclipse reference</a>. Smooth lunar limbs are used; this view does not predict individual Baily’s beads. The corona is a visual effect. The 400 km camera is an orbital viewpoint, not a reconstruction of the ISS’s historical flight path.</p>
 <p>Visible scale enlarges planets and compresses moon spacing. Earth & Shadow and Sky keep the Sun, Earth and Moon at true scale; other planets appear as direction markers in these views. The existing Galilean moon models and orbital guide curves are retained.</p>
 <a href="./README.md">Project notes & local launch</a> · <a href="./CREDITS.md">Credits & validation</a>
-</dialog><script type="module" src="./main.js?v=integrated-20261012-controls"></script>
+</dialog><script src="./vendor/satellite.min.js"></script><script type="module" src="./main.js?v=integrated-20261013-atlas-unified"></script>
 </body></html>
