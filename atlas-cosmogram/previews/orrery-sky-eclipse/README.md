@@ -79,3 +79,14 @@ the solar-system, observer-sky and eclipse views.
 
 See [CREDITS.md](./CREDITS.md) for provenance and [EXPORT_FEEDBACK.md](./EXPORT_FEEDBACK.md)
 for the brief audit of the supplied chat archive.
+
+
+## City names, birth charts and book geography (14 October 2026)
+
+The catalog startup failure was caused by calling `.add()` on an HTML optgroup; the repaired picker uses DOM `appendChild`. City search reuses the existing FeistTech GeoNames city database. Birth chart uses the existing tropical/Placidus chart, shown inside the Atlas with an explicit message bridge to its shared clock and observer. Birthplace timezones are inferred from city coordinates, editable, and resolved against IANA rules at the birth date. Repeated DST times require a choice; skipped local times are rejected.
+
+Book mode reuses the 27 canonical chapter records and historical location vertices from `qv4rk/V/data/events.json` and `data/locations/master-vertices.json`. Nodes are attached to the rotating globe; the timeline changes their visibility and brightness. Chapters can be opened in any order in a reading panel while the globe remains interactive. Chapter records that lack a time use noon UTC for display. Book mode uses ambient map lighting to keep geography readable.
+
+The two uploaded eclipse catalogs contain 620 records: 504 from astronomical years 0000–0207 and 116 from 1999–2050. Exact stored eclipse geometry is used at each catalog peak. Chapter, observer, date, camera and birth-chart links are carried through the `/cosmos/` share route.
+
+Verification used real Chromium/SwiftShader desktop and phone rendering, GPU/CPU shadow overlap comparisons, city/state/country lookup, observer share restoration, chapter globe picks and full text, historical daylight saving conversion, ambiguous time handling, and cross-origin natal-chart/Atlas sharing and reopening. No page errors were observed in the integration run.

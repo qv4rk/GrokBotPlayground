@@ -33,14 +33,14 @@ export class EclipseScene {
     this.scene.background=new THREE.Color(0x020306);
     this.earthFrame=new THREE.Group();this.scene.add(this.earthFrame);
     this.uniforms={uSun:{value:new THREE.Vector3()},uMoon:{value:new THREE.Vector3()},
-      uSunRadius:{value:SUN_RADIUS/EARTH_A},uMoonRadius:{value:MOON_RADIUS/EARTH_A},uMap:{value:null}};
+      uSunRadius:{value:SUN_RADIUS/EARTH_A},uMoonRadius:{value:MOON_RADIUS/EARTH_A},uMap:{value:null},uAmbient:{value:.008}};
     const loader=new THREE.TextureLoader();
     this.uniforms.uMap.value=loader.load(new URL('./assets/earth.jpg',import.meta.url).href);
     this.uniforms.uMap.value.colorSpace=THREE.SRGBColorSpace;
     const earthMaterial=new THREE.ShaderMaterial({uniforms:this.uniforms,vertexShader:vertex,
       fragmentShader:`
       #include <logdepthbuf_pars_fragment>
-      uniform sampler2D uMap;uniform vec3 uSun,uMoon;uniform float uSunRadius,uMoonRadius;
+      uniform sampler2D uMap;uniform vec3 uSun,uMoon;uniform float uSunRadius,uMoonRadius,uAmbient;
       varying vec3 vWorld,vNormal;varying vec2 vUv;${overlapGLSL}
       void main(){
       #include <logdepthbuf_fragment>
@@ -49,7 +49,7 @@ export class EclipseScene {
       vec3 surface=vWorld/length(scaled),light=normalize(uSun-surface);
       float daylight=max(0.0,dot(n,light));float shadow=eclipseAt(surface);
       vec3 terrain=texture2D(uMap,vUv).rgb;
-      gl_FragColor=vec4(terrain*(0.008+1.25*daylight*(1.0-shadow)),1.0);
+      gl_FragColor=vec4(terrain*(uAmbient+1.25*daylight*(1.0-shadow)),1.0);
       #include <tonemapping_fragment>
       #include <colorspace_fragment>
       }`});

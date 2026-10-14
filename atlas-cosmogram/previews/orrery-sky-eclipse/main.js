@@ -5,6 +5,8 @@ import {moonOffsetUnits} from './orrery/scale.js';
 import {makeCosmos,raDecToScene} from './cosmos.js';
 import {EclipseScene} from './eclipse-scene.js';
 import {createPhenomena} from './phenomena.js';
+import {bindPlaceSearch} from './place-search.js';
+import {makeBook,chapterDate} from './book.js';
 import {Astronomy as A,EVENTS,AU,EARTH_A,ephemeris,observer,sceneVector,atPoint,shadowCenter,rayEllipsoid} from './physics.mjs';
 const $=id=>document.getElementById(id),rad=Math.PI/180;
 const title=s=>s[0].toUpperCase()+s.slice(1);
@@ -45,6 +47,7 @@ try {
   const eclipticToEquatorial=new THREE.Matrix4();
   let view='earth',event=EVENTS[0],date=event.eclipse.peak.date,state=ephemeris(date),playing=false;
   let mode='visible',focus='',lat=event.eclipse.latitude,lon=event.eclipse.longitude,following=true;
+  let book=null,placeName='',placeTimezone='',natalURL='',placeSelected=false;
   let lastEarth=new THREE.Vector3(),lastFocus=new THREE.Vector3(),sunLock=false;
   const bodyNames={sun:'Sun',mercury:'Mercury',venus:'Venus',earth:'Earth',mars:'Mars',jupiter:'Jupiter',saturn:'Saturn',uranus:'Uranus',neptune:'Neptune',moon:'Moon',io:'Io',europa:'Europa',ganymede:'Ganymede',callisto:'Callisto'};
   for(const e of EVENTS){const o=new Option(e.name,e.id);$('event').add(o);}
@@ -180,6 +183,8 @@ try {
         if(lastEarth.lengthSq()){earthCamera.position.add(delta);earthControls.target.add(delta);}lastEarth.copy(p);}
     }
     if(view==='orrery'&&focus){const p=selectedPosition(focus),delta=p.clone().sub(lastFocus);orbitCamera.position.add(delta);orbitControls.target.add(delta);lastFocus.copy(p);}
+    eclipse.path.visible=$('track').checked&&!book?.enabled&&Math.abs(+date-+event.eclipse.peak.date)<3*3600000;
+    book?.update(date.getUTCFullYear());$('history-year').value=date.getUTCFullYear();$('history-time').value=date.getUTCFullYear();
     const center=eclipse.center;
     const shadowLabel=center?.isCatalogSite?`Catalog greatest-eclipse site${event.catalogRecord.site.umbra?' · inside umbra':' · no umbra at this site'}: `:'Calculated shadow axis: ';
     $('shadow').textContent=center?shadowLabel+`${Math.abs(center.lat).toFixed(4)}° ${center.lat<0?'S':'N'} · ${Math.abs(center.lon).toFixed(4)}° ${center.lon<0?'W':'E'}`:'Shadow axis does not intersect Earth at this time';
@@ -217,11 +222,11 @@ try {
   function setView(next) {
     view=next;orbitControls.enabled=next==='orrery';earthControls.enabled=next==='earth';
     for(const b of document.querySelectorAll('[data-view]'))b.classList.toggle('active',b.dataset.view===view);
-    $('earth-tools').hidden=next!=='earth';$('orrery-tools').hidden=next!=='orrery';$('sky-tools').hidden=next!=='sky';
+    $('earth-tools').hidden=next!=='earth'||!!book?.enabled;$('orrery-tools').hidden=next!=='orrery';$('sky-tools').hidden=next!=='sky';
     $('selection').hidden=true;
     eclipse.beacon.visible=next==='earth';
     (next==='orrery'?orbitScene:eclipse.scene).add(cosmos.group);cosmosTransform();
-    if(next==='orrery')frameOrbit();else if(next==='earth')frameEarth();else {anchorSky();wideSky();}
+    if(next==='orrery')frameOrbit();else if(next==='earth'){if(!book?.enabled)earthCamera.clearViewOffset();frameEarth();}else {anchorSky();wideSky();}
     setDate(date);
   }
   function useEvent(id) {
@@ -241,6 +246,7 @@ try {
   const scene=()=>view==='orrery'?orbitScene:eclipse.scene;
   const tapPoints=()=>view==='orrery'?[...Object.values(orrery.bodies).map(b=>b.mesh),...phenomena.markers]:[eclipse.moon,eclipse.sun,eclipse.earth,...(eclipse.beacon.visible?[eclipse.beacon]:[]),...[...eclipse.planets.values()]];
   function tapAt(x,y) {
+    if(book?.pick(x,y,camera(),view))return;
     const ray=new THREE.Raycaster();ray.setFromCamera(new THREE.Vector2(x/innerWidth*2-1,1-y/innerHeight*2),camera());
     const hit=ray.intersectObjects(tapPoints(),false)[0];let name=hit?.object.name;
     if(hit?.object===eclipse.earth){const p=[hit.point.x*EARTH_A,-hit.point.z*EARTH_A,hit.point.y*EARTH_A];
@@ -298,14 +304,30 @@ try {
   for(const id of ['layer-oumuamua','layer-nine','layer-perseids','layer-satellites'])$(id).onchange=()=>setLayers();
   $('layer-satellites').addEventListener('change',()=>{if($('layer-satellites').checked&&!stationRec)loadStations();});
   $('scale').onclick=()=>{mode=mode==='visible'?'true':'visible';orrery.setScaleMode(mode);setDate(date);frameOrbit();$('scale').textContent=mode==='visible'?'Show true scale':'Show visible scale';};
-  $('observer').onclick=()=>{const a=Number($('lat').value),b=Number($('lon').value);if(!Number.isFinite(a)||!Number.isFinite(b)||Math.abs(a)>90||Math.abs(b)>180)return;playing=false;$('play').textContent='Play';lat=a;lon=b;setView('sky');wideSky();};
+  const citySearch=bindPlaceSearch($('place'),$('place-results'),window.NATAL_CITIES||[],p=>{placeName=p.name;placeSelected=true;natalURL='';lat=p.lat;lon=p.lon;$('lat').value=lat;$('lon').value=lon;try{placeTimezone=window.tzlookup?.(lat,lon)||'';}catch{placeTimezone='';}$('place-status').textContent=placeName+(placeTimezone?' · '+placeTimezone:'');setDate(date);});
+  $('place').addEventListener('input',()=>placeSelected=false);
+  $('observer').onclick=()=>{if($('place').value.trim()&&!placeSelected&&!citySearch.selectFirst()){$('place-status').textContent='Choose a matching city from the list.';return;}const a=Number($('lat').value),b=Number($('lon').value);if(!Number.isFinite(a)||!Number.isFinite(b)||Math.abs(a)>90||Math.abs(b)>180)return;playing=false;$('play').textContent='Play';lat=a;lon=b;setView('sky');wideSky();};
+  function framePlace(){if(innerWidth<700&&book?.enabled)earthCamera.setViewOffset(innerWidth,innerHeight,0,innerHeight*.2,innerWidth,innerHeight);else earthCamera.clearViewOffset();const p=new THREE.Vector3(...sceneVector(observer(state,lat,lon)));earthControls.target.set(0,0,0);earthCamera.position.copy(p.normalize()).multiplyScalar(3.5*Math.max(1,1/earthCamera.aspect));earthControls.update();}
+  function setHistoryYear(y){if(!Number.isFinite(y)||y<-12000||y>12000)return;const d=new Date(date);d.setUTCFullYear(y);playing=false;$('play').textContent='Play';setDate(d);}
+  $('history-year').onchange=e=>setHistoryYear(Number(e.target.value));$('history-time').oninput=e=>setHistoryYear(Number(e.target.value));
+  $('book-all').addEventListener('change',()=>book?.update(date.getUTCFullYear()));
+  function setBookEnabled(v){book?.setEnabled(v);$('book-toggle').classList.toggle('active',v);eclipse.uniforms.uAmbient.value=v?.28:.008;$('eclipse-picker').hidden=v;$('eclipse-timeline').hidden=v;$('earth-tools').hidden=v||view!=='earth';if(v){eclipse.path.visible=false;eclipse.cones.visible=false;eclipse.footprint.visible=false;}}
+  $('book-toggle').onclick=()=>{if(!book)return;setBookEnabled(!book.enabled);$('book-toggle').classList.toggle('active',book.enabled);if(book.enabled){following=false;$('dock').classList.remove('collapsed');$('collapse').textContent='−';$('collapse').setAttribute('aria-expanded','true');book.open(book.selected||book.events[0].id,null,true);}};
+  $('birth-chart').onclick=()=>{
+    if($('place').value.trim()&&!placeSelected&&!citySearch.selectFirst()){$('place-status').textContent='Choose the birthplace from the matching cities.';$('dock').classList.remove('collapsed');return;}
+    let u;try{u=new URL(natalURL||'https://feisttech.com/apps/webapps/natal-chart/');}catch{u=new URL('https://feisttech.com/apps/webapps/natal-chart/');}
+    if(!natalURL){const zone=placeTimezone||'UTC',parts=new Intl.DateTimeFormat('en-GB',{timeZone:zone,year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(date),f={};for(const p of parts)f[p.type]=p.value;for(const [k,v]of Object.entries({y:f.year,mo:f.month,d:f.day,h:f.hour,mi:f.minute,utc:'0',lat,lon,city:placeName,tz:placeTimezone}))u.searchParams.set(k,v);}
+    u.searchParams.set('embed','atlas');$('natal-frame').src=u.href;$('natal-dialog').showModal();
+  };
+  $('close-natal').onclick=()=>$('natal-dialog').close();
+  window.addEventListener('message',e=>{if(e.source!==$('natal-frame').contentWindow||!['https://feisttech.com','https://www.feisttech.com'].includes(e.origin)||e.data?.type!=='feisttech:natal')return;const p=e.data,t=new Date(p.date);if(!Number.isFinite(+t)||!Number.isFinite(p.lat)||!Number.isFinite(p.lon)||Math.abs(p.lat)>90||Math.abs(p.lon)>180)return;lat=p.lat;lon=p.lon;placeName=p.city||p.name||'Birthplace';placeTimezone=p.timezone||'';placeSelected=true;$('place').value=placeName;$('lat').value=lat;$('lon').value=lon;$('place-status').textContent=placeName+(placeTimezone?' · '+placeTimezone:'');try{const u=new URL(p.url);if(['https://feisttech.com','https://www.feisttech.com'].includes(u.origin)&&u.pathname.startsWith('/apps/webapps/natal-chart/'))natalURL=u.href;}catch{}playing=false;$('play').textContent='Play';setBookEnabled(false);setDate(t);setView('sky');if(p.action==='view-sky')$('natal-dialog').close();});
   $('sun').onclick=()=>lookSun();$('zenith').onclick=wideSky;$('fov').oninput=()=>fov(Number($('fov').value));
   $('culture').onchange=()=>{cosmos.setCulture($('culture').value);cosmos.group.visible=$('culture').value!=='off';};
   $('cones').onchange=()=>{eclipse.cones.visible=$('cones').checked;eclipse.footprint.visible=$('cones').checked;};
-  $('track').onchange=()=>eclipse.path.visible=$('track').checked;
+  $('track').onchange=()=>eclipse.path.visible=$('track').checked&&!book?.enabled&&Math.abs(+date-+event.eclipse.peak.date)<3*3600000;
   function exactViewURL() {
     const u=new URL('https://feisttech.com/cosmos/'),q=u.searchParams,c=camera();
-    q.set('view',view);q.set('t',date.toISOString());q.set('event',event.id);
+    q.set('view',view);q.set('t',date.toISOString());q.set('event',event.id);if(placeName)q.set('place',placeName);if(placeTimezone)q.set('tz',placeTimezone);if(natalURL)q.set('natal',natalURL);if(book?.enabled){q.set('book','1');if(book.selected)q.set('chapter',book.selected);}
     q.set('lat',lat.toFixed(6));q.set('lon',lon.toFixed(6));q.set('focus',focus);q.set('scale',mode);
     q.set('culture',$('culture').value);q.set('cones',$('cones').checked?'1':'0');q.set('track',$('track').checked?'1':'0');q.set('names',$('names').checked?'1':'0');q.set('fov',skyCamera.fov.toFixed(2));
     q.set('layers',[ $('layer-oumuamua').checked?'oumuamua':'', $('layer-nine').checked?'nine':'', $('layer-perseids').checked?'perseids':'', $('layer-satellites').checked?'satellites':'' ].filter(Boolean).join(','));
@@ -334,6 +356,7 @@ try {
       ctx.fillText(el.textContent,parseFloat(el.style.left),parseFloat(el.style.top));}
     a.download=`atlas-${view}-${date.toISOString().replaceAll(':','-')}.png`;a.href=output.toDataURL('image/png');a.click();current.background=background;};
   window.addEventListener('resize',()=>{renderer.setSize(innerWidth,innerHeight);for(const c of [orbitCamera,earthCamera,skyCamera]){c.aspect=innerWidth/innerHeight;c.updateProjectionMatrix();}});
+  try{book=await makeBook(eclipse.earthFrame,orrery.bodies.earth.mesh,(e,site,jump)=>{lat=site.lat;lon=site.lon;placeName=site.name;placeSelected=true;natalURL='';try{placeTimezone=window.tzlookup(lat,lon);}catch{placeTimezone='';}$('place').value=placeName;$('place-status').textContent=placeName;$('lat').value=lat;$('lon').value=lon;following=false;if(jump)setDate(chapterDate(e));setView('earth');framePlace();if(innerWidth<700){$('dock').classList.add('collapsed');$('collapse').textContent='+';$('collapse').setAttribute('aria-expanded','false');}});}catch(error){$('book-toggle').disabled=true;console.warn('Book layer:',error);}
   useEvent('1999');setView('earth');if(innerWidth<700){$('dock').classList.add('collapsed');$('collapse').textContent='+';$('collapse').setAttribute('aria-expanded','false');}
   const query=new URLSearchParams(location.search);if(query.get('event'))useEvent(query.get('event'));if(query.get('view'))setView(query.get('view'));
   if(query.get('scale')==='true'){mode='true';orrery.setScaleMode(mode);$('scale').textContent='Show visible scale';}
@@ -341,12 +364,19 @@ try {
   if(query.has('cones'))$('cones').checked=query.get('cones')==='1';if(query.has('track'))$('track').checked=query.get('track')==='1';if(query.has('names'))$('names').checked=query.get('names')==='1';
   const layers=(query.get('layers')||'').split(',');$('layer-oumuamua').checked=layers.includes('oumuamua');$('layer-nine').checked=layers.includes('nine');$('layer-perseids').checked=layers.includes('perseids');$('layer-satellites').checked=layers.includes('satellites');setLayers();if($('layer-satellites').checked)loadStations();
   if(query.get('focus')){$('focus').value=query.get('focus');focus=$('focus').value;}
-  if(query.get('t'))setDate(new Date(query.get('t')));
+  if(query.has('lat')&&query.has('lon')){const a=Number(query.get('lat')),b=Number(query.get('lon'));if(Number.isFinite(a)&&Number.isFinite(b)&&Math.abs(a)<=90&&Math.abs(b)<=180){lat=a;lon=b;$('lat').value=a;$('lon').value=b;}}
+  placeName=query.get('place')||'';placeTimezone=query.get('tz')||'';if(placeName){$('place').value=placeName;placeSelected=true;$('place-status').textContent=placeName;}
+  try{const u=new URL(query.get('natal'));if(['https://feisttech.com','https://www.feisttech.com'].includes(u.origin)&&u.pathname.startsWith('/apps/webapps/natal-chart/'))natalURL=u.href;}catch{}
+  if(query.get('t'))setDate(new Date(query.get('t')));else setDate(date);
+  if(query.get('book')==='1'&&book){setBookEnabled(true);$('book-toggle').classList.add('active');if(query.get('chapter'))book.open(query.get('chapter'),null,false);}
+  if(focus&&!query.has('cam'))frameOrbit();if(view==='sky'&&query.has('fov'))fov(Number(query.get('fov')));
+  if(query.get('culture')==='off')cosmos.group.visible=false;
   const vec=(key,n)=>{const a=(query.get(key)||'').split(',').map(Number);return a.length===n&&a.every(Number.isFinite)?a:null;};
   const cam=vec('cam',3);if(cam)camera().position.fromArray(cam);
   const look=vec('look',3);if(look&&view==='orrery')orbitControls.target.fromArray(look);else if(look&&view==='earth')earthControls.target.fromArray(look);
   const rot=vec('rot',4);if(rot&&view==='sky')skyCamera.quaternion.fromArray(rot);
   if(cam||look){orbitControls.update();earthControls.update();}
+  if(query.get('chart')==='1'&&natalURL)$('birth-chart').click();
   let previous=performance.now(),elapsed=0;
   renderer.setAnimationLoop(now=>{
     const dt=Math.min(.1,(now-previous)/1000);previous=now;elapsed+=dt;
@@ -364,5 +394,5 @@ try {
       if(!n.el.hidden){n.el.style.left=`${(p.x+1)*innerWidth/2}px`;n.el.style.top=`${(1-p.y)*innerHeight/2}px`;}}
     renderer.render(scene(),c);
   });
-  window.__atlas={renderer,orrery,eclipse,cosmos,setDate,setView,useEvent,get state(){return state;},get view(){return view;},camera,scene};
+  window.__atlas={renderer,orrery,eclipse,cosmos,book,exactViewURL,get observer(){return {lat,lon,placeName};},setDate,setView,useEvent,get state(){return state;},get view(){return view;},camera,scene};
 } catch(error) {$('error').hidden=false;$('error').textContent=`Could not start the Atlas: ${error.message}`;console.error(error);}
