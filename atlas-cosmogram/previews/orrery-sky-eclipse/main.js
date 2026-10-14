@@ -49,7 +49,7 @@ try {
   const bodyNames={sun:'Sun',mercury:'Mercury',venus:'Venus',earth:'Earth',mars:'Mars',jupiter:'Jupiter',saturn:'Saturn',uranus:'Uranus',neptune:'Neptune',moon:'Moon',io:'Io',europa:'Europa',ganymede:'Ganymede',callisto:'Callisto'};
   for(const e of EVENTS){const o=new Option(e.name,e.id);$('event').add(o);}
   if(catalogEvents.length){const group=document.createElement('optgroup');group.label=`Uploaded eclipse catalog · ${catalogEvents.length} records`;
-    for(const e of catalogEvents)group.add(new Option(e.name,e.id));$('event').add(group);}
+    for(const e of catalogEvents)group.appendChild(new Option(e.name,e.id));$('event').add(group);}
   for(const [name,label] of Object.entries(bodyNames)) $('focus').add(new Option(label,name));
   for(const [name,label] of [['oumuamua','ʻOumuamua'],['nine','Planet Nine · hypothetical'],['perseids','Perseid stream crossing'],['satellites','ISS · live satellite TLE']])$('focus').add(new Option(label,name));
   const nameNodes=cosmos.centres.map(c=>{
