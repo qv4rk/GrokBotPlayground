@@ -159,8 +159,8 @@ try {
     cosmos.group.quaternion.setFromRotationMatrix(view==='orrery'?new THREE.Matrix4():eclipticToEquatorial);
   }
   function dateBox() {
-    const iso=date.toISOString();$('clock').textContent=`${iso.slice(0,10)} ${iso.slice(11,19)} UTC · JD ${state.jd.toFixed(6)}`;
-    if(document.activeElement!==$('date'))$('date').value=iso.slice(0,19);
+    const iso=date.toISOString(),parts=iso.split('T');$('clock').textContent=`${parts[0]} ${parts[1].slice(0,8)} UTC · JD ${state.jd.toFixed(6)}`;
+    if(document.activeElement!==$('date')){$('date').value=date.getUTCFullYear()>0?parts[0]+'T'+parts[1].slice(0,8):'';$('date').title=date.getUTCFullYear()>0?'UTC date and time':'For BCE dates, use History year or choose a chapter.';}
     const offset=(date-event.eclipse.peak.date)/60000;
     $('scrub').value=Math.max(-120,Math.min(120,offset));$('offset').textContent=`${offset>=0?'+':''}${offset.toFixed(1)} min`;
   }
