@@ -36,7 +36,7 @@
 <p id="clock" class="readout"></p><p id="shadow" class="readout"></p><p id="sky-status" class="readout"></p><p id="catalog" class="readout"></p>
 </div></aside>
 <aside id="book-reader" hidden><button id="book-close" aria-label="Close chapter">Close</button><h2 id="book-title"></h2><p id="book-meta"></p><div class="row"><button id="book-prev">Previous</button><button id="book-date">Visit chapter date</button><button id="book-next">Next</button></div><div id="book-content"></div><a id="book-source" target="_blank" rel="noopener">Published chapter</a></aside>
-<dialog id="natal-dialog"><div class="row"><h2>Birth chart & birth sky</h2><button id="close-natal">Back to Atlas</button></div><iframe id="natal-frame" title="The Atlas natal chart" allow="clipboard-write"></iframe></dialog>
+<dialog id="natal-dialog"><div class="row"><h2>Birth chart & birth sky</h2><button id="close-natal">Back to Atlas</button></div><iframe id="natal-frame" title="The Atlas natal chart" allow="clipboard-write; web-share"></iframe></dialog>
 <dialog id="about"><button id="close-about" aria-label="Close sources">Close</button><h2>Shared clock, shared geometry</h2>
 <p>The Sun, Moon, Earth rotation, surface shadow and observer camera share one UTC epoch. Earth is a WGS84 ellipsoid. Solar obscuration is calculated at every surface fragment from the angular overlap of the Sun and Moon.</p>
 <p>The uploaded eclipse catalogs contribute 620 events: the historical collection and the new 1999–2050 collection. At greatest eclipse, the stored Sun/Moon vectors and Earth rotation place the catalog shadow at its computed site. The catalog has no between-event ground-track samples, so those tracks are not invented. The Solar system globe shows an enlarged shadow marker; Earth & shadow shows the physical footprint.</p>
@@ -45,5 +45,5 @@
 <p><a id="nasa-source" href="https://eclipse.gsfc.nasa.gov/SEmono/TSE1999/TSE1999.html">NASA eclipse reference</a>. Smooth lunar limbs are used; this view does not predict individual Baily’s beads. The corona is a visual effect. The 400 km camera is an orbital viewpoint, not a reconstruction of the ISS’s historical flight path.</p>
 <p>Visible scale enlarges planets and compresses moon spacing. Earth & Shadow and Sky keep the Sun, Earth and Moon at true scale; other planets appear as direction markers in these views. The existing Galilean moon models and orbital guide curves are retained.</p>
 <a href="./README.md">Project notes & local launch</a> · <a href="./CREDITS.md">Credits & validation</a>
-</dialog><script src="./vendor/satellite.min.js"></script><script src="https://feisttech.com/apps/webapps/natal-chart/lib/cities.js"></script><script src="https://feisttech.com/apps/webapps/natal-chart/lib/tz-lookup.js"></script><script type="module" src="./main.js?v=places-book-20261014"></script>
+</dialog><script src="./vendor/satellite.min.js"></script><script src="https://feisttech.com/apps/webapps/natal-chart/lib/cities.js"></script><script src="https://feisttech.com/apps/webapps/natal-chart/lib/tz-lookup.js"></script><script type="module" src="./main.js?v=places-book-20261014-v2"></script>
 </body></html>
