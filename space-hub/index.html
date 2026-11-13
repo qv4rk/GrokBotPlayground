@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Space &amp; Maps</title>
+  <meta name="description" content="A launcher for orreries, globes, and maps across qv4rk's public repositories.">
+  <style>
+    :root {
+      --bg: #07080c;
+      --bg-card: #10131a;
+      --line: #232836;
+      --text: #e8e6df;
+      --muted: #8b90a0;
+      --gold: #d4b45a;
+      --gold-dim: #9a7f32;
+      --cyan: #7ec8d8;
+      --sans: "Segoe UI", "Helvetica Neue", system-ui, -apple-system, sans-serif;
+      --serif: Georgia, "Times New Roman", serif;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: var(--sans); }
+    body {
+      min-height: 100vh;
+      background-image:
+        radial-gradient(ellipse 80% 50% at 50% -10%, #162033 0%, transparent 55%),
+        radial-gradient(1px 1px at 12% 18%, #ffffff88 0, transparent 100%),
+        radial-gradient(1px 1px at 28% 72%, #ffffff55 0, transparent 100%),
+        radial-gradient(1px 1px at 47% 32%, #ffffff77 0, transparent 100%),
+        radial-gradient(1px 1px at 63% 14%, #ffffff44 0, transparent 100%),
+        radial-gradient(1px 1px at 81% 58%, #ffffff66 0, transparent 100%),
+        radial-gradient(1px 1px at 91% 24%, #ffffff50 0, transparent 100%),
+        radial-gradient(1px 1px at 8% 88%, #ffffff40 0, transparent 100%),
+        radial-gradient(1.5px 1.5px at 72% 86%, #ffffff70 0, transparent 100%);
+    }
+    header {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 64px 20px 28px;
+    }
+    header p.kicker {
+      margin: 0 0 10px;
+      font-size: 11px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    h1 {
+      margin: 0 0 12px;
+      font-family: var(--serif);
+      font-weight: 400;
+      font-size: clamp(40px, 7vw, 68px);
+      letter-spacing: .02em;
+      line-height: 1.05;
+    }
+    header .lede {
+      margin: 0;
+      max-width: 40em;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.55;
+    }
+    main { max-width: 1080px; margin: 0 auto; padding: 8px 20px 80px; }
+    section { margin: 36px 0 8px; }
+    section h2 {
+      margin: 0 0 6px;
+      font-size: 12px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      font-weight: 600;
+    }
+    section .repo-note {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+    article {
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(180deg, #141824, var(--bg-card));
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 20px 20px 18px;
+      min-height: 220px;
+    }
+    article h3 {
+      margin: 0 0 8px;
+      font-family: var(--serif);
+      font-weight: 400;
+      font-size: 23px;
+      line-height: 1.2;
+    }
+    article p {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+      flex: 1;
+    }
+    article .src {
+      margin: 0 0 16px;
+      font-size: 11px;
+      letter-spacing: .06em;
+      color: #6a7080;
+    }
+    article a.btn {
+      display: inline-block;
+      text-align: center;
+      text-decoration: none;
+      background: var(--gold);
+      color: #16120a;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: .04em;
+      padding: 12px 16px;
+      border-radius: 8px;
+      width: 100%;
+    }
+    article a.btn:hover { filter: brightness(1.08); }
+    article a.btn:focus-visible {
+      outline: 2px solid var(--cyan);
+      outline-offset: 3px;
+    }
+    footer {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 8px 20px 48px;
+      color: #5c6270;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <p class="kicker">qv4rk · public pages</p>
+    <h1>Space &amp; Maps</h1>
+    <p class="lede">One place to open the orreries, globes, skies, and maps across these repositories. Each button opens the live page in a new tab.</p>
+  </header>
+  <main>
+
+    <section>
+      <h2>solar-experience-live</h2>
+      <p class="repo-note">Standalone browser orrery, served on GitHub Pages.</p>
+      <div class="grid">
+        <article>
+          <h3>Solar Experience</h3>
+          <p>A 3D orrery with real planet positions, time controls, eclipse and chart views.</p>
+          <div class="src">Repo: qv4rk/solar-experience-live</div>
+          <a class="btn" href="https://qv4rk.github.io/solar-experience-live/" target="_blank" rel="noopener noreferrer">Open Solar Experience</a>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <h2>GrokBotPlayground</h2>
+      <p class="repo-note">Atlas, cosmogram, and staged orrery pages on GitHub Pages.</p>
+      <div class="grid">
+        <article>
+          <h3>The Atlas &amp; Cosmogram</h3>
+          <p>A Three.js globe and planetary clock, with an Antikythera time dial and a reading room for articles.</p>
+          <div class="src">Repo: qv4rk/GrokBotPlayground</div>
+          <a class="btn" href="https://qv4rk.github.io/GrokBotPlayground/atlas-cosmogram/" target="_blank" rel="noopener noreferrer">Open Atlas &amp; Cosmogram</a>
+        </article>
+        <article>
+          <h3>Solar System &amp; Sky</h3>
+          <p>Orrery, sky, and eclipse scenes, with a birth chart, book locations, and a shareable view.</p>
+          <div class="src">Repo: qv4rk/GrokBotPlayground</div>
+          <a class="btn" href="https://qv4rk.github.io/GrokBotPlayground/atlas-cosmogram/previews/orrery-sky-eclipse/" target="_blank" rel="noopener noreferrer">Open Solar System &amp; Sky</a>
+        </article>
+        <article>
+          <h3>The Scale Orrery</h3>
+          <p>A playground orrery with a visible-scale / true-scale toggle, staged here for review.</p>
+          <div class="src">Repo: qv4rk/GrokBotPlayground</div>
+          <a class="btn" href="https://qv4rk.github.io/GrokBotPlayground/scale-orrery/" target="_blank" rel="noopener noreferrer">Open Scale Orrery</a>
+        </article>
+        <article>
+          <h3>Scale Orrery Proposal</h3>
+          <p>A later staged proposal of the scale orrery, kept off the live atlas.</p>
+          <div class="src">Repo: qv4rk/GrokBotPlayground</div>
+          <a class="btn" href="https://qv4rk.github.io/GrokBotPlayground/atlas-cosmogram/proposals/scale-orrery/" target="_blank" rel="noopener noreferrer">Open Scale Orrery Proposal</a>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <h2>V · feisttech.com</h2>
+      <p class="repo-note">Space and map instruments on the FeistTech site.</p>
+      <div class="grid">
+        <article>
+          <h3>The Scale Orrery</h3>
+          <p>The solar system in visible and true scale, with the Moon, Jupiter’s moons, and eclipses.</p>
+          <div class="src">Repo: qv4rk/V</div>
+          <a class="btn" href="https://feisttech.com/orrery/" target="_blank" rel="noopener noreferrer">Open Scale Orrery</a>
+        </article>
+        <article>
+          <h3>About the Scale Orrery</h3>
+          <p>The mathematics, sources, checks, and present limits of the Scale Orrery.</p>
+          <div class="src">Repo: qv4rk/V</div>
+          <a class="btn" href="https://feisttech.com/orrery/about/" target="_blank" rel="noopener noreferrer">Open About page</a>
+        </article>
+        <article>
+          <h3>Globe &amp; Sky</h3>
+          <p>Stars from any article node on its day, and 5,000 years of eclipses, on a globe.</p>
+          <div class="src">Repo: qv4rk/V</div>
+          <a class="btn" href="https://feisttech.com/sky/" target="_blank" rel="noopener noreferrer">Open Globe &amp; Sky</a>
+        </article>
+        <article>
+          <h3>The Atlas</h3>
+          <p>Every FeistTech article on one map: a globe that becomes a street map as you zoom in.</p>
+          <div class="src">Repo: qv4rk/V</div>
+          <a class="btn" href="https://feisttech.com/atlas/" target="_blank" rel="noopener noreferrer">Open The Atlas</a>
+        </article>
+        <article>
+          <h3>Space</h3>
+          <p>Follow ʻOumuamua, satellites, and Planet Nine, and watch eclipses from the side.</p>
+          <div class="src">Repo: qv4rk/V</div>
+          <a class="btn" href="https://feisttech.com/space/" target="_blank" rel="noopener noreferrer">Open Space</a>
+        </article>
+        <article>
+          <h3>Solar System</h3>
+          <p>An Atlas solar-system view with orbits, labels, time speed, and a Perseid stream layer.</p>
+          <div class="src">Repo: qv4rk/V</div>
+          <a class="btn" href="https://feisttech.com/solsys/" target="_blank" rel="noopener noreferrer">Open Solar System</a>
+        </article>
+        <article>
+          <h3>Natal Chart</h3>
+          <p>Planet positions in the sky for any birth date and place.</p>
+          <div class="src">Repo: qv4rk/V</div>
+          <a class="btn" href="https://feisttech.com/natal/" target="_blank" rel="noopener noreferrer">Open Natal Chart</a>
+        </article>
+        <article>
+          <h3>Gaza City · Damage Over Time</h3>
+          <p>A neighborhood map of building damage in Gaza City, drawn from UNOSAT assessments.</p>
+          <div class="src">Repo: qv4rk/V</div>
+          <a class="btn" href="https://feisttech.com/gaza-damage/" target="_blank" rel="noopener noreferrer">Open Gaza damage map</a>
+        </article>
+        <article>
+          <h3>The Great GASPI</h3>
+          <p>An interactive globe of sovereignty and power across contested territories.</p>
+          <div class="src">Repo: qv4rk/V</div>
+          <a class="btn" href="https://feisttech.com/thegreatgaspi/" target="_blank" rel="noopener noreferrer">Open The Great GASPI</a>
+        </article>
+        <article>
+          <h3>GASPI 5.0</h3>
+          <p>A later GASPI prototype for West Bank and Gaza territories, checkpoints, and damage overlays.</p>
+          <div class="src">Repo: qv4rk/V</div>
+          <a class="btn" href="https://feisttech.com/gaspi5/" target="_blank" rel="noopener noreferrer">Open GASPI 5.0</a>
+        </article>
+      </div>
+    </section>
+
+  </main>
+  <footer>Links open in a new tab. This launcher lives at GrokBotPlayground/space-hub/ and does not change the pages it points to.</footer>
+</body>
+</html>
