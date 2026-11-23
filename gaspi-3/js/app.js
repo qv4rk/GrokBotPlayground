@@ -211,7 +211,7 @@
       st && st.original ? step("Original", h("span", {lang: st.lang}, "“" + st.original + "”")) : null,
       st && st.literal ? step("Literal translation", st.literal) : null,
       st && st.contextual ? step("Contextual translation", st.contextual) : null,
-      st && (st.translator || st.context) ? step("Notes", [st.translator, st.context].filter(Boolean).join(" ")) : null,
+      st && (st.translator || st.context) ? step("Notes", [st.translator, st.context].filter(Boolean).map(x => /[.!?]$/.test(x) ? x : x + ".").join(" ")) : null,
       s.note ? step("Source note", s.note) : null,
       relF.length ? step("Findings using this source", relF.map(f => f.title).join("; ")) : null,
       relD.length ? step("Disputes using this source", relD.map(d => d.question).join("; ")) : null].filter(Boolean));
