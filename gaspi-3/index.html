@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>GASPI 3.0 · Puerto Rico</title>
+<meta name="description" content="GASPI 3.0 pilot: Puerto Rico. Actors in their own words, court and UN findings kept separate, every claim sourced.">
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<div id="app" class="shell">
+  <main id="map" class="map" aria-label="Map of Puerto Rico"></main>
+  <aside id="panel" class="panel" aria-label="Territory panel" data-snap="mid">
+    <button class="sheet-handle" id="sheetHandle" aria-label="Resize panel"><span></span></button>
+    <header class="panel-head">
+      <div class="eyebrow">GASPI 3.0 · pilot territory</div>
+      <h1 id="tName">Puerto Rico</h1>
+      <p class="lede" id="tLede"></p>
+      <nav class="tabs" role="tablist" id="tabs"></nav>
+    </header>
+    <div class="panel-body" id="panelBody" tabindex="-1"></div>
+    <section class="drawer" id="drawer" aria-hidden="true" aria-label="Source chain">
+      <header class="drawer-head">
+        <button class="back" id="drawerBack" aria-label="Close source chain">← Back</button>
+        <span>Source chain</span>
+      </header>
+      <div class="drawer-body" id="drawerBody"></div>
+    </section>
+  </aside>
+</div>
+<noscript><p style="padding:2rem">This page needs JavaScript. The data is in <a href="data/puerto-rico.json">data/puerto-rico.json</a>.</p></noscript>
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

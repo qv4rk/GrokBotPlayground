@@ -1,0 +1,6 @@
+{
+ "schema": "gaspi-3.0/index",
+ "territories": [
+  {"id": "puerto-rico", "name": "Puerto Rico", "file": "data/puerto-rico.json", "status": "pilot"}
+ ]
+}
